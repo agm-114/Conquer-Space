@@ -55,7 +55,14 @@ class SysUserInterface {
         common::Universe &GetUniverse() { return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->m_universe; }
         asset::AssetManager &GetAssetManager() { return GetApp().GetAssetManager(); }
 
+<<<<<<< HEAD
+
      private:
         engine::Application &m_app;
     };
 }  // namespace cqsp::client::systems
+    == == ==
+    = private : cqsp::engine::Application & m_app;
+};
+}  // namespace cqsp::client::systems
+>>>>>>> pr-283

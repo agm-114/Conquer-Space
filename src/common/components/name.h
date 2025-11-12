@@ -23,20 +23,23 @@
 
 namespace cqsp::common::components {
 <<<<<<< HEAD
+<<<<<<< HEAD
 == == == =
 
 >>>>>>> pr_254
              struct Name {
-    std::string name;
-    operator const std::string&() const { return name; }
-};
+    == == == = struct Name {
+>>>>>>> pr-283
+        std::string name;
+        operator const std::string&() const { return name; }
+    };
 
-struct Identifier {
-    std::string identifier;
-    operator const std::string&() const { return identifier; }
-};
+    struct Identifier {
+        std::string identifier;
+        operator const std::string&() const { return identifier; }
+    };
 
-struct Description {
-    std::string description;
-};
+    struct Description {
+        std::string description;
+    };
 }  // namespace cqsp::common::components

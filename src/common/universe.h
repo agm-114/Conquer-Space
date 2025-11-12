@@ -30,20 +30,23 @@
 #include "common/actions/names/namegenerator.h"
 #include "common/components/market.h"
 #include "common/components/stardate.h"
-    <<<<<<< HEAD
+        <<<<<<<HEAD
 #include "common/systems/economy/economyconfig.h"
-    == == ==
-    =
+                   == == ==
+               =
 #include "common/actions/names/namegenerator.h"
-        >>>>>>> pr - 292 == == == =
+                   >>>>>>>
+            pr - 292 ==
+    == ==
+    =
 #include "common/components/stardate.h"
 #include "common/systems/names/namegenerator.h"
-                                      >>>>>>> pr-290
+        >>>>>>> pr - 290
 #include "common/node.h"
 #include "common/util/random/random.h"
 
-                                      <<<<<<< HEAD < < < < < < <
-                                      HEAD namespace cqsp::common {
+                    <<<<<<< HEAD < < < < < < <
+        HEAD < < < < < < < HEAD namespace cqsp::common {
     == == == = namespace cqsp::common {
         class Node;
         == == == = namespace cqsp::common {
@@ -51,28 +54,39 @@
             class NodeView {
              public:
                 using ViewType = entt::basic_view<entt::entity, entt::get_t<Components...>, entt::exclude_t<>, void>;
+                == == == = namespace cqsp::common {
+                    class Universe : public entt::registry {
+                     public:
+                        explicit Universe(std::string uuid);
+                        Universe();
+>>>>>>> pr-283
 
-                class Iterator {
-                 public:
-                    Iterator(ViewType view, typename ViewType::iterator it, Registry& registry)
-                        : view_(view), it_(it), registry_(registry) {}
+                        class Iterator {
+                         public:
+                            Iterator(ViewType view, typename ViewType::iterator it, Registry& registry)
+                                : view_(view), it_(it), registry_(registry) {}
 
-                    auto operator*() const -> Node { return Node(*it_, registry_); }
+                            auto operator*() const -> Node { return Node(*it_, registry_); }
 
-                    Iterator& operator++() {
-                        ++it_;
-                        return *this;
-                    }
+                            Iterator& operator++() {
+                                ++it_;
+                                return *this;
+                            }
 
-                    bool operator!=(const Iterator& other) const { return it_ != other.it_; }
+                            bool operator!=(const Iterator& other) const { return it_ != other.it_; }
 
-                 private:
-                    ViewType view_;
-                    typename ViewType::iterator it_;
-                    Registry& registry_;
-                };
+                         private:
+                            ViewType view_;
+                            typename ViewType::iterator it_;
+                            Registry& registry_;
+                        };
 
-                NodeView(ViewType view, Registry& registry) : view_(view), registry_(registry) {}
+<<<<<<< HEAD
+                     NodeView(ViewType view, Registry& registry)
+                         : view_(view), registry_(registry) {} == == == = private : bool to_tick = false;
+                    };
+                }  // namespace cqsp::common
+>>>>>>> pr-283
 
                 Iterator begin() { return Iterator(view_, view_.begin(), registry_); }
                 Iterator end() { return Iterator(view_, view_.end(), registry_); }

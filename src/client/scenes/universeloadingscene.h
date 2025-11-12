@@ -23,6 +23,7 @@
 #include "client/scenes/scene.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::scene {
     class UniverseLoadingScene : public ClientScene {
     == == == = namespace cqsp::scene {
@@ -37,33 +38,45 @@
                     explicit UniverseLoadingScene(engine::Application& app);
                     ~UniverseLoadingScene();
 >>>>>>> pr-286
+                    == == == = namespace cqsp::scene {
+                        class UniverseLoadingScene : public cqsp::client::Scene {
+                         public:
+                            explicit UniverseLoadingScene(cqsp::engine::Application& app);
+                            ~UniverseLoadingScene();
+>>>>>>> pr-283
 
-                    void Init();
-                    void Update(float deltaTime);
-                    void Ui(float deltaTime);
-                    void Render(float deltaTime);
+                            void Init();
+                            void Update(float deltaTime);
+                            void Ui(float deltaTime);
+                            void Render(float deltaTime);
 
-                 private:
-                    std::atomic<bool> m_done_loading;
-                    std::unique_ptr<std::thread> thread;
+                         private:
+                            std::atomic<bool> m_done_loading;
+                            std::unique_ptr<std::thread> thread;
 
 <<<<<<< HEAD
-                    void LoadCurrentUniverse();
-                    == == == = void LoadCurrentUniverse();
+                            void LoadCurrentUniverse();
+                            == == == = void LoadCurrentUniverse();
 >>>>>>> pr-286
 
-                    bool m_completed_loading;
+                            bool m_completed_loading;
 
 <<<<<<< HEAD
-                    Rml::ElementDocument* document;
-                };
 <<<<<<< HEAD
-            }  // namespace cqsp::client::scene
-            == == == =
-        }  // namespace cqsp::scene
+                            Rml::ElementDocument* document;
+                        };
+<<<<<<< HEAD
+                    }  // namespace cqsp::client::scene
+                    == == == =
+                }  // namespace cqsp::scene
 >>>>>>> pr_254
+                    == == ==
+                    = Rml::ElementDocument * document;
+            };
+        }  // namespace cqsp::client::scene
+>>>>>>> pr-286
             == == ==
             = Rml::ElementDocument * document;
     };
-}  // namespace cqsp::client::scene
->>>>>>> pr-286
+}  // namespace cqsp::scene
+>>>>>>> pr-283

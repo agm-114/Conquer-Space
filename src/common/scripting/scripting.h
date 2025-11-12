@@ -26,23 +26,29 @@
 
 #include <sol/sol.hpp>
 
-namespace cqsp::common::scripting {
-class ScriptInterface : public sol::state {
- public:
-    using sol::state::state;
-    ScriptInterface();
-    void RunScript(std::string_view str);
-    void ParseResult(const sol::protected_function_result&);
-    void RegisterDataGroup(std::string_view name);
-    void Init();
-    int GetLength(std::string_view);
+<<<<<<< HEAD namespace cqsp::common::scripting {
+    == == == = namespace cqsp::scripting {
+>>>>>>> pr-283
+        class ScriptInterface : public sol::state {
+         public:
+            using sol::state::state;
+            ScriptInterface();
+            void RunScript(std::string_view str);
+            void ParseResult(const sol::protected_function_result&);
+            void RegisterDataGroup(std::string_view name);
+            void Init();
+            int GetLength(std::string_view);
 
-    std::vector<std::string> values;
+            std::vector<std::string> values;
 
-    std::vector<std::string> GetLogs();
+            std::vector<std::string> GetLogs();
 
- private:
-    std::shared_ptr<spdlog::logger> logger;
-    std::shared_ptr<spdlog::sinks::ringbuffer_sink_mt> ringbuffer_sink;
-};
-}  // namespace cqsp::common::scripting
+         private:
+            std::shared_ptr<spdlog::logger> logger;
+            std::shared_ptr<spdlog::sinks::ringbuffer_sink_mt> ringbuffer_sink;
+        };
+<<<<<<< HEAD
+    }  // namespace cqsp::common::scripting
+    == == == =
+}  // namespace cqsp::scripting
+>>>>>>> pr-283

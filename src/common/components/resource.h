@@ -347,6 +347,7 @@ struct IndustrySize {
         // Ledgers later to show how much
     };
 
+<<<<<<< HEAD
     struct FailedResourceProduction {};
 
     struct FailedResourceConsumption {};
@@ -354,4 +355,8 @@ struct IndustrySize {
     struct ResourceDistribution {
         std::map<entt::entity, double> dist;
     };
+    == == == = struct ResourceDistribution {
+        std::map<entt::entity, double> dist;
+    };
+>>>>>>> pr-283
 }  // namespace cqsp::common::components

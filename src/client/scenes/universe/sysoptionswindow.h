@@ -21,6 +21,7 @@
 namespace cqsp::client::systems {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void ShowOptionsWindow(bool* open, engine::Application& app);
 }  // namespace cqsp::client::systems
 <<<<<<< HEAD
@@ -33,3 +34,6 @@ void ShowOptionsWindow(bool* open, engine::Application& app);
              == == == = void ShowOptionsWindow(bool* open, engine::Application& app);
 }  // namespace cqsp::client::systems
 >>>>>>> pr-286
+== == == = void ShowOptionsWindow(bool* open, cqsp::engine::Application& app);
+}  // namespace cqsp::client::systems
+>>>>>>> pr-283

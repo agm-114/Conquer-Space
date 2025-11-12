@@ -42,5 +42,9 @@ bool SellGood(Universe& universe, entt::entity agent, const components::Resource
 
 void AddParticipant(Universe& universe, entt::entity market, entt::entity entity);
 
+<<<<<<< HEAD
 double GetCost(Universe& universe, entt::entity market, const components::ResourceLedger& ledger);
+== == ==
+    = double GetCost(cqsp::common::Universe & universe, entt::entity market, const components::ResourceLedger& ledger);
+>>>>>>> pr-283
 }  // namespace cqsp::common::systems::economy

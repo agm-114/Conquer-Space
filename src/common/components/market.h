@@ -315,6 +315,9 @@ struct Owned {
 <<<<<<< HEAD:src/common/components/market.h
 
 struct TradePartners : std::vector<entt::entity> {};
+<<<<<<< HEAD:src/common/components/market.h
 == == == =
 >>>>>>> pr_254:src/common/components/economy.h
+             == == == =
+>>>>>>> pr-283:src/common/components/economy.h
 }  // namespace cqsp::common::components

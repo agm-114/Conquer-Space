@@ -41,6 +41,7 @@ struct Fleet {
 };
 }  // namespace cqsp::common::components::ships
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 // Copyright 2021 Conquer Space
 #pragma once
@@ -79,3 +80,5 @@ struct Command {
 >>>>>>> pr_4
 =======
 >>>>>>> pr_254
+=======
+>>>>>>> pr-283

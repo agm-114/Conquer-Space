@@ -23,6 +23,7 @@
 #include "entt/entt.hpp"
 
 namespace cqsp::client::systems {
+<<<<<<< HEAD
 bool DrawLedgerTable(const std::string& name, const common::Universe&,
                      const common::components::ResourceLedger& ledger);
 <<<<<<< HEAD
@@ -30,3 +31,7 @@ bool DrawLedgerTable(const std::string& name, const common::Universe&,
 == == == =
 }  // namespace cqsp::client::systems
 >>>>>>> pr-286
+== == == = bool DrawLedgerTable(const std::string& name, const cqsp::common::Universe&,
+                                const cqsp::common::components::ResourceLedger& ledger);
+}  // namespace cqsp::client::systems
+>>>>>>> pr-283

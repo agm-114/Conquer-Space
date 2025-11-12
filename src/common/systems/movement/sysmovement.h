@@ -5,27 +5,32 @@
 
 #include "common/systems/isimulationsystem.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD namespace conquerspace { namespace common {namespace systems { == == == = namespace cqsp::common::systems {
 >>>>>>> pr_254
-    class SysOrbit : public ISimulationSystem {public : void DoSystem(components::Universe & universe);
-int Interval();
-}
-;
-
-class SysPath : public ISimulationSystem {
+    class SysOrbit : public ISimulationSystem {
  public:
     void DoSystem(components::Universe& universe);
     int Interval();
 };
 
+class SysPath : public ISimulationSystem {
+    == == == = namespace cqsp::common::systems {
+        class SysOrbit : public ISimulationSystem {
+>>>>>>> pr-283
+         public:
+            void DoSystem(components::Universe& universe);
+            int Interval();
+        };
+
 <<<<<<< HEAD
 <<<<<<< HEAD
-class SysMove : public ISimulationSystem {
- public:
-    void DoSystem(components::Universe& universe);
-};
+        class SysMove : public ISimulationSystem {
+         public:
+            void DoSystem(components::Universe& universe);
+        };
 <<<<<<< HEAD
-}  // namespace systems
+    }  // namespace systems
 }  // namespace common
 }  // namespace conquerspace
 == == == = class SysSurface : public ISimulationSystem {
@@ -83,6 +88,10 @@ class SysSurface : public ISimulationSystem {
     void DoSystem();
     int Interval() { return 1; }
 };
+<<<<<<< HEAD
 >>>>>>> pr-290
 }  // namespace cqsp::common::systems
 >>>>>>> pr_254
+== == == =
+}  // namespace cqsp::common::systems
+>>>>>>> pr-283

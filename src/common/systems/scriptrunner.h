@@ -54,7 +54,11 @@ class SysScript : public cqsp::common::systems::ISimulationSystem {
     std::vector<sol::table> events;
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 }  // namespace cqsp::common::systems
 == == == =
 }  // namespace cqsp::common::systems
 >>>>>>> pr_254
+== == == =
+}  // namespace cqsp::common::systems
+>>>>>>> pr-283

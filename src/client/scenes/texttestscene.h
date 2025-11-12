@@ -23,6 +23,7 @@
 #include "client/scenes/scene.h"
 #include "engine/renderer/framebuffer.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::scene {
     == == ==
     = namespace cqsp::scene {
@@ -51,32 +52,56 @@
                     explicit TextTestScene(engine::Application& app) : client::ClientScene(app) {}
                     ~TextTestScene();
 >>>>>>> pr-286
+                    == == == = namespace cqsp::scene {
+                        /// <summary>
+                        /// Just a playground for various graphics stuff
+                        /// </summary>
+                        /// <param name="app"></param>
+                        class TextTestScene : public cqsp::client::Scene {
+                         public:
+                            explicit TextTestScene(cqsp::engine::Application& app) : cqsp::client::Scene(app) {}
+                            ~TextTestScene();
+>>>>>>> pr-283
 
-                    void Init();
-                    void Update(float deltaTime);
-                    void Ui(float deltaTime);
-                    void Render(float deltaTime);
+                            void Init();
+                            void Update(float deltaTime);
+                            void Ui(float deltaTime);
+                            void Render(float deltaTime);
 
 <<<<<<< HEAD
-
-                 private:
-                    engine::LayerRenderer renderer;
-                    float font_size = 40.f;
-                    std::string text = "The quick brown fox jumps over the lazy dog";
-                    int layer;
-                    int src = 0;
-                    int post = 0;
-                    std::map<std::string, int> indices;
-                    std::vector<const char*> names;
-                    float delta_t = 0;
-                };
 <<<<<<< HEAD
-            }  // namespace cqsp::client::scene
-            == == == =
-     }  // namespace cqsp::scene
+
+                         private:
+                            engine::LayerRenderer renderer;
+                            float font_size = 40.f;
+                            std::string text = "The quick brown fox jumps over the lazy dog";
+                            int layer;
+                            int src = 0;
+                            int post = 0;
+                            std::map<std::string, int> indices;
+                            std::vector<const char*> names;
+                            float delta_t = 0;
+                        };
+<<<<<<< HEAD
+                    }  // namespace cqsp::client::scene
+                    == == == =
+             }  // namespace cqsp::scene
 >>>>>>> pr_254
+                 == == ==
+                 = private : engine::LayerRenderer renderer;
+                float font_size = 40.f;
+                std::string text = "The quick brown fox jumps over the lazy dog";
+                int layer;
+                int src = 0;
+                int post = 0;
+                std::map<std::string, int> indices;
+                std::vector<const char*> names;
+                float delta_t = 0;
+            };
+     }  // namespace cqsp::client::scene
+>>>>>>> pr-286
          == == ==
-         = private : engine::LayerRenderer renderer;
+         = private : cqsp::engine::LayerRenderer renderer;
         float font_size = 40.f;
         std::string text = "The quick brown fox jumps over the lazy dog";
         int layer;
@@ -86,5 +111,5 @@
         std::vector<const char*> names;
         float delta_t = 0;
     };
-}  // namespace cqsp::client::scene
->>>>>>> pr-286
+}  // namespace cqsp::scene
+>>>>>>> pr-283
