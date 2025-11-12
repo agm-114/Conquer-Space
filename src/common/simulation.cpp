@@ -39,14 +39,13 @@
 #include "common/components/name.h"
 #include "common/components/organizations.h"
 #include "common/components/player.h"
-        <<<<<<< HEAD
+        <<<<<<<HEAD
 #include "common/components/resource.h"
 #include "common/components/ships.h"
-        <<<<<<< HEAD == ==
-        ==
-    =
+                   <<<<<<<HEAD == == == =
 #include "common/components/movement.h"
-        >>>>>>> pr_8
+                              >>>>>>>
+                       pr_8
 #include "common/components/units.h"
 #include "common/systems/economy/sysagent.h"
 #include "common/systems/economy/sysfinance.h"
@@ -64,13 +63,15 @@
 #include "common/systems/science/systechnology.h"
 #include "common/systems/scriptrunner.h"
 #include "common/util/profiler.h"
-        == == ==
-    =
+                   == == ==
+               =
 #include "common/components/orbit.h"
 #include "common/components/ships.h"
 #include "common/components/units.h"
-        >>>>>>> pr_4
+                   >>>>>>>
+            pr_4
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         namespace cqsp::common::systems::simulation {
     Simulation::Simulation(Game & game)
@@ -92,6 +93,19 @@
         // Move ships towards targets
         AddSystem<conquerspace::common::systems::SysOrbit>();
         AddSystem<conquerspace::common::systems::SysPath>();
+        == == == = using cqsp::common::systems::simulation::Simulation;
+        using cqsp::common::Universe;
+        Simulation::Simulation(Universe & _universe, scripting::ScriptInterface & script_interface)
+            : m_universe(_universe), script_runner(_universe, script_interface) {
+            namespace cqspcs = cqsp::common::systems;
+            AddSystem<cqspcs::SysPopulationGrowth>();
+            AddSystem<cqspcs::SysPopulationConsumption>();
+            AddSystem<cqspcs::SysFactory>();
+            AddSystem<cqspcs::SysOrbit>();
+            AddSystem<cqspcs::SysPath>();
+            AddSystem<cqspcs::SysSurface>();
+        }
+>>>>>>> pr_28
 
         // Register functions
     script_interface.set_function("event_player", [&](sol::table event_table) {

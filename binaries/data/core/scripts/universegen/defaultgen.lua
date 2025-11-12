@@ -102,11 +102,33 @@ generators:insert({
         -- Add tech
         core.add_tech_progress(civ_id)
 
+<<<<<<< HEAD
         core.complete_technology(civ_id, technologies["steel_forging"])
         core.complete_technology(civ_id, technologies["consumer_good_manufacturing"])
         core.complete_technology(civ_id, technologies["concrete_manufacturing"])
         core.complete_technology(civ_id, technologies["basic_mining"])
         core.research_technology(civ_id, technologies["blank_research"])
         core.add_potential_tech(civ_id, technologies["temp_research"])
+=======
+        -- Add city
+        local city_count = random(300, 500)
+        for index = 0, city_count, 1 do
+            local city = add_planet_settlement(planet, random(-90, 90) , random(-180, 180))
+            set_name(city, "City ".. index)
+            local pop_unit = add_population_segment(city, random_normal_int(50000000, 2000000)) -- 100 million
+            attach_market(market, pop_unit)
+            set_resource_consume(pop_unit, goods["consumer_good"], 1750)
+            -- Add industry
+            create_industries(city)
+            attach_market(market, create_factory(city, recipes["steel_forging"], 1500))
+            -- Add various factories
+            attach_market(market, create_factory(city, recipes["consumer_good_manufacturing"], 1000))
+            attach_market(market, create_factory(city, recipes["concrete_manufacturing"], 300))
+            attach_market(market, create_mine(city, goods["copper"], 1000, 1))
+            attach_market(market, create_mine(city, goods["aluminium"], 1000, 1))
+            attach_market(market, create_mine(city, goods["stone"], 1000, 1))
+            attach_market(market, create_mine(city, goods["iron"], 10000, 1))
+        end
+>>>>>>> pr_28
     end
 })

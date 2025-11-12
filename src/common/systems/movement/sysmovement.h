@@ -20,6 +20,7 @@ class SysPath : public ISimulationSystem {
     int Interval();
 };
 
+<<<<<<< HEAD
 class SysMove : public ISimulationSystem {
  public:
     void DoSystem(components::Universe& universe);
@@ -27,3 +28,12 @@ class SysMove : public ISimulationSystem {
 }  // namespace systems
 }  // namespace common
 }  // namespace conquerspace
+== == == = class SysSurface : public ISimulationSystem {
+ public:
+    void DoSystem(Universe& universe);
+    int Interval();
+};
+}
+}
+}
+>>>>>>> pr_28

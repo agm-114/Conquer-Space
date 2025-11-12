@@ -58,11 +58,19 @@ class SysStarSystemRenderer {
     conquerspace::common::components::Universe &m_universe;
     conquerspace::engine::Application &m_app;
 
+<<<<<<< HEAD
     conquerspace::engine::Renderable planet;
     conquerspace::engine::Renderable sky;
     conquerspace::engine::Renderable planet_circle;
     conquerspace::engine::Renderable ship_overlay;
     conquerspace::engine::Renderable sun;
+    == == == = cqsp::engine::Renderable planet;
+    cqsp::engine::Renderable sky;
+    cqsp::engine::Renderable planet_circle;
+    cqsp::engine::Renderable ship_overlay;
+    cqsp::engine::Renderable city;
+    cqsp::engine::Renderable sun;
+>>>>>>> pr_28
 
     glm::vec3 cam_pos;
     glm::vec3 cam_up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -75,6 +83,7 @@ class SysStarSystemRenderer {
     void DrawEntityName(glm::vec3 &object_pos, entt::entity ent_id);
     void DrawPlanetIcon(glm::vec3 &object_pos);
     void DrawShipIcon(glm::vec3 &object_pos);
+    void DrawCityIcon(glm::vec3 &object_pos);
     void DrawPlanet(glm::vec3 &object_pos);
     void DrawStar(glm::vec3 &object_pos);
     void DrawTerrainlessPlanet(glm::vec3 &object_pos);
