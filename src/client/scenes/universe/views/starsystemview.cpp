@@ -76,6 +76,10 @@ using client::components::Offset;
 using client::components::OrbitMesh;
 using client::components::PlanetTerrainRender;
 using client::components::PlanetTexture;
+<<<<<<< HEAD
+== == == = using client::components::PlanetOrbit;
+using client::components::Offset;
+>>>>>>> pr-294
 using components::Habitation;
 using components::Name;
 
@@ -112,6 +116,7 @@ SysStarSystemRenderer::SysStarSystemRenderer(common::Universe& _u, engine::Appli
       view_y(0),
 <<<<<<< HEAD
       view_center(glm::vec3(1, 1, 1)),
+<<<<<<< HEAD
       sun_color(glm::vec3(10, 10, 10)) {} == == == = view_center(vec3(1, 1, 1)),
                                                 sun_color(vec3(10, 10, 10)) {}
 struct Offset {
@@ -142,6 +147,9 @@ struct PlanetOrbit {
     ~PlanetOrbit() = default;
 };
 >>>>>>> pr_254
+== == == = sun_color(glm::vec3(10, 10, 10)) {}
+
+>>>>>>> pr-294
 
 void SysStarSystemRenderer::Initialize() {
     InitializeMeshes();

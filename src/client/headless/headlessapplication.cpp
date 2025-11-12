@@ -63,7 +63,10 @@ int HeadlessApplication::run() {
                 std::string arg_string = line.substr(line.find(' '), std::string::npos);
                 arg_string = util::strip(arg_string);
                 // Now we have to iterate forward and find any quotation marks...
+<<<<<<< HEAD
                 arguments = util::split(arg_string, " ");
+                == == == = argument = util::split(arg_string, " ");
+>>>>>>> pr-294
                 line = line.substr(0, line.find(' '));
             }
             if (IsCommandComment(line, arguments, "generate")) {

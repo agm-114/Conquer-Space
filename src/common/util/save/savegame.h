@@ -23,4 +23,8 @@
 namespace cqsp::common::save {
 void save_game(Universe& universe);
 void load_game(Universe& universe, std::string_view directory);
+<<<<<<< HEAD
 }  // namespace cqsp::common::save
+== == == =
+}  // namespace cqsp::client::save
+>>>>>>> pr-294

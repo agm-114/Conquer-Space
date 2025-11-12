@@ -17,24 +17,27 @@
 #include "client/systems/universeloader.h"
 
 #include "client/systems/assetloading.h"
+<<<<<<< HEAD == == == =
+#include "common/util/save/savegame.h"
+               >>>>>>> pr-294
 #include "common/systems/sysuniversegenerator.h"
 #include "common/util/save/savegame.h"
 
-namespace cqsp::client {
+    namespace cqsp::client {
 
-using common::systems::universegenerator::ScriptUniverseGenerator;
+    using common::systems::universegenerator::ScriptUniverseGenerator;
 
-void LoadUniverse(asset::AssetManager& asset_manager, ConquerSpace& conquer_space) {
-    systems::LoadAllResources(asset_manager, conquer_space);
-    SPDLOG_INFO("Made all game resources into game objects");
-    using asset::TextAsset;
-    // Process scripts for core
-    TextAsset* script_list = asset_manager.GetAsset<TextAsset>("core:base");
-    conquer_space.GetScriptInterface().RunScript(script_list->data);
-    SPDLOG_INFO("Done loading scripts");
-    // Load universe
-    ScriptUniverseGenerator script_generator(conquer_space.GetScriptInterface());
+    void LoadUniverse(asset::AssetManager & asset_manager, ConquerSpace & conquer_space) {
+        systems::LoadAllResources(asset_manager, conquer_space);
+        SPDLOG_INFO("Made all game resources into game objects");
+        using asset::TextAsset;
+        // Process scripts for core
+        TextAsset* script_list = asset_manager.GetAsset<TextAsset>("core:base");
+        conquer_space.GetScriptInterface().RunScript(script_list->data);
+        SPDLOG_INFO("Done loading scripts");
+        // Load universe
+        ScriptUniverseGenerator script_generator(conquer_space.GetScriptInterface());
 
-    script_generator.Generate(conquer_space.GetUniverse());
-}
+        script_generator.Generate(conquer_space.GetUniverse());
+    }
 }  // namespace cqsp::client
