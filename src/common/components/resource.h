@@ -76,7 +76,11 @@ class ResourceLedger : private LedgerMap {
     ResourceLedger() = default;
     ~ResourceLedger() = default;
 
+<<<<<<< HEAD
     double operator[](const entt::entity) const;
+    == == == = const double operator[](const entt::entity) const;
+
+>>>>>>> pr_191
 
     /// <summary>
     /// This resource ledger has enough resources inside to transfer "amount" amount of resources away
@@ -242,6 +246,9 @@ class ResourceLedger : private LedgerMap {
 };
 
 ResourceLedger CopyVals(const ResourceLedger& keys, const ResourceLedger& values);
+<<<<<<< HEAD
+== == == = ResourceLedger ResourceLedgerZip(const ResourceLedger& key, const ResourceLedger& value);
+>>>>>>> pr_191
 
 struct RecipeOutput {
     entt::entity entity;
@@ -266,6 +273,7 @@ struct RecipeCost {
     ResourceLedger scaling;
 };
 
+<<<<<<< HEAD
 // Factory size
 struct IndustrySize {
     // The size of the factory.
@@ -279,54 +287,71 @@ struct IndustrySize {
     int workers;
     bool shortage = false;
     double wages = 25;
-};
+    == == == =
 
-struct CostBreakdown {
-    double revenue;
-    // How much it paid in materials to produce goods
-    double materialcosts;
-    // How much cash it took to maintain the factory
-    double maintenance;
-    // How much it paid to people
-    double wages;
-    double profit;
-    // How much it paid in transport fees
-    double transport;
+                 // Factory size
+        struct IndustrySize {
+        double size;
+        double utilization;
+>>>>>>> pr_191
+    };
 
-    void Reset() {
-        revenue = 0;
-        materialcosts = 0;
-        maintenance = 0;
-        wages = 0;
-        profit = 0;
-        transport = 0;
-    }
-};
+    struct CostBreakdown {
+        double revenue;
+        // How much it paid in materials to produce goods
+        double materialcosts;
+        // How much cash it took to maintain the factory
+        double maintenance;
+        // How much it paid to people
+        double wages;
+        double profit;
+        // How much it paid in transport fees
+        double transport;
 
-// TODO(AGM): Remove
-struct FactoryTimer {
-    float interval;
-    float time_left;
-};
+        void Reset() {
+            revenue = 0;
+            materialcosts = 0;
+            maintenance = 0;
+            wages = 0;
+            profit = 0;
+            transport = 0;
+        }
+    };
 
-struct ResourceConsumption : public ResourceLedger {};
-struct ResourceProduction : public ResourceLedger {};
+<<<<<<< HEAD
+    == == == =
 
-struct ResourceConverter {
-    entt::entity recipe;
-};
+                 //Essentially resource consumption + production
+        struct ResourceIO {
+        ResourceLedger input;
+        ResourceLedger output;
+    };
 
-struct ResourceStockpile : public ResourceLedger {};
+>>>>>>> pr_191
+    // TODO(AGM): Remove
+    struct FactoryTimer {
+        float interval;
+        float time_left;
+    };
 
-struct FailedResourceTransfer {
-    // Ledgers later to show how much
-};
+    struct ResourceConsumption : public ResourceLedger {};
+    struct ResourceProduction : public ResourceLedger {};
 
-struct FailedResourceProduction {};
+    struct ResourceConverter {
+        entt::entity recipe;
+    };
 
-struct FailedResourceConsumption {};
+    struct ResourceStockpile : public ResourceLedger {};
 
-struct ResourceDistribution {
-    std::map<entt::entity, double> dist;
-};
+    struct FailedResourceTransfer {
+        // Ledgers later to show how much
+    };
+
+    struct FailedResourceProduction {};
+
+    struct FailedResourceConsumption {};
+
+    struct ResourceDistribution {
+        std::map<entt::entity, double> dist;
+    };
 }  // namespace cqsp::common::components

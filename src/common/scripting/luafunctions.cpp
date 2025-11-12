@@ -285,6 +285,7 @@ void FunctionEconomy(Universe& universe, ScriptInterface& script_engine) {
 void FunctionCivilizationGen(Universe& universe, ScriptInterface& script_engine) {
             CREATE_NAMESPACE(core);
 
+<<<<<<< HEAD
             REGISTER_FUNCTION("add_civilization", [&]() {
                 entity civ = universe.create();
                 universe.emplace<components::Organization>(civ);
@@ -295,6 +296,13 @@ void FunctionCivilizationGen(Universe& universe, ScriptInterface& script_engine)
                 auto& gov = universe.get_or_emplace<components::Governed>(owned);
                 gov.governor = owner;
             });
+            == == == = REGISTER_FUNCTION("create_industries",
+                                         [&](entt::entity city) { universe.emplace<cqspc::IndustrialZone>(city); });
+
+            REGISTER_FUNCTION("add_industry", [&](entt::entity city, entt::entity entity) {
+                universe.get<cqspc::IndustrialZone>(city).industries.push_back(entity);
+            });
+>>>>>>> pr_191
 
             REGISTER_FUNCTION("is_player",
                               [&](entity civ) { return static_cast<bool>(universe.all_of<components::Player>(civ)); });
@@ -307,8 +315,16 @@ void FunctionCivilizationGen(Universe& universe, ScriptInterface& script_engine)
             });
 }
 
+<<<<<<< HEAD
 void FunctionEconomy(Universe& universe, ScriptInterface& script_engine) {
             CREATE_NAMESPACE(core);
+            == == == = REGISTER_FUNCTION("add_power_plant", [&](entt::entity city, double productivity) {
+                entt::entity entity = universe.create();
+                universe.emplace<cqspc::infrastructure::PowerPlant>(entity, productivity);
+                universe.get<cqspc::IndustrialZone>(city).industries.push_back(entity);
+                return entity;
+            });
+>>>>>>> pr_191
 
             REGISTER_FUNCTION("create_industries",
                               [&](entity city) { universe.emplace<components::IndustrialZone>(city); });
@@ -396,72 +412,78 @@ void FunctionEconomy(Universe& universe, ScriptInterface& script_engine) {
                         systems::economy::AddParticipant(universe, market_entity, participant);
                     });
 
+<<<<<<< HEAD
                     REGISTER_FUNCTION("add_cash", [&](entity participant, double balance) {
                         universe.get_or_emplace<components::Wallet>(participant) += balance;
+                    });
+                    == == == = REGISTER_FUNCTION("add_cash", [&](entt::entity participant, double balance) {
+                        universe.get_or_emplace<cqspc::Wallet>(participant) += balance;
                     });
                 }
 
             void
-            FunctionUser(Universe & universe, ScriptInterface & script_engine) {
+            FunctionUser(cqsp::common::Universe & universe, cqsp::scripting::ScriptInterface & script_engine) {
                 CREATE_NAMESPACE(core);
 
-                REGISTER_FUNCTION("set_name", [&](entity entity, std::string name) {
-                    universe.emplace_or_replace<components::Name>(entity, name);
+                REGISTER_FUNCTION("set_name", [&](entt::entity entity, std::string name) {
+                    universe.emplace_or_replace<cqspc::Name>(entity, name);
                 });
 
-                REGISTER_FUNCTION("to_human_string", [&](int64_t number) { return util::LongToHumanString(number); });
+                REGISTER_FUNCTION("to_human_string",
+                                  [&](int64_t number) { return cqsp::util::LongToHumanString(number); });
 
                 REGISTER_FUNCTION("get_name",
-                                  [&](entity entity) { return universe.get<components::Name>(entity).name; });
+                                  [&](entt::entity entity) { return universe.get<cqspc::Name>(entity).name; });
 
                 REGISTER_FUNCTION("get_random_name", [&](const std::string& name_gen, const std::string& rule) {
                     return universe.name_generators[name_gen].Generate(rule);
                 });
             }
 
-            void FunctionPopulation(Universe & universe, ScriptInterface & script_engine) {
+            void FunctionPopulation(cqsp::common::Universe & universe,
+                                    cqsp::scripting::ScriptInterface & script_engine) {
                 CREATE_NAMESPACE(core);
 
-                REGISTER_FUNCTION("add_population_segment", [&](entity settlement, uint64_t popsize) {
+                REGISTER_FUNCTION("add_population_segment", [&](entt::entity settlement, uint64_t popsize) {
                     entt::entity population = universe.create();
-                    universe.emplace<components::PopulationSegment>(population, popsize);
-                    universe.emplace<components::ResourceStockpile>(population);
-                    universe.emplace<components::LaborInformation>(population);
+                    universe.emplace<cqspc::PopulationSegment>(population, popsize);
+                    universe.emplace<cqspc::ResourceStockpile>(population);
+                    universe.emplace<cqspc::Employee>(population);
                     // Add to planet list
-                    universe.get<components::Settlement>(settlement).population.push_back(population);
+                    universe.get<cqspc::Settlement>(settlement).population.push_back(population);
 
                     return population;
                 });
 
-                REGISTER_FUNCTION("get_segment_size", [&](entity segment) {
-                    return universe.get<components::PopulationSegment>(segment).population;
+                REGISTER_FUNCTION("get_segment_size", [&](entt::entity segment) {
+                    return universe.get<cqspc::PopulationSegment>(segment).population;
                 });
 
                 // Get population segments of a planet
-                REGISTER_FUNCTION("get_segments", [&](entity planet) {
-                    return universe.get<components::Settlement>(planet).population;
+                REGISTER_FUNCTION("get_segments", [&](entt::entity planet) {
+                    return universe.get<cqspc::Settlement>(planet).population;
                 });
 
                 // Get cities of a planet
-                REGISTER_FUNCTION("get_cities", [&](entity planet) {
-                    return universe.get<components::Habitation>(planet).settlements;
+                REGISTER_FUNCTION("get_cities", [&](entt::entity planet) {
+                    return universe.get<cqspc::Habitation>(planet).settlements;
                 });
             }
 
-            void FunctionShips(Universe & universe, ScriptInterface & script_engine) {
+            void FunctionShips(cqsp::common::Universe & universe, cqsp::scripting::ScriptInterface & script_engine) {
                 CREATE_NAMESPACE(core);
 
-                REGISTER_FUNCTION("create_ship", [&](entity civ, entity orbit, entity starsystem) {
-                    return actions::CreateShip(universe, civ, orbit, starsystem);
+                REGISTER_FUNCTION("create_ship", [&](entt::entity civ, entt::entity orbit, entt::entity starsystem) {
+                    return cqsp::common::systems::actions::CreateShip(universe, civ, orbit, starsystem);
                 });
             }
 
-            void FunctionEvent(Universe & universe, ScriptInterface & script_engine) {
+            void FunctionEvent(cqsp::common::Universe & universe, cqsp::scripting::ScriptInterface & script_engine) {
                 CREATE_NAMESPACE(core);
 
-    REGISTER_FUNCTION("push_event", [&](entity entity, sol::table event_table) {
-                    auto& queue = universe.get_or_emplace<event::EventQueue>(entity);
-                    auto event = std::make_shared<event::Event>();
+    REGISTER_FUNCTION("push_event", [&](entt::entity entity, sol::table event_table) {
+                    auto& queue = universe.get_or_emplace<cqsp::common::event::EventQueue>(entity);
+                    auto event = std::make_shared<cqsp::common::event::Event>();
                     event->title = event_table["title"];
                     SPDLOG_INFO("Parsing event \"{}\"", event->title);
                     event->content = event_table["content"];
@@ -477,304 +499,407 @@ void FunctionEconomy(Universe& universe, ScriptInterface& script_engine) {
                             sol::optional<std::string> tooltip = action["tooltip"];
                             if (tooltip) {
                                 event_result->tooltip = *tooltip;
+>>>>>>> pr_191
+                            }
+
+                            void FunctionUser(Universe & universe, ScriptInterface & script_engine) {
+                                CREATE_NAMESPACE(core);
+
+                                REGISTER_FUNCTION("set_name", [&](entity entity, std::string name) {
+                                    universe.emplace_or_replace<components::Name>(entity, name);
+                                });
+
+                                REGISTER_FUNCTION("to_human_string",
+                                                  [&](int64_t number) { return util::LongToHumanString(number); });
+
+                                REGISTER_FUNCTION("get_name", [&](entity entity) {
+                                    return universe.get<components::Name>(entity).name;
+                                });
+
+                                REGISTER_FUNCTION("get_random_name",
+                                                  [&](const std::string& name_gen, const std::string& rule) {
+                                                      return universe.name_generators[name_gen].Generate(rule);
+                                                  });
+                            }
+
+                            void FunctionPopulation(Universe & universe, ScriptInterface & script_engine) {
+                                CREATE_NAMESPACE(core);
+
+                                REGISTER_FUNCTION("add_population_segment", [&](entity settlement, uint64_t popsize) {
+                                    entt::entity population = universe.create();
+                                    universe.emplace<components::PopulationSegment>(population, popsize);
+                                    universe.emplace<components::ResourceStockpile>(population);
+                                    universe.emplace<components::LaborInformation>(population);
+                                    // Add to planet list
+                                    universe.get<components::Settlement>(settlement).population.push_back(population);
+
+                                    return population;
+                                });
+
+                                REGISTER_FUNCTION("get_segment_size", [&](entity segment) {
+                                    return universe.get<components::PopulationSegment>(segment).population;
+                                });
+
+                                // Get population segments of a planet
+                                REGISTER_FUNCTION("get_segments", [&](entity planet) {
+                                    return universe.get<components::Settlement>(planet).population;
+                                });
+
+                                // Get cities of a planet
+                                REGISTER_FUNCTION("get_cities", [&](entity planet) {
+                                    return universe.get<components::Habitation>(planet).settlements;
+                                });
+                            }
+
+                            void FunctionShips(Universe & universe, ScriptInterface & script_engine) {
+                                CREATE_NAMESPACE(core);
+
+                                REGISTER_FUNCTION("create_ship", [&](entity civ, entity orbit, entity starsystem) {
+                                    return actions::CreateShip(universe, civ, orbit, starsystem);
+                                });
+                            }
+
+                            void FunctionEvent(Universe & universe, ScriptInterface & script_engine) {
+                                CREATE_NAMESPACE(core);
+
+    REGISTER_FUNCTION("push_event", [&](entity entity, sol::table event_table) {
+                                    auto& queue = universe.get_or_emplace<event::EventQueue>(entity);
+                                    auto event = std::make_shared<event::Event>();
+                                    event->title = event_table["title"];
+                                    SPDLOG_INFO("Parsing event \"{}\"", event->title);
+                                    event->content = event_table["content"];
+                                    event->image = event_table["image"];
+                                    sol::optional<std::vector<sol::table>> optional = event_table["actions"];
+                                    if (optional) {
+                                        for (auto& action : *optional) {
+                                            if (action == sol::nil) {
+                                                continue;
+                                            }
+                                            auto event_result = std::make_shared<cqsp::common::event::EventResult>();
+                                            event_result->name = action["name"];
+                                            sol::optional<std::string> tooltip = action["tooltip"];
+                                            if (tooltip) {
+                                                event_result->tooltip = *tooltip;
 >>>>>>> pr_254
-                            }
-                            return market_entity;
-                            // return entity;
-                        };
-                        REGISTER_FUNCTION("create_market", lambda);
+                                            }
+                                            return market_entity;
+                                            // return entity;
+                                        };
+                                        REGISTER_FUNCTION("create_market", lambda);
 
-                        REGISTER_FUNCTION("place_market", [&](entt::entity market, entt::entity planet) {
-                            universe.emplace<components::MarketCenter>(planet, market);
-                        });
+                                        REGISTER_FUNCTION(
+                                            "place_market", [&](entt::entity market, entt::entity planet) {
+                                                universe.emplace<components::MarketCenter>(planet, market);
+                                            });
 
-                        REGISTER_FUNCTION("attach_market", [&](entt::entity market_entity, entt::entity participant) {
-                            Node market_node(universe, market_entity);
-                            Node participant_node(universe, participant);
-                            actions::AddParticipant(market_node, participant_node);
-                        });
+                                        REGISTER_FUNCTION("attach_market",
+                                                          [&](entt::entity market_entity, entt::entity participant) {
+                                                              Node market_node(universe, market_entity);
+                                                              Node participant_node(universe, participant);
+                                                              actions::AddParticipant(market_node, participant_node);
+                                                          });
 
-                        REGISTER_FUNCTION("get_balance", [&](entt::entity participant) {
-                            return universe.get_or_emplace<Wallet>(participant).GetBalance();
-                        });
+                                        REGISTER_FUNCTION("get_balance", [&](entt::entity participant) {
+                                            return universe.get_or_emplace<Wallet>(participant).GetBalance();
+                                        });
 
-                        REGISTER_FUNCTION("add_balance", [&](entt::entity participant, double balance) {
-                            universe.get_or_emplace<Wallet>(participant) += balance;
-                        });
+                                        REGISTER_FUNCTION("add_balance", [&](entt::entity participant, double balance) {
+                                            universe.get_or_emplace<Wallet>(participant) += balance;
+                                        });
 
-                        auto get_planetary_markets = [&]() {
-                            auto view = universe.view<Market, components::PlanetaryMarket>();
-                            std::vector<entt::entity> markets;
-                            for (entt::entity entity : view) {
-                                markets.push_back(entity);
-                            }
-                            return sol::as_table(markets);
-                        };
-                        REGISTER_FUNCTION("get_planetary_markets", get_planetary_markets);
-                    }
-
-                    void FunctionUser(Universe & universe, ScriptInterface & script_engine) {
-                        CREATE_NAMESPACE(core);
-
-                        REGISTER_FUNCTION("set_name", [&](entt::entity entity, const std::string& name) {
-                            universe.emplace_or_replace<components::Name>(entity, name);
-                        });
-
-                        REGISTER_FUNCTION("to_human_string",
-                                          [&](int64_t number) { return cqsp::util::NumberToHumanString(number); });
-
-                        REGISTER_FUNCTION("get_name",
-                                          [&](entt::entity entity) { return util::GetName(universe, entity); });
-
-                        REGISTER_FUNCTION("get_random_name", [&](const std::string& name_gen, const std::string& rule) {
-                            return universe.name_generators[name_gen].Generate(rule);
-                        });
-                    }
-
-                    void FunctionPopulation(Universe & universe, ScriptInterface & script_engine) {
-                        CREATE_NAMESPACE(core);
-
-                        REGISTER_FUNCTION("add_population_segment", [&](entt::entity settlement, uint64_t popsize) {
-                            entt::entity population = universe.create();
-                            universe.emplace<PopulationSegment>(population, popsize);
-                            universe.emplace<components::ResourceStockpile>(population);
-                            universe.emplace<components::LaborInformation>(population);
-                            // Add to planet list
-                            universe.get<Settlement>(settlement).population.push_back(population);
-
-                            return population;
-                        });
-
-                        REGISTER_FUNCTION("get_segment_size", [&](entt::entity segment) {
-                            return universe.get<PopulationSegment>(segment).population;
-                        });
-
-                        // Get population segments of a planet
-                        REGISTER_FUNCTION("get_segments", [&](entt::entity planet) {
-                            return universe.get<Settlement>(planet).population;
-                        });
-
-                        // Get cities of a planet
-                        REGISTER_FUNCTION("get_cities", [&](entt::entity planet) {
-                            return universe.get<Habitation>(planet).settlements;
-                        });
-
-                        REGISTER_FUNCTION("get_city",
-                                          [&](const std::string& planet) { return universe.cities[planet]; });
-                    }
-
-                    void FunctionShips(cqsp::common::Universe & universe, ScriptInterface & script_engine) {
-                        CREATE_NAMESPACE(core);
-
-                        REGISTER_FUNCTION("create_ship",
-                                          [&](entt::entity civ, entt::entity orbit, entt::entity starsystem) {
-                                              Node civ_node(universe, civ);
-                                              Node orbit_node(universe, orbit);
-                                              Node starsystem_node(universe, orbit);
-                                              return actions::CreateShip(civ_node, orbit_node, starsystem_node);
-                                          });
-                    }
-
-                    void FunctionEvent(Universe & universe, ScriptInterface & script_engine) {
-                        CREATE_NAMESPACE(core);
-
-                        REGISTER_FUNCTION("push_event", [&](entt::entity entity, sol::table event_table) {
-                            auto& queue = universe.get_or_emplace<event::EventQueue>(entity);
-                            auto event = std::make_shared<cqsp::common::event::Event>();
-                            event->title = event_table["title"];
-                            SPDLOG_INFO("Parsing event \"{}\"", event->title);
-                            event->content = event_table["content"];
-                            event->image = event_table["image"];
-                            sol::optional<std::vector<sol::table>> optional = event_table["actions"];
-                            if (optional) {
-                                for (auto& action : *optional) {
-                                    if (action == sol::nil) {
-                                        continue;
-                                    }
-                                    auto event_result = std::make_shared<cqsp::common::event::EventResult>();
-                                    event_result->name = action["name"];
-                                    sol::optional<std::string> tooltip = action["tooltip"];
-                                    if (tooltip) {
-                                        event_result->tooltip = *tooltip;
+                                        auto get_planetary_markets = [&]() {
+                                            auto view = universe.view<Market, components::PlanetaryMarket>();
+                                            std::vector<entt::entity> markets;
+                                            for (entt::entity entity : view) {
+                                                markets.push_back(entity);
+                                            }
+                                            return sol::as_table(markets);
+                                        };
+                                        REGISTER_FUNCTION("get_planetary_markets", get_planetary_markets);
                                     }
 
-                                    event->table = event_table;
-                                    sol::optional<sol::function> f = action["action"];
-                                    event_result->has_event = f.has_value();
-                                    if (f) {
-                                        event_result->action = *f;
+                                    void FunctionUser(Universe & universe, ScriptInterface & script_engine) {
+                                        CREATE_NAMESPACE(core);
+
+                                        REGISTER_FUNCTION(
+                                            "set_name", [&](entt::entity entity, const std::string& name) {
+                                                universe.emplace_or_replace<components::Name>(entity, name);
+                                            });
+
+                                        REGISTER_FUNCTION("to_human_string", [&](int64_t number) {
+                                            return cqsp::util::NumberToHumanString(number);
+                                        });
+
+                                        REGISTER_FUNCTION("get_name", [&](entt::entity entity) {
+                                            return util::GetName(universe, entity);
+                                        });
+
+                                        REGISTER_FUNCTION("get_random_name",
+                                                          [&](const std::string& name_gen, const std::string& rule) {
+                                                              return universe.name_generators[name_gen].Generate(rule);
+                                                          });
                                     }
-                                    event->actions.push_back(event_result);
-                                }
-                            }
-                            queue.events.push_back(event);
-                        });
-                    }
 
-                    void FunctionResource(Universe & universe, ScriptInterface & script_engine) {
-                        CREATE_NAMESPACE(core);
+                                    void FunctionPopulation(Universe & universe, ScriptInterface & script_engine) {
+                                        CREATE_NAMESPACE(core);
 
-                        REGISTER_FUNCTION("add_resource", [&](entt::entity storage, entt::entity resource, int amount) {
-                            // Add resources to the resource stockpile
-                            universe.get<ResourceStockpile>(storage)[resource] += amount;
-                        });
+                                        REGISTER_FUNCTION(
+                                            "add_population_segment", [&](entt::entity settlement, uint64_t popsize) {
+                                                entt::entity population = universe.create();
+                                                universe.emplace<PopulationSegment>(population, popsize);
+                                                universe.emplace<components::ResourceStockpile>(population);
+                                                universe.emplace<components::LaborInformation>(population);
+                                                // Add to planet list
+                                                universe.get<Settlement>(settlement).population.push_back(population);
 
-                        REGISTER_FUNCTION("get_resource_count", [&](entt::entity stockpile, entt::entity resource) {
-                            return universe.get<ResourceStockpile>(stockpile)[resource];
-                        });
-                    }
+                                                return population;
+                                            });
 
-                    void FunctionCivilizations(Universe & universe, ScriptInterface & script_engine) {
-                        CREATE_NAMESPACE(core);
+                                        REGISTER_FUNCTION("get_segment_size", [&](entt::entity segment) {
+                                            return universe.get<PopulationSegment>(segment).population;
+                                        });
 
-                        REGISTER_FUNCTION("get_player", [&]() { return universe.view<components::Player>().front(); });
-                        REGISTER_FUNCTION("get_capital_city", [&](entt::entity civ) {
-                            return universe.get<components::Country>(civ).capital_city;
-                        });
-                    }
+                                        // Get population segments of a planet
+                                        REGISTER_FUNCTION("get_segments", [&](entt::entity planet) {
+                                            return universe.get<Settlement>(planet).population;
+                                        });
 
-                    void FunctionScience(Universe & universe, ScriptInterface & script_engine) {
-                        CREATE_NAMESPACE(core);
+                                        // Get cities of a planet
+                                        REGISTER_FUNCTION("get_cities", [&](entt::entity planet) {
+                                            return universe.get<Habitation>(planet).settlements;
+                                        });
 
-                        REGISTER_FUNCTION("create_lab", [&]() { return actions::CreateLab(universe); });
+                                        REGISTER_FUNCTION("get_city", [&](const std::string& planet) {
+                                            return universe.cities[planet];
+                                        });
+                                    }
 
-                        REGISTER_FUNCTION("add_science", [&](entt::entity lab, entt::entity research, double progress) {
-                            Node lab_node(universe, lab);
-                            Node research_node(universe, research);
-                            actions::AddScienceResearch(lab_node, research_node, progress);
-                        });
+                                    void FunctionShips(cqsp::common::Universe & universe,
+                                                       ScriptInterface & script_engine) {
+                                        CREATE_NAMESPACE(core);
 
-                        REGISTER_FUNCTION("add_tech_progress", [&](entt::entity entity) {
-                            universe.emplace<components::science::TechnologicalProgress>(entity);
-                            universe.emplace<ScientificResearch>(entity);
-                        });
+                                        REGISTER_FUNCTION("create_ship", [&](entt::entity civ, entt::entity orbit,
+                                                                             entt::entity starsystem) {
+                                            Node civ_node(universe, civ);
+                                            Node orbit_node(universe, orbit);
+                                            Node starsystem_node(universe, orbit);
+                                            return actions::CreateShip(civ_node, orbit_node, starsystem_node);
+                                        });
+                                    }
 
-                        REGISTER_FUNCTION("complete_technology", [&](entt::entity entity, entt::entity tech) {
-                            Node civilization(universe, entity);
-                            Node tech_node(universe, tech);
-                            actions::ResearchTech(civilization, tech_node);
-                        });
+                                    void FunctionEvent(Universe & universe, ScriptInterface & script_engine) {
+                                        CREATE_NAMESPACE(core);
 
-                        REGISTER_FUNCTION("research_technology", [&](entt::entity entity, entt::entity tech) {
-                            auto& res = universe.get<ScientificResearch>(entity);
-                            res.current_research[tech] = 0;
-                        });
+                                        REGISTER_FUNCTION("push_event", [&](entt::entity entity,
+                                                                            sol::table event_table) {
+                                            auto& queue = universe.get_or_emplace<event::EventQueue>(entity);
+                                            auto event = std::make_shared<cqsp::common::event::Event>();
+                                            event->title = event_table["title"];
+                                            SPDLOG_INFO("Parsing event \"{}\"", event->title);
+                                            event->content = event_table["content"];
+                                            event->image = event_table["image"];
+                                            sol::optional<std::vector<sol::table>> optional = event_table["actions"];
+                                            if (optional) {
+                                                for (auto& action : *optional) {
+                                                    if (action == sol::nil) {
+                                                        continue;
+                                                    }
+                                                    auto event_result =
+                                                        std::make_shared<cqsp::common::event::EventResult>();
+                                                    event_result->name = action["name"];
+                                                    sol::optional<std::string> tooltip = action["tooltip"];
+                                                    if (tooltip) {
+                                                        event_result->tooltip = *tooltip;
+                                                    }
 
-                        REGISTER_FUNCTION("add_potential_tech", [&](entt::entity entity, entt::entity tech) {
-                            auto& res = universe.get<ScientificResearch>(entity);
-                            res.potential_research.insert(tech);
-                        });
-                    }
+                                                    event->table = event_table;
+                                                    sol::optional<sol::function> f = action["action"];
+                                                    event_result->has_event = f.has_value();
+                                                    if (f) {
+                                                        event_result->action = *f;
+                                                    }
+                                                    event->actions.push_back(event_result);
+                                                }
+                                            }
+                                            queue.events.push_back(event);
+                                        });
+                                    }
 
-                    // this is just meant for debugging and is not performant at all
-                    sol::table GetMarketTable(Universe & universe, ScriptInterface & script_engine,
-                                              entt::entity market) {
-                        sol::table market_table = script_engine.create_table_with();
+                                    void FunctionResource(Universe & universe, ScriptInterface & script_engine) {
+                                        CREATE_NAMESPACE(core);
 
-                        Market& market_component = universe.get<Market>(market);
-                        auto goods_view = universe.view<components::Price>();
-                        for (entt::entity good : goods_view) {
-                            sol::table good_table = script_engine.create_table_with();
-                            good_table["price"] = market_component.price[good];
-                            good_table["supply"] = market_component.supply()[good];
-                            good_table["demand"] = market_component.demand()[good];
-                            good_table["sd_ratio"] = market_component.sd_ratio[good];
-                            good_table["consumption"] = market_component.consumption[good];
-                            good_table["production"] = market_component.production[good];
-                            good_table["trade"] = market_component.trade[good];
-                            market_table.set(good, good_table);
-                            // Now get all the values for goods
-                        }
-                        return market_table;
-                    }
+                                        REGISTER_FUNCTION("add_resource", [&](entt::entity storage,
+                                                                              entt::entity resource, int amount) {
+                                            // Add resources to the resource stockpile
+                                            universe.get<ResourceStockpile>(storage)[resource] += amount;
+                                        });
+
+                                        REGISTER_FUNCTION(
+                                            "get_resource_count", [&](entt::entity stockpile, entt::entity resource) {
+                                                return universe.get<ResourceStockpile>(stockpile)[resource];
+                                            });
+                                    }
+
+                                    void FunctionCivilizations(Universe & universe, ScriptInterface & script_engine) {
+                                        CREATE_NAMESPACE(core);
+
+                                        REGISTER_FUNCTION("get_player", [&]() {
+                                            return universe.view<components::Player>().front();
+                                        });
+                                        REGISTER_FUNCTION("get_capital_city", [&](entt::entity civ) {
+                                            return universe.get<components::Country>(civ).capital_city;
+                                        });
+                                    }
+
+                                    void FunctionScience(Universe & universe, ScriptInterface & script_engine) {
+                                        CREATE_NAMESPACE(core);
+
+                                        REGISTER_FUNCTION("create_lab", [&]() { return actions::CreateLab(universe); });
+
+                                        REGISTER_FUNCTION("add_science", [&](entt::entity lab, entt::entity research,
+                                                                             double progress) {
+                                            Node lab_node(universe, lab);
+                                            Node research_node(universe, research);
+                                            actions::AddScienceResearch(lab_node, research_node, progress);
+                                        });
+
+                                        REGISTER_FUNCTION("add_tech_progress", [&](entt::entity entity) {
+                                            universe.emplace<components::science::TechnologicalProgress>(entity);
+                                            universe.emplace<ScientificResearch>(entity);
+                                        });
+
+                                        REGISTER_FUNCTION("complete_technology",
+                                                          [&](entt::entity entity, entt::entity tech) {
+                                                              Node civilization(universe, entity);
+                                                              Node tech_node(universe, tech);
+                                                              actions::ResearchTech(civilization, tech_node);
+                                                          });
+
+                                        REGISTER_FUNCTION("research_technology",
+                                                          [&](entt::entity entity, entt::entity tech) {
+                                                              auto& res = universe.get<ScientificResearch>(entity);
+                                                              res.current_research[tech] = 0;
+                                                          });
+
+                                        REGISTER_FUNCTION("add_potential_tech",
+                                                          [&](entt::entity entity, entt::entity tech) {
+                                                              auto& res = universe.get<ScientificResearch>(entity);
+                                                              res.potential_research.insert(tech);
+                                                          });
+                                    }
+
+                                    // this is just meant for debugging and is not performant at all
+                                    sol::table GetMarketTable(Universe & universe, ScriptInterface & script_engine,
+                                                              entt::entity market) {
+                                        sol::table market_table = script_engine.create_table_with();
+
+                                        Market& market_component = universe.get<Market>(market);
+                                        auto goods_view = universe.view<components::Price>();
+                                        for (entt::entity good : goods_view) {
+                                            sol::table good_table = script_engine.create_table_with();
+                                            good_table["price"] = market_component.price[good];
+                                            good_table["supply"] = market_component.supply()[good];
+                                            good_table["demand"] = market_component.demand()[good];
+                                            good_table["sd_ratio"] = market_component.sd_ratio[good];
+                                            good_table["consumption"] = market_component.consumption[good];
+                                            good_table["production"] = market_component.production[good];
+                                            good_table["trade"] = market_component.trade[good];
+                                            market_table.set(good, good_table);
+                                            // Now get all the values for goods
+                                        }
+                                        return market_table;
+                                    }
 
 <<<<<<< HEAD
-                    void FunctionTrade(Universe & universe, ScriptInterface & script_engine) {
-                        CREATE_NAMESPACE(core);
+                                    void FunctionTrade(Universe & universe, ScriptInterface & script_engine) {
+                                        CREATE_NAMESPACE(core);
 
-                        REGISTER_FUNCTION("get_market_table", [&](entt::entity market) {
-                            return GetMarketTable(universe, script_engine, market);
-                        });
-                    }
+                                        REGISTER_FUNCTION("get_market_table", [&](entt::entity market) {
+                                            return GetMarketTable(universe, script_engine, market);
+                                        });
+                                    }
 
-                    void LoadFunctions(Universe & universe, ScriptInterface & script_engine) {
-                        FunctionCivilizationGen(universe, script_engine);
-                        FunctionCivilizations(universe, script_engine);
-                        FunctionEconomy(universe, script_engine);
-                        FunctionPopulation(universe, script_engine);
-                        FunctionRandom(universe, script_engine);
-                        FunctionUniverseBodyGen(universe, script_engine);
-                        FunctionUser(universe, script_engine);
-                        FunctionEvent(universe, script_engine);
-                        FunctionShips(universe, script_engine);
-                        FunctionResource(universe, script_engine);
-                        FunctionScience(universe, script_engine);
-                        FunctionTrade(universe, script_engine);
-                    }
+                                    void LoadFunctions(Universe & universe, ScriptInterface & script_engine) {
+                                        FunctionCivilizationGen(universe, script_engine);
+                                        FunctionCivilizations(universe, script_engine);
+                                        FunctionEconomy(universe, script_engine);
+                                        FunctionPopulation(universe, script_engine);
+                                        FunctionRandom(universe, script_engine);
+                                        FunctionUniverseBodyGen(universe, script_engine);
+                                        FunctionUser(universe, script_engine);
+                                        FunctionEvent(universe, script_engine);
+                                        FunctionShips(universe, script_engine);
+                                        FunctionResource(universe, script_engine);
+                                        FunctionScience(universe, script_engine);
+                                        FunctionTrade(universe, script_engine);
+                                    }
 }  // namespace cqsp::common::scripting
 =======
 void FunctionResource(Universe& universe, ScriptInterface& script_engine) {
-                    CREATE_NAMESPACE(core);
+                                    CREATE_NAMESPACE(core);
 
-                    REGISTER_FUNCTION("add_resource", [&](entity storage, entity resource, int amount) {
-                        // Add resources to the resource stockpile
-                        universe.get<components::ResourceStockpile>(storage)[resource] += amount;
-                    });
+                                    REGISTER_FUNCTION("add_resource", [&](entity storage, entity resource, int amount) {
+                                        // Add resources to the resource stockpile
+                                        universe.get<components::ResourceStockpile>(storage)[resource] += amount;
+                                    });
 
-                    REGISTER_FUNCTION("get_resource_count", [&](entity stockpile, entity resource) {
-                        return universe.get<components::ResourceStockpile>(stockpile)[resource];
-                    });
+                                    REGISTER_FUNCTION("get_resource_count", [&](entity stockpile, entity resource) {
+                                        return universe.get<components::ResourceStockpile>(stockpile)[resource];
+                                    });
 }
 
 void FunctionCivilizations(Universe& universe, ScriptInterface& script_engine) {
-                    CREATE_NAMESPACE(core);
+                                    CREATE_NAMESPACE(core);
 
-                    REGISTER_FUNCTION("get_player", [&]() { return universe.view<components::Player>().front(); });
+                                    REGISTER_FUNCTION("get_player",
+                                                      [&]() { return universe.view<components::Player>().front(); });
 }
 
 void FunctionScience(Universe& universe, ScriptInterface& script_engine) {
-                    CREATE_NAMESPACE(core);
+                                    CREATE_NAMESPACE(core);
 
-                    REGISTER_FUNCTION("create_lab", [&]() { return systems::science::CreateLab(universe); });
+                                    REGISTER_FUNCTION("create_lab",
+                                                      [&]() { return systems::science::CreateLab(universe); });
 
-                    REGISTER_FUNCTION("add_science", [&](entity lab, entity research, double progress) {
-                        systems::science::AddScienceResearch(universe, lab, research, progress);
-                    });
+                                    REGISTER_FUNCTION("add_science", [&](entity lab, entity research, double progress) {
+                                        systems::science::AddScienceResearch(universe, lab, research, progress);
+                                    });
 
-                    REGISTER_FUNCTION("add_tech_progress", [&](entity entity) {
-                        universe.emplace<components::science::TechnologicalProgress>(entity);
-                        universe.emplace<components::science::ScientificResearch>(entity);
-                    });
+                                    REGISTER_FUNCTION("add_tech_progress", [&](entity entity) {
+                                        universe.emplace<components::science::TechnologicalProgress>(entity);
+                                        universe.emplace<components::science::ScientificResearch>(entity);
+                                    });
 
-                    REGISTER_FUNCTION("complete_technology", [&](entity civ, entity tech) {
-                        systems::science::ResearchTech(universe, civ, tech);
-                    });
+                                    REGISTER_FUNCTION("complete_technology", [&](entity civ, entity tech) {
+                                        systems::science::ResearchTech(universe, civ, tech);
+                                    });
 
-                    REGISTER_FUNCTION("research_technology", [&](entity researcher, entity tech) {
-                        auto& res = universe.get<components::science::ScientificResearch>(researcher);
-                        res.current_research[tech] = 0;
-                    });
+                                    REGISTER_FUNCTION("research_technology", [&](entity researcher, entity tech) {
+                                        auto& res = universe.get<components::science::ScientificResearch>(researcher);
+                                        res.current_research[tech] = 0;
+                                    });
 
-                    REGISTER_FUNCTION("add_potential_tech", [&](entt::entity researcher, entt::entity tech) {
-                        auto& res = universe.get<components::science::ScientificResearch>(researcher);
-                        res.potential_research.insert(tech);
-                    });
+                                    REGISTER_FUNCTION("add_potential_tech", [&](entt::entity researcher,
+                                                                                entt::entity tech) {
+                                        auto& res = universe.get<components::science::ScientificResearch>(researcher);
+                                        res.potential_research.insert(tech);
+                                    });
 }
 
 void LoadFunctions(Universe& universe, ScriptInterface& script_engine) {
-                    FunctionCivilizationGen(universe, script_engine);
-                    FunctionCivilizations(universe, script_engine);
-                    FunctionEconomy(universe, script_engine);
-                    FunctionPopulation(universe, script_engine);
-                    FunctionRandom(universe, script_engine);
-                    FunctionUniverseBodyGen(universe, script_engine);
-                    FunctionUser(universe, script_engine);
-                    FunctionEvent(universe, script_engine);
-                    FunctionShips(universe, script_engine);
-                    FunctionResource(universe, script_engine);
-                    FunctionScience(universe, script_engine);
+                                    FunctionCivilizationGen(universe, script_engine);
+                                    FunctionCivilizations(universe, script_engine);
+                                    FunctionEconomy(universe, script_engine);
+                                    FunctionPopulation(universe, script_engine);
+                                    FunctionRandom(universe, script_engine);
+                                    FunctionUniverseBodyGen(universe, script_engine);
+                                    FunctionUser(universe, script_engine);
+                                    FunctionEvent(universe, script_engine);
+                                    FunctionShips(universe, script_engine);
+                                    FunctionResource(universe, script_engine);
+                                    FunctionScience(universe, script_engine);
 }
-            }  // namespace cqsp::common::scripting
+                            }  // namespace cqsp::common::scripting
 
 
 >>>>>>> pr_254

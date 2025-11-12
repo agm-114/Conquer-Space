@@ -105,6 +105,7 @@ struct MarketElementInformation {
     double price_ratio;
     double sd_ratio;
     double inputratio;
+<<<<<<< HEAD:src/common/components/market.h
 };
 
 struct MarketOrder {
@@ -126,6 +127,8 @@ struct PlanetaryMarket {
     // Resources supplied by the interplanetary market
     ResourceLedger supplied_resources;
     ResourceLedger supply_difference;
+    == == == =
+>>>>>>> pr_191:src/common/components/economy.h
 };
 
 struct Market : MarketInformation {

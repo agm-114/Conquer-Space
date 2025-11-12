@@ -25,10 +25,10 @@
 #include "common/components/player.h"
 <<<<<<< HEAD == == == =
 #include "common/components/movement.h"
-               >>>>>>> pr_8
+    >>>>>>> pr_8
 #include "common/components/population.h"
 #include "common/components/resource.h"
-               <<<<<<< HEAD
+    <<<<<<<HEAD
 #include "common/components/surface.h"
 #include "engine/gui.h"
 #include "engine/renderer/primitives/cube.h"
@@ -36,7 +36,7 @@
 #include "engine/renderer/primitives/uvsphere.h"
 #include "engine/renderer/renderer.h"
                == == ==
-    =
+           =
 
 #include "client/systems/gui/sysevent.h"
 #include "client/systems/syscommand.h"
@@ -45,7 +45,8 @@
 #include "client/systems/sysplanetviewer.h"
 #include "client/systems/sysstarsystemtree.h"
 #include "client/systems/systurnsavewindow.h"
-        >>>>>>> pr_8
+               >>>>>>>
+        pr_8
 
     bool game_halted = false;
 
@@ -74,6 +75,7 @@ void conquerspace::scene::UniverseScene::Init() {
 
     selected_planet = player_civ->starting_planet;
 
+<<<<<<< HEAD
     AddUISystem<conquerspace::client::systems::SysPlanetInformation>();
     AddUISystem<conquerspace::client::systems::SysTurnSaveWindow>();
     AddUISystem<conquerspace::client::systems::SysStarSystemTree>();
@@ -81,6 +83,21 @@ void conquerspace::scene::UniverseScene::Init() {
     AddUISystem<conquerspace::client::systems::SysDebugMenu>();
     AddUISystem<conquerspace::client::systems::SysCommand>();
     AddUISystem<conquerspace::client::systems::gui::SysEvent>();
+    == == == = AddUISystem<cqsps::SysPlanetInformation>();
+    //AddUISystem<cqsps::SysTurnSaveWindow>();
+    AddUISystem<cqsps::SysStarSystemTree>();
+    AddUISystem<cqsps::SysPauseMenu>();
+    AddUISystem<cqsps::SysDebugMenu>();
+    //AddUISystem<cqsps::SysCommand>();
+    //AddUISystem<cqsps::CivilizationInfoPanel>();
+    //AddUISystem<cqsps::SysFieldViewer>();
+    //AddUISystem<cqsps::SysTechnologyProjectViewer>();
+    //AddUISystem<cqsps::SysTechnologyViewer>();
+    AddUISystem<cqsps::SysCountryInformation>();
+    AddUISystem<cqsps::SysPlanetMarketInformation>();
+
+    AddUISystem<cqsps::gui::SysEvent>();
+>>>>>>> pr_191
     simulation->tick();
 }
 

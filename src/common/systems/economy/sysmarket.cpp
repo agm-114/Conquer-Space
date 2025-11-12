@@ -91,6 +91,7 @@
                     market.demand().AddNegative(market.trade);
                     market.sd_ratio = (market.supply()).SafeDivision(market.demand());
 
+<<<<<<< HEAD
                     for (Node good_node : goodsview) {
                         DeterminePrice(market, good_node);
                     }
@@ -174,3 +175,19 @@
                         }
                     }
                 }  // namespace cqsp::common::systems
+                == == == =
+                             // Initialize the price
+                    for (entt::entity goodenity : goodsview) {
+                    market.price[goodenity] = universe.get<components::Price>(goodenity);
+                    // Set the supply and demand things as 1 so that they sell for
+                    // now
+                    market.previous_demand[goodenity] = 1;
+                    market.previous_supply[goodenity] = 1;
+                    market.supply[goodenity] = 1;
+                    market.demand[goodenity] = 1;
+                }
+                market.sd_ratio = market.supply.SafeDivision(market.demand);
+                market.history.push_back(market);
+            }
+        }
+>>>>>>> pr_191
