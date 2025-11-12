@@ -61,8 +61,7 @@
 #include "stb_image.h"  // NOLINT: STB is rather annoying
 #include "tracy/Tracy.hpp"
 
-                <<<<<<< HEAD < < < < < < <
-    HEAD namespace cqsp::client::systems {
+    < < < < < < < HEAD < < < < < < < HEAD namespace cqsp::client::systems {
 
 <<<<<<< HEAD
     namespace components = common::components;
@@ -544,6 +543,7 @@
         // Also change up the shader
         planet.shaderProgram = pbr_shader;
     }*/
+<<<<<<< HEAD
 <<<<<<< HEAD
                                                 // Calculate camera
                                                 CenterCameraOnCity();
@@ -2815,6 +2815,1449 @@
                                                                                                                                 day_offset) {
                                                                                                                             // Need to interpolate between the frames
 <<<<<<< HEAD
+                                                                                                                            == ==
+                                                                                                                                ==
+                                                                                                                                =
+                                                                                                                                    // Calculate camera
+                                                                                                                                CenterCameraOnCity();
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            SeePlanet(
+                                                                                                                                entt::entity
+                                                                                                                                    ent) {
+                                                                                                                            m_universe
+                                                                                                                                .clear<
+                                                                                                                                    FocusedPlanet>();
+                                                                                                                            m_universe
+                                                                                                                                .emplace<
+                                                                                                                                    FocusedPlanet>(
+                                                                                                                                    ent);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DoUI(
+                                                                                                                                float
+                                                                                                                                    deltaTime) {
+                                                                                                                            // #ifdef NDEBUG
+                                                                                                                            //     return;
+                                                                                                                            // #endif
+                                                                                                                            RenderInformationWindow(
+                                                                                                                                deltaTime);
+                                                                                                                            RenderSelectedObjectInformation();
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DrawStars() {
+                                                                                                                            ZoneScoped;
+                                                                                                                            // Draw stars
+
+                                                                                                                            renderer
+                                                                                                                                .BeginDraw(
+                                                                                                                                    physical_layer);
+                                                                                                                            for (
+                                                                                                                                entt::entity
+                                                                                                                                    star :
+                                                                                                                                m_universe
+                                                                                                                                    .view<
+                                                                                                                                        Body,
+                                                                                                                                        LightEmitter>()) {
+                                                                                                                                // Draw the star circle
+                                                                                                                                glm::vec3 object_pos =
+                                                                                                                                    CalculateCenteredObject(
+                                                                                                                                        star);
+                                                                                                                                sun_position =
+                                                                                                                                    object_pos;
+                                                                                                                                DrawStar(
+                                                                                                                                    star,
+                                                                                                                                    object_pos);
+                                                                                                                            }
+                                                                                                                            renderer
+                                                                                                                                .EndDraw(
+                                                                                                                                    physical_layer);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DrawBodies() {
+                                                                                                                            ZoneScoped;
+                                                                                                                            // Draw other bodies
+                                                                                                                            auto bodies =
+                                                                                                                                m_universe
+                                                                                                                                    .view<
+                                                                                                                                        Body>(
+                                                                                                                                        entt::exclude<
+                                                                                                                                            LightEmitter>);
+                                                                                                                            renderer
+                                                                                                                                .BeginDraw(
+                                                                                                                                    planet_icon_layer);
+                                                                                                                            glDepthFunc(
+                                                                                                                                GL_ALWAYS);
+                                                                                                                            DrawAllPlanetBillboards(
+                                                                                                                                bodies);
+                                                                                                                            glDepthFunc(
+                                                                                                                                GL_LESS);
+                                                                                                                            renderer
+                                                                                                                                .EndDraw(
+                                                                                                                                    planet_icon_layer);
+
+                                                                                                                            renderer
+                                                                                                                                .BeginDraw(
+                                                                                                                                    physical_layer);
+                                                                                                                            DrawAllPlanets(
+                                                                                                                                bodies);
+                                                                                                                            DrawAllOrbits();
+                                                                                                                            DrawModels();
+                                                                                                                            renderer
+                                                                                                                                .EndDraw(
+                                                                                                                                    physical_layer);
+
+                                                                                                                            // This is on the ship icon layer because the cities have to appear on top of planets
+                                                                                                                            // and planet_icon_layer is behind all the planets.
+                                                                                                                            renderer
+                                                                                                                                .BeginDraw(
+                                                                                                                                    ship_icon_layer);
+                                                                                                                            DrawAllCities(
+                                                                                                                                bodies);
+                                                                                                                            renderer
+                                                                                                                                .EndDraw(
+                                                                                                                                    ship_icon_layer);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DrawShips() {
+                                                                                                                            ZoneScoped;
+                                                                                                                            // Draw Ships
+
+                                                                                                                            renderer
+                                                                                                                                .BeginDraw(
+                                                                                                                                    ship_icon_layer);
+                                                                                                                            ship_overlay
+                                                                                                                                .shaderProgram
+                                                                                                                                ->UseProgram();
+                                                                                                                            for (
+                                                                                                                                entt::entity
+                                                                                                                                    ship :
+                                                                                                                                m_universe
+                                                                                                                                    .view<
+                                                                                                                                        ships::
+                                                                                                                                            Ship,
+                                                                                                                                        ctx::
+                                                                                                                                            VisibleOrbit>()) {
+                                                                                                                                // if it's not visible, then don't render
+                                                                                                                                glm::vec3 object_pos =
+                                                                                                                                    CalculateCenteredObject(
+                                                                                                                                        ship);
+                                                                                                                                ship_overlay
+                                                                                                                                    .shaderProgram
+                                                                                                                                    ->setVec4(
+                                                                                                                                        "color",
+                                                                                                                                        1,
+                                                                                                                                        0,
+                                                                                                                                        0,
+                                                                                                                                        1);
+                                                                                                                                // Interpolate so that it looks nice
+                                                                                                                                if (m_universe
+                                                                                                                                        .any_of<
+                                                                                                                                            types::
+                                                                                                                                                FuturePosition>(
+                                                                                                                                            ship)) {
+                                                                                                                                    auto& future_comp =
+                                                                                                                                        m_universe
+                                                                                                                                            .get<
+                                                                                                                                                types::
+                                                                                                                                                    FuturePosition>(
+                                                                                                                                                ship);
+                                                                                                                                    const auto& pos =
+                                                                                                                                        future_comp
+                                                                                                                                            .position +
+                                                                                                                                        future_comp
+                                                                                                                                            .center;
+                                                                                                                                    glm::vec3 future_pos =
+                                                                                                                                        CalculateCenteredObject(
+                                                                                                                                            ConvertPoint(
+                                                                                                                                                pos));
+                                                                                                                                    DrawShipIcon(glm::mix(
+                                                                                                                                        object_pos,
+                                                                                                                                        future_pos,
+                                                                                                                                        m_universe
+                                                                                                                                            .tick_fraction));
+                                                                                                                                } else {
+                                                                                                                                    DrawShipIcon(
+                                                                                                                                        object_pos);
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                            renderer
+                                                                                                                                .EndDraw(
+                                                                                                                                    ship_icon_layer);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DrawSkybox() {
+                                                                                                                            ZoneScoped;
+                                                                                                                            // Draw sky box
+                                                                                                                            renderer
+                                                                                                                                .BeginDraw(
+                                                                                                                                    skybox_layer);
+                                                                                                                            sky.shaderProgram
+                                                                                                                                ->UseProgram();
+                                                                                                                            sky.shaderProgram
+                                                                                                                                ->setMat4(
+                                                                                                                                    "view",
+                                                                                                                                    glm::mat4(
+                                                                                                                                        glm::mat3(
+                                                                                                                                            camera_matrix)));
+                                                                                                                            sky.shaderProgram
+                                                                                                                                ->setMat4(
+                                                                                                                                    "projection",
+                                                                                                                                    projection);
+                                                                                                                            glDepthFunc(
+                                                                                                                                GL_LEQUAL);
+                                                                                                                            // skybox cube
+                                                                                                                            engine::Draw(
+                                                                                                                                sky);
+                                                                                                                            glDepthFunc(
+                                                                                                                                GL_LESS);
+                                                                                                                            renderer
+                                                                                                                                .EndDraw(
+                                                                                                                                    skybox_layer);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DrawModels() {
+                                                                                                                            // Loop through the space bodies that are close
+                                                                                                                            for (
+                                                                                                                                entt::entity
+                                                                                                                                    ship :
+                                                                                                                                m_universe
+                                                                                                                                    .view<
+                                                                                                                                        ships::
+                                                                                                                                            Ship,
+                                                                                                                                        ctx::
+                                                                                                                                            VisibleOrbit>()) {
+                                                                                                                                // Get the model of the object
+                                                                                                                                entt::entity
+                                                                                                                                    body_entity =
+                                                                                                                                        ship;
+
+                                                                                                                                if (!m_universe
+                                                                                                                                         .any_of<
+                                                                                                                                             components::
+                                                                                                                                                 WorldModel>(
+                                                                                                                                             body_entity)) {
+                                                                                                                                    continue;
+                                                                                                                                }
+                                                                                                                                auto model_name =
+                                                                                                                                    m_universe
+                                                                                                                                        .get<
+                                                                                                                                            components::
+                                                                                                                                                WorldModel>(
+                                                                                                                                            body_entity);
+                                                                                                                                glm::vec3 object_pos =
+                                                                                                                                    CalculateCenteredObject(
+                                                                                                                                        body_entity);
+                                                                                                                                if (glm::distance(
+                                                                                                                                        cam_pos,
+                                                                                                                                        object_pos) >
+                                                                                                                                    1000) {
+                                                                                                                                    continue;
+                                                                                                                                }
+                                                                                                                                auto model =
+                                                                                                                                    m_app
+                                                                                                                                        .GetAssetManager()
+                                                                                                                                        .GetAsset<
+                                                                                                                                            asset::
+                                                                                                                                                Model>(
+                                                                                                                                            model_name
+                                                                                                                                                .name);
+                                                                                                                                glm::mat4 transform =
+                                                                                                                                    glm::mat4(
+                                                                                                                                        1.f);
+                                                                                                                                transform =
+                                                                                                                                    glm::translate(
+                                                                                                                                        transform,
+                                                                                                                                        object_pos);
+
+                                                                                                                                transform =
+                                                                                                                                    glm::scale(
+                                                                                                                                        transform,
+                                                                                                                                        model
+                                                                                                                                            ->scale);
+                                                                                                                                model
+                                                                                                                                    ->shader
+                                                                                                                                    ->UseProgram();
+                                                                                                                                model
+                                                                                                                                    ->shader
+                                                                                                                                    ->SetMVP(
+                                                                                                                                        transform,
+                                                                                                                                        camera_matrix,
+                                                                                                                                        projection);
+                                                                                                                                model
+                                                                                                                                    ->Draw();
+                                                                                                                            }
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::DrawEntityName(
+                                                                                                                            glm::vec3 &
+                                                                                                                                object_pos,
+                                                                                                                            entt::entity
+                                                                                                                                ent_id) {
+                                                                                                                            std::string
+                                                                                                                                text = GetName(
+                                                                                                                                    m_universe,
+                                                                                                                                    ent_id);
+                                                                                                                            glm::vec3 pos =
+                                                                                                                                GetBillboardPosition(
+                                                                                                                                    object_pos);
+                                                                                                                            // Check if the position on screen is within bounds
+                                                                                                                            if (pos.z <
+                                                                                                                                    1 &&
+                                                                                                                                pos.z >
+                                                                                                                                    -1 &&
+                                                                                                                                (pos.x >
+                                                                                                                                     0 &&
+                                                                                                                                 pos.x <
+                                                                                                                                     m_app
+                                                                                                                                         .GetWindowWidth() &&
+                                                                                                                                 pos.y >
+                                                                                                                                     0 &&
+                                                                                                                                 pos.y <
+                                                                                                                                     m_app
+                                                                                                                                         .GetWindowHeight())) {
+                                                                                                                                m_app
+                                                                                                                                    .DrawText(
+                                                                                                                                        text,
+                                                                                                                                        pos.x,
+                                                                                                                                        pos.y,
+                                                                                                                                        20);
+                                                                                                                            }
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DrawPlanetIcon(
+                                                                                                                                glm::
+                                                                                                                                    vec3 &
+                                                                                                                                object_pos) {
+                                                                                                                            glm::mat4 planetDispMat =
+                                                                                                                                GetBillboardMatrix(
+                                                                                                                                    GetBillboardPosition(
+                                                                                                                                        object_pos));
+
+                                                                                                                            SetBillboardProjection(
+                                                                                                                                planet_circle
+                                                                                                                                    .shaderProgram,
+                                                                                                                                planetDispMat);
+                                                                                                                            engine::Draw(
+                                                                                                                                planet_circle);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::DrawPlanetBillboards(
+                                                                                                                            const entt::
+                                                                                                                                entity&
+                                                                                                                                    ent_id,
+                                                                                                                            const glm::
+                                                                                                                                vec3&
+                                                                                                                                    object_pos) {
+                                                                                                                            glm::vec3 pos =
+                                                                                                                                GetBillboardPosition(
+                                                                                                                                    object_pos);
+
+                                                                                                                            // Check if the position on screen is within bounds
+                                                                                                                            if (GLPositionNotInBounds(
+                                                                                                                                    CalculateGLPosition(
+                                                                                                                                        object_pos),
+                                                                                                                                    pos)) {
+                                                                                                                                return;
+                                                                                                                            }
+
+                                                                                                                            std::string
+                                                                                                                                text = GetName(
+                                                                                                                                    m_universe,
+                                                                                                                                    ent_id);
+
+                                                                                                                            glm::mat4 planetDispMat =
+                                                                                                                                GetBillboardMatrix(
+                                                                                                                                    pos);
+
+                                                                                                                            SetBillboardProjection(
+                                                                                                                                planet_circle
+                                                                                                                                    .shaderProgram,
+                                                                                                                                planetDispMat);
+
+                                                                                                                            engine::Draw(
+                                                                                                                                planet_circle);
+
+                                                                                                                            m_app
+                                                                                                                                .DrawText(
+                                                                                                                                    text,
+                                                                                                                                    pos.x,
+                                                                                                                                    pos.y,
+                                                                                                                                    20);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DrawCityIcon(
+                                                                                                                                const glm::
+                                                                                                                                    vec3&
+                                                                                                                                        object_pos) {
+                                                                                                                            glm::vec3 pos =
+                                                                                                                                GetBillboardPosition(
+                                                                                                                                    object_pos);
+                                                                                                                            if (pos.z >=
+                                                                                                                                    1 ||
+                                                                                                                                pos.z <=
+                                                                                                                                    -1) {
+                                                                                                                                return;
+                                                                                                                            }
+
+                                                                                                                            glm::mat4 planetDispMat =
+                                                                                                                                GetBillboardMatrix(
+                                                                                                                                    pos);
+                                                                                                                            // Scale it by the window ratio
+                                                                                                                            planetDispMat = glm::scale(
+                                                                                                                                planetDispMat,
+                                                                                                                                glm::vec3(
+                                                                                                                                    1,
+                                                                                                                                    GetWindowRatio(),
+                                                                                                                                    1));
+
+                                                                                                                            SetBillboardProjection(
+                                                                                                                                city.shaderProgram,
+                                                                                                                                planetDispMat);
+                                                                                                                            city.shaderProgram
+                                                                                                                                ->Set(
+                                                                                                                                    "color",
+                                                                                                                                    1,
+                                                                                                                                    0,
+                                                                                                                                    1,
+                                                                                                                                    1);
+
+                                                                                                                            engine::Draw(
+                                                                                                                                city);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DrawAllCities(
+                                                                                                                                auto&
+                                                                                                                                    bodies) {
+                                                                                                                            for (
+                                                                                                                                auto
+                                                                                                                                    body_entity :
+                                                                                                                                bodies) {
+                                                                                                                                glm::vec3 object_pos =
+                                                                                                                                    CalculateCenteredObject(
+                                                                                                                                        body_entity);
+                                                                                                                                RenderCities(
+                                                                                                                                    object_pos,
+                                                                                                                                    body_entity);
+                                                                                                                            }
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DrawShipIcon(
+                                                                                                                                const glm::
+                                                                                                                                    vec3&
+                                                                                                                                        object_pos) {
+                                                                                                                            glm::vec3 pos =
+                                                                                                                                GetBillboardPosition(
+                                                                                                                                    object_pos);
+                                                                                                                            glm::mat4 shipDispMat =
+                                                                                                                                GetBillboardMatrix(
+                                                                                                                                    pos);
+                                                                                                                            float window_ratio =
+                                                                                                                                GetWindowRatio();
+                                                                                                                            glm::vec4 gl_Position =
+                                                                                                                                CalculateGLPosition(
+                                                                                                                                    object_pos);
+
+                                                                                                                            // Check if the position on screen is within bounds
+                                                                                                                            if (GLPositionNotInBounds(
+                                                                                                                                    gl_Position,
+                                                                                                                                    pos)) {
+                                                                                                                                return;
+                                                                                                                            }
+
+                                                                                                                            shipDispMat = glm::scale(
+                                                                                                                                shipDispMat,
+                                                                                                                                glm::vec3(
+                                                                                                                                    1,
+                                                                                                                                    window_ratio,
+                                                                                                                                    1));
+                                                                                                                            SetBillboardProjection(
+                                                                                                                                ship_overlay
+                                                                                                                                    .shaderProgram,
+                                                                                                                                shipDispMat);
+                                                                                                                            engine::Draw(
+                                                                                                                                ship_overlay);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::DrawTexturedPlanet(
+                                                                                                                            const glm::
+                                                                                                                                vec3&
+                                                                                                                                    object_pos,
+                                                                                                                            const entt::entity
+                                                                                                                                entity) {
+                                                                                                                            bool have_normal =
+                                                                                                                                false;
+                                                                                                                            bool have_roughness =
+                                                                                                                                false;
+                                                                                                                            bool
+                                                                                                                                have_province;
+                                                                                                                            GetPlanetTexture(
+                                                                                                                                entity,
+                                                                                                                                have_normal,
+                                                                                                                                have_roughness,
+                                                                                                                                have_province);
+
+                                                                                                                            this->have_province =
+                                                                                                                                have_province;
+
+                                                                                                                            auto& body =
+                                                                                                                                m_universe
+                                                                                                                                    .get<
+                                                                                                                                        bodies::
+                                                                                                                                            Body>(
+                                                                                                                                        entity);
+                                                                                                                            glm::mat4 position =
+                                                                                                                                glm::mat4(
+                                                                                                                                    1.f);
+                                                                                                                            position =
+                                                                                                                                glm::translate(
+                                                                                                                                    position,
+                                                                                                                                    object_pos);
+                                                                                                                            position *= glm::mat4(GetBodyRotation(
+                                                                                                                                body.axial,
+                                                                                                                                body.rotation,
+                                                                                                                                body.rotation_offset));
+
+                                                                                                                            // Rotate
+                                                                                                                            float scale =
+                                                                                                                                body.radius;  // types::toAU(body.radius)
+                                                                                                                            // * view_scale;
+                                                                                                                            position = glm::scale(
+                                                                                                                                position,
+                                                                                                                                glm::vec3(
+                                                                                                                                    scale));
+
+                                                                                                                            auto shader =
+                                                                                                                                textured_planet
+                                                                                                                                    .shaderProgram
+                                                                                                                                    .get();
+                                                                                                                            if (scale <
+                                                                                                                                10.f) {
+                                                                                                                                // then use different shader if it's close enough
+                                                                                                                                shader =
+                                                                                                                                    near_shader
+                                                                                                                                        .get();
+                                                                                                                                glDepthFunc(
+                                                                                                                                    GL_ALWAYS);
+                                                                                                                            }
+
+                                                                                                                            shader
+                                                                                                                                ->SetMVP(
+                                                                                                                                    position,
+                                                                                                                                    camera_matrix,
+                                                                                                                                    projection);
+
+                                                                                                                            // Maybe a seperate shader for planets without normal maps would be better
+                                                                                                                            shader
+                                                                                                                                ->setBool(
+                                                                                                                                    "haveNormal",
+                                                                                                                                    have_normal);
+
+                                                                                                                            shader
+                                                                                                                                ->setVec3(
+                                                                                                                                    "lightDir",
+                                                                                                                                    glm::normalize(
+                                                                                                                                        sun_position -
+                                                                                                                                        object_pos));
+                                                                                                                            shader
+                                                                                                                                ->setVec3(
+                                                                                                                                    "lightPosition",
+                                                                                                                                    sun_position);
+                                                                                                                            shader
+                                                                                                                                ->setVec3(
+                                                                                                                                    "lightColor",
+                                                                                                                                    sun_color);
+                                                                                                                            shader
+                                                                                                                                ->setVec3(
+                                                                                                                                    "viewPos",
+                                                                                                                                    cam_pos);
+
+                                                                                                                            // If a country is clicked on...
+                                                                                                                            shader
+                                                                                                                                ->setVec4(
+                                                                                                                                    "country_color",
+                                                                                                                                    glm::vec4(
+                                                                                                                                        selected_province_color,
+                                                                                                                                        1));
+                                                                                                                            shader
+                                                                                                                                ->setBool(
+                                                                                                                                    "country",
+                                                                                                                                    have_province);
+                                                                                                                            shader
+                                                                                                                                ->setBool(
+                                                                                                                                    "is_roughness",
+                                                                                                                                    have_roughness);
+
+                                                                                                                            engine::Draw(
+                                                                                                                                textured_planet,
+                                                                                                                                shader);
+                                                                                                                            glDepthFunc(
+                                                                                                                                GL_LESS);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::GetPlanetTexture(
+                                                                                                                            const entt::entity
+                                                                                                                                entity,
+                                                                                                                            bool&
+                                                                                                                                have_normal,
+                                                                                                                            bool&
+                                                                                                                                have_roughness,
+                                                                                                                            bool&
+                                                                                                                                have_province) {
+                                                                                                                            if (!m_universe
+                                                                                                                                     .all_of<
+                                                                                                                                         PlanetTexture>(
+                                                                                                                                         entity)) {
+                                                                                                                                return;
+                                                                                                                            }
+                                                                                                                            auto& terrain_data =
+                                                                                                                                m_universe
+                                                                                                                                    .get<
+                                                                                                                                        PlanetTexture>(
+                                                                                                                                        entity);
+                                                                                                                            textured_planet
+                                                                                                                                .textures
+                                                                                                                                .clear();
+                                                                                                                            textured_planet
+                                                                                                                                .textures
+                                                                                                                                .push_back(
+                                                                                                                                    terrain_data
+                                                                                                                                        .terrain);
+                                                                                                                            if (terrain_data
+                                                                                                                                    .normal !=
+                                                                                                                                nullptr) {
+                                                                                                                                have_normal =
+                                                                                                                                    true;
+                                                                                                                                textured_planet
+                                                                                                                                    .textures
+                                                                                                                                    .push_back(
+                                                                                                                                        terrain_data
+                                                                                                                                            .normal);
+                                                                                                                            } else {
+                                                                                                                                textured_planet
+                                                                                                                                    .textures
+                                                                                                                                    .push_back(
+                                                                                                                                        terrain_data
+                                                                                                                                            .terrain);
+                                                                                                                            }
+                                                                                                                            if (terrain_data
+                                                                                                                                    .roughness !=
+                                                                                                                                nullptr) {
+                                                                                                                                have_roughness =
+                                                                                                                                    true;
+                                                                                                                                textured_planet
+                                                                                                                                    .textures
+                                                                                                                                    .push_back(
+                                                                                                                                        terrain_data
+                                                                                                                                            .roughness);
+                                                                                                                            } else {
+                                                                                                                                textured_planet
+                                                                                                                                    .textures
+                                                                                                                                    .push_back(
+                                                                                                                                        terrain_data
+                                                                                                                                            .terrain);
+                                                                                                                            }
+                                                                                                                            // Add province data if they have it
+                                                                                                                            have_province =
+                                                                                                                                (terrain_data
+                                                                                                                                     .province_texture !=
+                                                                                                                                 nullptr);
+                                                                                                                            if (terrain_data
+                                                                                                                                    .province_texture !=
+                                                                                                                                nullptr) {
+                                                                                                                                textured_planet
+                                                                                                                                    .textures
+                                                                                                                                    .push_back(
+                                                                                                                                        terrain_data
+                                                                                                                                            .province_texture);
+                                                                                                                            }
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DrawAllPlanets(
+                                                                                                                                auto&
+                                                                                                                                    bodies) {
+                                                                                                                            ZoneScoped;
+                                                                                                                            for (
+                                                                                                                                entt::entity
+                                                                                                                                    body_entity :
+                                                                                                                                bodies) {
+                                                                                                                                glm::vec3 object_pos =
+                                                                                                                                    CalculateCenteredObject(
+                                                                                                                                        body_entity);
+
+                                                                                                                                // This can probably switched to some log system based off the mass of
+                                                                                                                                // a planet.
+                                                                                                                                //if (true) {
+                                                                                                                                // Check if planet has terrain or not
+                                                                                                                                // Don't actually use proc-gen terrain for now
+                                                                                                                                // if (m_universe.all_of<bodies::Terrain>(body_entity)) {
+                                                                                                                                // Do empty terrain
+                                                                                                                                // Check if the planet has the thing
+                                                                                                                                if (m_universe
+                                                                                                                                        .all_of<
+                                                                                                                                            bodies::
+                                                                                                                                                TexturedTerrain>(
+                                                                                                                                            body_entity)) {
+                                                                                                                                    DrawTexturedPlanet(
+                                                                                                                                        object_pos,
+                                                                                                                                        body_entity);
+                                                                                                                                } else {
+                                                                                                                                    DrawTerrainlessPlanet(
+                                                                                                                                        body_entity,
+                                                                                                                                        object_pos);
+                                                                                                                                }
+                                                                                                                                //}
+                                                                                                                            }
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            DrawAllPlanetBillboards(
+                                                                                                                                auto&
+                                                                                                                                    bodies) {
+                                                                                                                            ZoneScoped;
+                                                                                                                            planet_circle
+                                                                                                                                .shaderProgram
+                                                                                                                                ->UseProgram();
+                                                                                                                            planet_circle
+                                                                                                                                .shaderProgram
+                                                                                                                                ->setVec4(
+                                                                                                                                    "color",
+                                                                                                                                    0,
+                                                                                                                                    0,
+                                                                                                                                    1,
+                                                                                                                                    1);
+                                                                                                                            for (
+                                                                                                                                auto
+                                                                                                                                    body_entity :
+                                                                                                                                bodies) {
+                                                                                                                                // Draw the planet circle
+                                                                                                                                glm::vec3 object_pos =
+                                                                                                                                    CalculateCenteredObject(
+                                                                                                                                        body_entity);
+
+                                                                                                                                //if (true) {
+                                                                                                                                // Check if it's obscured by a planet, but eh, we can deal with
+                                                                                                                                // it later Set planet circle color
+                                                                                                                                DrawPlanetBillboards(
+                                                                                                                                    body_entity,
+                                                                                                                                    object_pos);
+                                                                                                                                //continue;
+                                                                                                                                //}
+                                                                                                                            }
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::DrawStar(
+                                                                                                                            const entt::
+                                                                                                                                entity&
+                                                                                                                                    entity,
+                                                                                                                            glm::vec3&
+                                                                                                                                object_pos) {
+                                                                                                                            glm::mat4 position =
+                                                                                                                                glm::mat4(
+                                                                                                                                    1.f);
+                                                                                                                            position =
+                                                                                                                                glm::translate(
+                                                                                                                                    position,
+                                                                                                                                    object_pos);
+
+                                                                                                                            glm::mat4 transform =
+                                                                                                                                glm::mat4(
+                                                                                                                                    1.f);
+                                                                                                                            // Scale it by radius
+                                                                                                                            const double& radius =
+                                                                                                                                m_universe
+                                                                                                                                    .get<
+                                                                                                                                        Body>(
+                                                                                                                                        entity)
+                                                                                                                                    .radius;
+                                                                                                                            double scale =
+                                                                                                                                radius;
+                                                                                                                            transform = glm::scale(
+                                                                                                                                transform,
+                                                                                                                                glm::vec3(
+                                                                                                                                    scale,
+                                                                                                                                    scale,
+                                                                                                                                    scale));
+                                                                                                                            position =
+                                                                                                                                position *
+                                                                                                                                transform;
+
+                                                                                                                            sun.SetMVP(
+                                                                                                                                position,
+                                                                                                                                camera_matrix,
+                                                                                                                                projection);
+                                                                                                                            sun.shaderProgram
+                                                                                                                                ->setVec4(
+                                                                                                                                    "color",
+                                                                                                                                    1,
+                                                                                                                                    1,
+                                                                                                                                    1,
+                                                                                                                                    1);
+                                                                                                                            engine::Draw(
+                                                                                                                                sun);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::DrawTerrainlessPlanet(
+                                                                                                                            const entt::
+                                                                                                                                entity&
+                                                                                                                                    entity,
+                                                                                                                            glm::vec3&
+                                                                                                                                object_pos) {
+                                                                                                                            glm::mat4 position =
+                                                                                                                                glm::mat4(
+                                                                                                                                    1.f);
+                                                                                                                            position =
+                                                                                                                                glm::translate(
+                                                                                                                                    position,
+                                                                                                                                    object_pos);
+                                                                                                                            float scale =
+                                                                                                                                300;
+                                                                                                                            if (m_universe
+                                                                                                                                    .any_of<
+                                                                                                                                        Body>(
+                                                                                                                                        entity)) {
+                                                                                                                                scale =
+                                                                                                                                    m_universe
+                                                                                                                                        .get<
+                                                                                                                                            Body>(
+                                                                                                                                            entity)
+                                                                                                                                        .radius;
+                                                                                                                            }
+
+                                                                                                                            position = glm::scale(
+                                                                                                                                position,
+                                                                                                                                glm::vec3(
+                                                                                                                                    scale));
+                                                                                                                            glm::mat4 transform =
+                                                                                                                                glm::mat4(
+                                                                                                                                    1.f);
+                                                                                                                            position =
+                                                                                                                                position *
+                                                                                                                                transform;
+
+                                                                                                                            sun.SetMVP(
+                                                                                                                                position,
+                                                                                                                                camera_matrix,
+                                                                                                                                projection);
+                                                                                                                            sun.shaderProgram
+                                                                                                                                ->setVec4(
+                                                                                                                                    "color",
+                                                                                                                                    1,
+                                                                                                                                    0,
+                                                                                                                                    1,
+                                                                                                                                    1);
+                                                                                                                            engine::Draw(
+                                                                                                                                sun);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::RenderCities(
+                                                                                                                            glm::vec3 &
+                                                                                                                                object_pos,
+                                                                                                                            const entt::
+                                                                                                                                entity&
+                                                                                                                                    body_entity) {
+                                                                                                                            ZoneScoped;
+                                                                                                                            // Draw Cities
+                                                                                                                            if (!m_universe
+                                                                                                                                     .all_of<
+                                                                                                                                         Habitation>(
+                                                                                                                                         body_entity)) {
+                                                                                                                                return;
+                                                                                                                            }
+                                                                                                                            std::vector<
+                                                                                                                                entt::
+                                                                                                                                    entity>
+                                                                                                                                cities =
+                                                                                                                                    m_universe
+                                                                                                                                        .get<
+                                                                                                                                            Habitation>(
+                                                                                                                                            body_entity)
+                                                                                                                                        .settlements;
+                                                                                                                            if (cities
+                                                                                                                                    .empty()) {
+                                                                                                                                return;
+                                                                                                                            }
+
+                                                                                                                            Body& body =
+                                                                                                                                m_universe
+                                                                                                                                    .get<
+                                                                                                                                        Body>(
+                                                                                                                                        body_entity);
+                                                                                                                            auto quat = GetBodyRotation(
+                                                                                                                                body.axial,
+                                                                                                                                body.rotation,
+                                                                                                                                body.rotation_offset);
+
+                                                                                                                            city.shaderProgram
+                                                                                                                                ->UseProgram();
+                                                                                                                            city.shaderProgram
+                                                                                                                                ->setVec4(
+                                                                                                                                    "color",
+                                                                                                                                    0.5,
+                                                                                                                                    0.5,
+                                                                                                                                    0.5,
+                                                                                                                                    1);
+                                                                                                                            for (
+                                                                                                                                auto
+                                                                                                                                    city_entity :
+                                                                                                                                cities) {
+                                                                                                                                // Calculate position to render
+                                                                                                                                if (!m_universe
+                                                                                                                                         .any_of<
+                                                                                                                                             Offset>(
+                                                                                                                                             city_entity)) {
+                                                                                                                                    // Calculate offset
+                                                                                                                                    continue;
+                                                                                                                                }
+                                                                                                                                Offset doffset =
+                                                                                                                                    m_universe
+                                                                                                                                        .get<
+                                                                                                                                            Offset>(
+                                                                                                                                            city_entity);
+                                                                                                                                glm::vec3 city_pos =
+                                                                                                                                    m_universe
+                                                                                                                                        .get<
+                                                                                                                                            Offset>(
+                                                                                                                                            city_entity)
+                                                                                                                                        .offset *
+                                                                                                                                    (float)body
+                                                                                                                                        .radius;
+                                                                                                                                // Check if line of sight and city position intersects the sphere that is the planet
+                                                                                                                                city_pos =
+                                                                                                                                    quat *
+                                                                                                                                    city_pos;
+                                                                                                                                glm::vec3 city_world_pos =
+                                                                                                                                    city_pos +
+                                                                                                                                    object_pos;
+                                                                                                                                if (CityIsVisible(
+                                                                                                                                        city_world_pos,
+                                                                                                                                        object_pos,
+                                                                                                                                        cam_pos)) {
+                                                                                                                                    // If it's reasonably close, then we can show city names
+                                                                                                                                    //if (scroll < 3) {
+                                                                                                                                    DrawEntityName(
+                                                                                                                                        city_world_pos,
+                                                                                                                                        city_entity);
+                                                                                                                                    //}
+                                                                                                                                    DrawCityIcon(
+                                                                                                                                        city_world_pos);
+                                                                                                                                }
+                                                                                                                            }
+
+                                                                                                                            if (is_founding_city &&
+                                                                                                                                is_rendering_founding_city) {
+                                                                                                                                DrawCityIcon(
+                                                                                                                                    GetMouseOnObject());
+                                                                                                                            }
+                                                                                                                        }
+
+                                                                                                                        bool
+                                                                                                                        SysStarSystemRenderer::CityIsVisible(
+                                                                                                                            glm::vec3
+                                                                                                                                city_pos,
+                                                                                                                            glm::vec3
+                                                                                                                                planet_pos,
+                                                                                                                            glm::vec3
+                                                                                                                                cam_pos) {
+                                                                                                                            float dist = glm::dot(
+                                                                                                                                (planet_pos -
+                                                                                                                                 city_pos),
+                                                                                                                                (cam_pos -
+                                                                                                                                 city_pos));
+                                                                                                                            return (
+                                                                                                                                dist <
+                                                                                                                                0);
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            CalculateCityPositions() {
+                                                                                                                            // Calculate offset for all cities on planet if they exist
+                                                                                                                            if (!m_universe
+                                                                                                                                     .valid(
+                                                                                                                                         m_viewing_entity)) {
+                                                                                                                                return;
+                                                                                                                            }
+                                                                                                                            if (!m_universe
+                                                                                                                                     .all_of<
+                                                                                                                                         Habitation>(
+                                                                                                                                         m_viewing_entity)) {
+                                                                                                                                return;
+                                                                                                                            }
+                                                                                                                            std::vector<
+                                                                                                                                entt::
+                                                                                                                                    entity>
+                                                                                                                                cities =
+                                                                                                                                    m_universe
+                                                                                                                                        .get<
+                                                                                                                                            Habitation>(
+                                                                                                                                            m_viewing_entity)
+                                                                                                                                        .settlements;
+                                                                                                                            if (cities
+                                                                                                                                    .empty()) {
+                                                                                                                                return;
+                                                                                                                            }
+                                                                                                                            for (
+                                                                                                                                auto&
+                                                                                                                                    city_entity :
+                                                                                                                                cities) {
+                                                                                                                                if (!m_universe
+                                                                                                                                         .all_of<
+                                                                                                                                             SurfaceCoordinate>(
+                                                                                                                                             city_entity)) {
+                                                                                                                                    continue;
+                                                                                                                                }
+                                                                                                                                auto& coord =
+                                                                                                                                    m_universe
+                                                                                                                                        .get<
+                                                                                                                                            SurfaceCoordinate>(
+                                                                                                                                            city_entity);
+                                                                                                                                Body parent =
+                                                                                                                                    m_universe
+                                                                                                                                        .get<
+                                                                                                                                            Body>(
+                                                                                                                                            m_viewing_entity);
+                                                                                                                                m_universe
+                                                                                                                                    .emplace_or_replace<
+                                                                                                                                        Offset>(
+                                                                                                                                        city_entity,
+                                                                                                                                        types::toVec3(
+                                                                                                                                            coord
+                                                                                                                                                .universe_view(),
+                                                                                                                                            1));
+                                                                                                                            }
+                                                                                                                            SPDLOG_INFO(
+                                                                                                                                "Calculated offset");
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            CalculateScroll() {
+                                                                                                                            double min_scroll =
+                                                                                                                                0.1;
+                                                                                                                            if (m_viewing_entity !=
+                                                                                                                                    entt::
+                                                                                                                                        null &&
+                                                                                                                                m_universe
+                                                                                                                                    .valid(
+                                                                                                                                        m_viewing_entity) &&
+                                                                                                                                m_universe
+                                                                                                                                    .all_of<
+                                                                                                                                        Body>(
+                                                                                                                                        m_viewing_entity)) {
+                                                                                                                                min_scroll = std::max(
+                                                                                                                                    m_universe
+                                                                                                                                            .get<
+                                                                                                                                                Body>(
+                                                                                                                                                m_viewing_entity)
+                                                                                                                                            .radius *
+                                                                                                                                        1.1,
+                                                                                                                                    0.1);
+                                                                                                                            }
+                                                                                                                            if (scroll -
+                                                                                                                                    m_app.GetScrollAmount() *
+                                                                                                                                        3 *
+                                                                                                                                        scroll /
+                                                                                                                                        33 <=
+                                                                                                                                min_scroll) {
+                                                                                                                                return;
+                                                                                                                            }
+                                                                                                                            scroll -=
+                                                                                                                                m_app
+                                                                                                                                    .GetScrollAmount() *
+                                                                                                                                3 *
+                                                                                                                                scroll /
+                                                                                                                                33;
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            LoadPlanetTextures() {
+                                                                                                                            for (
+                                                                                                                                auto
+                                                                                                                                    body :
+                                                                                                                                m_universe
+                                                                                                                                    .view<
+                                                                                                                                        Orbit>()) {
+                                                                                                                                if (!m_universe
+                                                                                                                                         .all_of<
+                                                                                                                                             bodies::
+                                                                                                                                                 TexturedTerrain>(
+                                                                                                                                             body)) {
+                                                                                                                                    continue;
+                                                                                                                                }
+                                                                                                                                auto textures =
+                                                                                                                                    m_universe
+                                                                                                                                        .get<
+                                                                                                                                            bodies::
+                                                                                                                                                TexturedTerrain>(
+                                                                                                                                            body);
+                                                                                                                                auto& data =
+                                                                                                                                    m_universe
+                                                                                                                                        .get_or_emplace<
+                                                                                                                                            PlanetTexture>(
+                                                                                                                                            body);
+                                                                                                                                data.terrain =
+                                                                                                                                    m_app
+                                                                                                                                        .GetAssetManager()
+                                                                                                                                        .GetAsset<
+                                                                                                                                            Texture>(
+                                                                                                                                            textures
+                                                                                                                                                .terrain_name);
+                                                                                                                                if (!textures
+                                                                                                                                         .normal_name
+                                                                                                                                         .empty()) {
+                                                                                                                                    data.normal =
+                                                                                                                                        m_app
+                                                                                                                                            .GetAssetManager()
+                                                                                                                                            .GetAsset<
+                                                                                                                                                Texture>(
+                                                                                                                                                textures
+                                                                                                                                                    .normal_name);
+                                                                                                                                }
+                                                                                                                                if (!textures
+                                                                                                                                         .roughness_name
+                                                                                                                                         .empty()) {
+                                                                                                                                    data.roughness =
+                                                                                                                                        m_app
+                                                                                                                                            .GetAssetManager()
+                                                                                                                                            .GetAsset<
+                                                                                                                                                Texture>(
+                                                                                                                                                textures
+                                                                                                                                                    .roughness_name);
+                                                                                                                                }
+                                                                                                                                if (!m_universe
+                                                                                                                                         .any_of<
+                                                                                                                                             components::
+                                                                                                                                                 ProvincedPlanet>(
+                                                                                                                                             body)) {
+                                                                                                                                    continue;
+                                                                                                                                }
+                                                                                                                                auto& province_map =
+                                                                                                                                    m_universe
+                                                                                                                                        .get<
+                                                                                                                                            components::
+                                                                                                                                                ProvincedPlanet>(
+                                                                                                                                            body);
+                                                                                                                                // Add province data if they have it
+                                                                                                                                data.province_texture =
+                                                                                                                                    m_app
+                                                                                                                                        .GetAssetManager()
+                                                                                                                                        .GetAsset<
+                                                                                                                                            Texture>(
+                                                                                                                                            province_map
+                                                                                                                                                .province_texture);
+
+                                                                                                                                asset::BinaryAsset* bin_asset =
+                                                                                                                                    m_app
+                                                                                                                                        .GetAssetManager()
+                                                                                                                                        .GetAsset<
+                                                                                                                                            asset::
+                                                                                                                                                BinaryAsset>(
+                                                                                                                                            province_map
+                                                                                                                                                .province_map);
+                                                                                                                                if (bin_asset ==
+                                                                                                                                    nullptr) {
+                                                                                                                                    SPDLOG_ERROR(
+                                                                                                                                        "Could not find the planet province map {}",
+                                                                                                                                        province_map
+                                                                                                                                            .province_map);
+                                                                                                                                    continue;
+                                                                                                                                }
+                                                                                                                                // Then create vector
+                                                                                                                                uint64_t file_size =
+                                                                                                                                    bin_asset
+                                                                                                                                        ->data
+                                                                                                                                        .size();
+                                                                                                                                int comp =
+                                                                                                                                    0;
+                                                                                                                                stbi_set_flip_vertically_on_load(
+                                                                                                                                    0);
+                                                                                                                                int province_width;
+                                                                                                                                int province_height;
+                                                                                                                                auto d = stbi_load_from_memory(
+                                                                                                                                    bin_asset
+                                                                                                                                        ->data
+                                                                                                                                        .data(),
+                                                                                                                                    file_size,
+                                                                                                                                    &province_width,
+                                                                                                                                    &province_height,
+                                                                                                                                    &comp,
+                                                                                                                                    0);
+
+                                                                                                                                // Set country map
+                                                                                                                                data.province_map
+                                                                                                                                    .reserve(static_cast<
+                                                                                                                                             long>(
+                                                                                                                                        province_height *
+                                                                                                                                        province_width));
+                                                                                                                                // the province map will be the same dimensions as the province texture, so it should be fine?
+                                                                                                                                for (
+                                                                                                                                    int x =
+                                                                                                                                        0;
+                                                                                                                                    x <
+                                                                                                                                    province_width;
+                                                                                                                                    x++) {
+                                                                                                                                    for (
+                                                                                                                                        int y =
+                                                                                                                                            0;
+                                                                                                                                        y <
+                                                                                                                                        province_height;
+                                                                                                                                        y++) {
+                                                                                                                                        // Then get from the maps
+                                                                                                                                        int pos =
+                                                                                                                                            (x * province_height +
+                                                                                                                                             y) *
+                                                                                                                                            comp;
+                                                                                                                                        std::tuple<
+                                                                                                                                            int,
+                                                                                                                                            int,
+                                                                                                                                            int,
+                                                                                                                                            int>
+                                                                                                                                            t = std::make_tuple(
+                                                                                                                                                d[pos],
+                                                                                                                                                d[pos +
+                                                                                                                                                  1],
+                                                                                                                                                d[pos +
+                                                                                                                                                  2],
+                                                                                                                                                d[pos +
+                                                                                                                                                  3]);
+                                                                                                                                        int i = components::ProvinceColor::toInt(
+                                                                                                                                            std::get<
+                                                                                                                                                0>(
+                                                                                                                                                t),
+                                                                                                                                            std::get<
+                                                                                                                                                1>(
+                                                                                                                                                t),
+                                                                                                                                            std::get<
+                                                                                                                                                2>(
+                                                                                                                                                t));
+                                                                                                                                        if (m_universe
+                                                                                                                                                .province_colors
+                                                                                                                                                    [body]
+                                                                                                                                                .find(
+                                                                                                                                                    i) !=
+                                                                                                                                            m_universe
+                                                                                                                                                .province_colors
+                                                                                                                                                    [body]
+                                                                                                                                                .end()) {
+                                                                                                                                            data.province_map
+                                                                                                                                                .push_back(
+                                                                                                                                                    m_universe
+                                                                                                                                                        .province_colors
+                                                                                                                                                            [body]
+                                                                                                                                                            [i]);
+                                                                                                                                        } else {
+                                                                                                                                            data.province_map
+                                                                                                                                                .push_back(
+                                                                                                                                                    entt::
+                                                                                                                                                        null);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                                stbi_image_free(
+                                                                                                                                    d);
+                                                                                                                            }
+                                                                                                                        }
+
+                                                                                                                        ShaderProgram_t
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            ConstructShader(
+                                                                                                                                const std::
+                                                                                                                                    string&
+                                                                                                                                        key) {
+                                                                                                                            return m_app
+                                                                                                                                .GetAssetManager()
+                                                                                                                                .GetAsset<
+                                                                                                                                    ShaderDefinition>(
+                                                                                                                                    key)
+                                                                                                                                ->MakeShader();
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            InitializeFramebuffers() {
+                                                                                                                            buffer_shader =
+                                                                                                                                ConstructShader(
+                                                                                                                                    "core:framebuffer");
+
+                                                                                                                            ship_icon_layer =
+                                                                                                                                renderer
+                                                                                                                                    .AddLayer<
+                                                                                                                                        engine::
+                                                                                                                                            FramebufferRenderer>(
+                                                                                                                                        buffer_shader,
+                                                                                                                                        *m_app
+                                                                                                                                             .GetWindow());
+                                                                                                                            physical_layer =
+                                                                                                                                renderer
+                                                                                                                                    .AddLayer<
+                                                                                                                                        engine::
+                                                                                                                                            FramebufferRenderer>(
+                                                                                                                                        buffer_shader,
+                                                                                                                                        *m_app
+                                                                                                                                             .GetWindow());
+                                                                                                                            planet_icon_layer =
+                                                                                                                                renderer
+                                                                                                                                    .AddLayer<
+                                                                                                                                        engine::
+                                                                                                                                            FramebufferRenderer>(
+                                                                                                                                        buffer_shader,
+                                                                                                                                        *m_app
+                                                                                                                                             .GetWindow());
+                                                                                                                            skybox_layer =
+                                                                                                                                renderer
+                                                                                                                                    .AddLayer<
+                                                                                                                                        engine::
+                                                                                                                                            FramebufferRenderer>(
+                                                                                                                                        buffer_shader,
+                                                                                                                                        *m_app
+                                                                                                                                             .GetWindow());
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            LoadProvinceMap() {
+                                                                                                                        }
+
+                                                                                                                        void
+                                                                                                                        SysStarSystemRenderer::
+                                                                                                                            InitializeMeshes() {
+                                                                                                                            // Initialize meshes, etc
+                                                                                                                            engine::Mesh_t sphere_mesh =
+                                                                                                                                engine::primitive::
+                                                                                                                                    ConstructSphereMesh(
+                                                                                                                                        sphere_resolution,
+                                                                                                                                        sphere_resolution);
+
+                                                                                                                            // Initialize shaders
+                                                                                                                            planet_shader =
+                                                                                                                                ConstructShader(
+                                                                                                                                    "core:planetshader");
+                                                                                                                            circle_shader =
+                                                                                                                                ConstructShader(
+                                                                                                                                    "core:2dcolorshader");
+                                                                                                                            textured_planet_shader =
+                                                                                                                                ConstructShader(
+                                                                                                                                    "core:planet_textureshader");
+                                                                                                                            near_shader =
+                                                                                                                                ConstructShader(
+                                                                                                                                    "core:neartexturedobject");
+                                                                                                                            orbit_shader =
+                                                                                                                                ConstructShader(
+                                                                                                                                    "core:orbitshader");
+                                                                                                                            vis_shader =
+                                                                                                                                ConstructShader(
+                                                                                                                                    "core:vertex_vis");
+                                                                                                                            model_shader =
+                                                                                                                                ConstructShader(
+                                                                                                                                    "core:model_pbr_log_shader");
+                                                                                                                            sun_shader =
+                                                                                                                                ConstructShader(
+                                                                                                                                    "core:sunshader");
+                                                                                                                            skybox_shader =
+                                                                                                                                ConstructShader(
+                                                                                                                                    "core:skybox");
+
+                                                                                                                            // Initialize sky box
+                                                                                                                            Texture* sky_texture =
+                                                                                                                                m_app
+                                                                                                                                    .GetAssetManager()
+                                                                                                                                    .GetAsset<
+                                                                                                                                        Texture>(
+                                                                                                                                        "core:skycubemap");
+                                                                                                                            sky.mesh = engine::
+                                                                                                                                primitive::
+                                                                                                                                    MakeCube();
+                                                                                                                            sky.shaderProgram =
+                                                                                                                                skybox_shader;
+
+                                                                                                                            planet_circle
+                                                                                                                                .mesh =
+                                                                                                                                engine::primitive::
+                                                                                                                                    CreateFilledCircle();
+                                                                                                                            planet_circle
+                                                                                                                                .shaderProgram =
+                                                                                                                                circle_shader;
+
+                                                                                                                            ship_overlay
+                                                                                                                                .mesh =
+                                                                                                                                engine::primitive::
+                                                                                                                                    CreateFilledTriangle();
+                                                                                                                            ship_overlay
+                                                                                                                                .shaderProgram =
+                                                                                                                                circle_shader;
+
+                                                                                                                            city.mesh =
+                                                                                                                                engine::primitive::
+                                                                                                                                    MakeTexturedPaneMesh();
+                                                                                                                            city.shaderProgram =
+                                                                                                                                circle_shader;
+
+                                                                                                                            // Planet spheres
+                                                                                                                            planet
+                                                                                                                                .mesh =
+                                                                                                                                sphere_mesh;
+                                                                                                                            planet
+                                                                                                                                .shaderProgram =
+                                                                                                                                planet_shader;
+
+                                                                                                                            textured_planet
+                                                                                                                                .mesh =
+                                                                                                                                sphere_mesh;
+                                                                                                                            textured_planet
+                                                                                                                                .shaderProgram =
+                                                                                                                                textured_planet_shader;
+
+                                                                                                                            // Initialize sun
+                                                                                                                            sun.mesh =
+                                                                                                                                sphere_mesh;
+                                                                                                                            sun.shaderProgram =
+                                                                                                                                sun_shader;
+                                                                                                                        }
+
+                                                                                                                        glm::quat
+                                                                                                                        SysStarSystemRenderer::GetBodyRotation(
+                                                                                                                            double
+                                                                                                                                axial,
+                                                                                                                            double
+                                                                                                                                rotation,
+                                                                                                                            double
+                                                                                                                                day_offset) {
+                                                                                                                            // Need to interpolate between the frames
+>>>>>>> main
     float rot = (float)bodies::GetPlanetRotationAngle(
 <<<<<<< HEAD
 =======
@@ -4952,7 +6395,8 @@
                                                                                                                         SysStarSystemRenderer::
                                                                                                                             CheckResourceDistRender() {
 #if FALSE
-                                                                                                                            <<<<<<< HEAD < < < < < < <
+                                                                                                                            < < < < < < <
+                                                                                                                                    HEAD < < < < < < <
                                                                                                                                     HEAD ==
                                                                                                                                 ==
                                                                                                                                 ==
@@ -6737,6 +8181,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                                                                                                                                                                                 glm::vec3 vec =
                                                                                                                                                                                                     types::toVec3(
                                                                                                                                                                                                         orb,
@@ -6771,6 +8216,44 @@
                                                                                                                                                                                                     2 /
                                                                                                                                                                                                     res *
                                                                                                                                                                                                     i;
+                                                                                                                                                                                                == ==
+                                                                                                                                                                                                    ==
+                                                                                                                                                                                                    = const float
+                                                                                                                                                                                                        min_launch_dis =
+                                                                                                                                                                                                            body.radius;
+                                                                                                                                                                                                float col =
+                                                                                                                                                                                                    dis -
+                                                                                                                                                                                                    min_launch_dis;
+                                                                                                                                                                                                float r =
+                                                                                                                                                                                                    log(col) /
+                                                                                                                                                                                                    log(max_dis);
+                                                                                                                                                                                                float g =
+                                                                                                                                                                                                    1 -
+                                                                                                                                                                                                    r;
+                                                                                                                                                                                                float b =
+                                                                                                                                                                                                    inc /
+                                                                                                                                                                                                    3.15;
+                                                                                                                                                                                                glm::vec4 color_v =
+                                                                                                                                                                                                    {1.f,
+                                                                                                                                                                                                     1.f,
+                                                                                                                                                                                                     1.f,
+                                                                                                                                                                                                     0.7f};
+                                                                                                                                                                                                if (m_universe
+                                                                                                                                                                                                        .any_of<
+                                                                                                                                                                                                            ships::
+                                                                                                                                                                                                                Ship>(
+                                                                                                                                                                                                            entity)) {
+                                                                                                                                                                                                    color_v = {
+                                                                                                                                                                                                        0.10196078431372549f,
+                                                                                                                                                                                                        0.6313725490196078f,
+                                                                                                                                                                                                        0.24313725490196078f,
+                                                                                                                                                                                                        0.7f};
+                                                                                                                                                                                                }
+                                                                                                                                                                                                orbit_shader
+                                                                                                                                                                                                    ->Set(
+                                                                                                                                                                                                        "color",
+                                                                                                                                                                                                        color_v);
+>>>>>>> main
 
 <<<<<<< HEAD
                                                                                                                                                                                                 glm::vec3 vec =

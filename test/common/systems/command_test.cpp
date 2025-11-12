@@ -20,15 +20,16 @@
 #include "common/components/orbit.h"
 <<<<<<< HEAD == == == =
 #include "common/actions/maneuver/commands.h"
-               >>>>>>> pr-292
+    >>>>>>> pr - 292
 #include "common/universe.h"
 
-    TEST(CommandTest, SOIHierachyTest) {
+                TEST(CommandTest, SOIHierachyTest) {
     cqsp::common::Universe universe;
     entt::entity current_body = universe.create();
     entt::entity source_body = current_body;
     // Now make the vector
     std::vector<entt::entity> expected_hierachy;
+    expected_hierachy.push_back(current_body);
     for (int i = 0; i < 5; i++) {
         entt::entity parent_body = universe.create();
         auto& orbit = universe.emplace<cqsp::common::components::types::Orbit>(current_body);

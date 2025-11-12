@@ -16,16 +16,17 @@
  */
 #include <gtest/gtest.h>
 
-#include "common/actions/maneuver/maneuver.h"
+#include "common/actions/maneuver/basicmaneuver.h"
 #include "common/actions/maneuver/rendezvous.h"
 #include "common/components/orbit.h"
 #include "common/components/units.h"
 <<<<<<< HEAD:test/common/systems/basic_maneuver_test.cpp == == == =
 #include "common/actions/maneuver/maneuver.h"
 #include "common/actions/maneuver/rendezvous.h"
-               >>>>>>> pr-292:test/common/systems/maneuvertest.cpp
+    >>>>>>> pr - 292 : test / common / systems /
+                       maneuvertest.cpp
 
-    TEST(Maneuver, CircularCircularizeApogeeTest) {
+                       TEST(Maneuver, CircularCircularizeApogeeTest) {
     namespace cqspt = cqsp::common::components::types;
     namespace cqsps = cqsp::common::systems;
     // Make a random orbit, apply an impulse, and ensure the position is te same
@@ -49,7 +50,7 @@ TEST(Maneuver, CircularizeApogeeTest) {
     // Get the manever velocity?
     // Compare to circular velocity
     double to_velocity = cqspt::GetCircularOrbitingVelocity(orbit.GM, orbit.GetApoapsis());
-    double from_velocity = glm::length(cqspt::OrbitVelocityToVec3(orbit, cqspt::PI));
+    double from_velocity = glm::length(cqspt::OrbitVelocityToVec3(orbit, cqspt::apoapsis));
     double r = cqspt::OrbitVelocityAtR(orbit.GM, orbit.semi_major_axis, orbit.GetApoapsis());
     // So the expected delta v at that point should be...
     EXPECT_DOUBLE_EQ(from_velocity, r);
@@ -71,7 +72,7 @@ TEST(Maneuver, InclinedCircularizeApogeeTest) {
     // Get the manever velocity?
     // Compare to circular velocity
     double to_velocity = cqspt::GetCircularOrbitingVelocity(orbit.GM, orbit.GetApoapsis());
-    double from_velocity = glm::length(cqspt::OrbitVelocityToVec3(orbit, cqspt::PI));
+    double from_velocity = glm::length(cqspt::OrbitVelocityToVec3(orbit, cqspt::apoapsis));
     double r = cqspt::OrbitVelocityAtR(orbit.GM, orbit.semi_major_axis, orbit.GetApoapsis());
     // So the expected delta v at that point should be...
     EXPECT_DOUBLE_EQ(from_velocity, r);
@@ -93,7 +94,7 @@ TEST(Maneuver, HighEccentricityCircularizeApogeeTest) {
     // Get the manever velocity?
     // Compare to circular velocity
     double to_velocity = cqspt::GetCircularOrbitingVelocity(orbit.GM, orbit.GetApoapsis());
-    double from_velocity = glm::length(cqspt::OrbitVelocityToVec3(orbit, cqspt::PI));
+    double from_velocity = glm::length(cqspt::OrbitVelocityToVec3(orbit, cqspt::apoapsis));
     double r = cqspt::OrbitVelocityAtR(orbit.GM, orbit.semi_major_axis, orbit.GetApoapsis());
     // So the expected delta v at that point should be...
     EXPECT_DOUBLE_EQ(from_velocity, r);
@@ -117,17 +118,17 @@ TEST(Maneuver, DISABLED_OffsetCircularizeApogeeTest) {
     // Get the manever velocity?
     // Compare to circular velocity
     double to_velocity = cqspt::GetCircularOrbitingVelocity(orbit.GM, orbit.GetApoapsis());
-    double from_velocity = glm::length(cqspt::OrbitVelocityToVec3(orbit, cqspt::PI));
+    double from_velocity = glm::length(cqspt::OrbitVelocityToVec3(orbit, cqspt::apoapsis));
     double r = cqspt::OrbitVelocityAtR(orbit.GM, orbit.semi_major_axis, orbit.GetApoapsis());
     EXPECT_DOUBLE_EQ(from_velocity, r);
     EXPECT_NEAR(glm::length(maneuver.first), to_velocity - from_velocity, 1e-10);
     cqspt::Orbit new_orbit = cqspt::ApplyImpulse(orbit, maneuver.first, maneuver.second);
-    EXPECT_EQ(GetTrueAnomaly(orbit, orbit.TimeToTrueAnomaly(cqspt::PI)), cqspt::PI);
+    EXPECT_EQ(GetTrueAnomaly(orbit, orbit.TimeToTrueAnomaly(cqspt::apoapsis)), cqspt::apoapsis);
     EXPECT_EQ(orbit.nu(), 0);
     // Check if it's circular
     // Get velocity at apogee
-    EXPECT_DOUBLE_EQ(orbit.TimeToTrueAnomaly(cqspt::PI), maneuver.second);
-    EXPECT_EQ(orbit.TimeToTrueAnomaly(cqspt::PI), 0);
+    EXPECT_DOUBLE_EQ(orbit.TimeToTrueAnomaly(cqspt::apoapsis), maneuver.second);
+    EXPECT_EQ(orbit.TimeToTrueAnomaly(cqspt::apoapsis), 0);
     EXPECT_NEAR(new_orbit.eccentricity, 0, 1e-15);
     EXPECT_DOUBLE_EQ(new_orbit.semi_major_axis, orbit.GetApoapsis());
 }
@@ -408,7 +409,7 @@ TEST(Maneuver, EccentricInclinationTest) {
     EXPECT_NEAR(new_orbit.GetApoapsis(), orbit.GetApoapsis(), 1e-4);
     EXPECT_NEAR(new_orbit.inclination, new_inclination, 1e-4);
     // Should be at apoapsis because we look for the lowest velocity
-    EXPECT_NEAR(maneuver.second, orbit.TimeToTrueAnomaly(cqspt::PI), 1e-4);
+    EXPECT_NEAR(maneuver.second, orbit.TimeToTrueAnomaly(cqspt::apoapsis), 1e-4);
     glm::dvec3 start = cqspt::toVec3(orbit, GetTrueAnomaly(orbit, maneuver.second));
     glm::dvec3 end = cqspt::toVec3(new_orbit);
     EXPECT_NEAR(start.x, end.x, 1e-4);
@@ -433,7 +434,7 @@ TEST(Maneuver, EccentricDecreaseInclinationTest) {
     EXPECT_NEAR(new_orbit.GetApoapsis(), orbit.GetApoapsis(), 1e-4);
     EXPECT_NEAR(new_orbit.inclination, new_inclination, 1e-4);
     // Should be at apoapsis because we look for the lowest velocity
-    EXPECT_NEAR(maneuver.second, orbit.TimeToTrueAnomaly(cqspt::PI), 1e-4);
+    EXPECT_NEAR(maneuver.second, orbit.TimeToTrueAnomaly(cqspt::apoapsis), 1e-4);
     glm::dvec3 start = cqspt::toVec3(orbit, GetTrueAnomaly(orbit, maneuver.second));
     glm::dvec3 end = cqspt::toVec3(new_orbit);
     EXPECT_NEAR(start.x, end.x, 1e-4);
@@ -460,7 +461,7 @@ TEST(Maneuver, OmegaEccentricDecreaseInclinationTest) {
     EXPECT_NEAR(new_orbit.semi_major_axis, orbit.semi_major_axis, 1e-4);
 
     // Should be at apoapsis because we look for the lowest velocity
-    EXPECT_NEAR(maneuver.second, orbit.TimeToTrueAnomaly(cqspt::PI), 1e-4);
+    EXPECT_NEAR(maneuver.second, orbit.TimeToTrueAnomaly(cqspt::apoapsis), 1e-4);
     glm::dvec3 start = cqspt::toVec3(orbit, GetTrueAnomaly(orbit, maneuver.second));
     glm::dvec3 end = cqspt::toVec3(new_orbit);
     // Ignore this, the math checks out, we are just having some precision issues
@@ -489,7 +490,7 @@ TEST(Maneuver, DISABLED_ChangeWEccentricChangeInclinationTest) {
     EXPECT_NEAR(new_orbit.semi_major_axis, orbit.semi_major_axis, 1e-4);
 
     // Should be at apoapsis because we look for the lowest velocity
-    EXPECT_NEAR(maneuver.second, orbit.TimeToTrueAnomaly(cqspt::PI), 1e-4);
+    EXPECT_NEAR(maneuver.second, orbit.TimeToTrueAnomaly(cqspt::apoapsis), 1e-4);
     glm::dvec3 start = cqspt::toVec3(orbit, GetTrueAnomaly(orbit, maneuver.second));
     glm::dvec3 end = cqspt::toVec3(new_orbit);
     // Ignore this, the math checks out, we are just having some precision issues
@@ -515,7 +516,7 @@ TEST(Maneuver, DISABLED_CoplanarInterceptTest) {
     double phase = cqspt::CalculatePhaseAngle(orbit, orbit2, maneuver.first.second);
     EXPECT_NEAR(transfer_angle, phase, 1e-4);
     cqspt::Orbit intercept_orbit = cqspt::ApplyImpulse(orbit, maneuver.first.first, maneuver.first.second);
-    double time = intercept_orbit.TimeToTrueAnomaly(cqspt::PI);
+    double time = intercept_orbit.TimeToTrueAnomaly(cqspt::apoapsis);
     EXPECT_DOUBLE_EQ(intercept_orbit.GetApoapsis(), orbit2.semi_major_axis);
     EXPECT_DOUBLE_EQ(intercept_orbit.GetPeriapsis(), orbit.semi_major_axis);
     EXPECT_NEAR(maneuver.second.second - maneuver.first.second, time, 0.5);

@@ -16,8 +16,9 @@
  */
 #include "common/systems/history/sysmarkethistory.h"
 
-#include "common/components/history.h"
 <<<<<<< HEAD
+#include "common/components/history.h"
+    <<<<<<< HEAD
 #include "common/components/market.h"
     namespace cqsp::common::systems::history {
 
@@ -30,6 +31,11 @@
 
     void SysMarketHistory::DoSystem() {
         /*
+=======
+namespace cqsp::common::systems::history {
+void SysMarketHistory::DoSystem() {
+    /*
+>>>>>>> main
     for (Node market_node : GetUniverse().nodes<Market>()) {
         Market& market_data = market_node.get<Market>();
         market_data.history.push_back(market_data);

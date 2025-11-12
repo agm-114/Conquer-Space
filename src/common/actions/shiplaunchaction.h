@@ -76,9 +76,9 @@ entt::entity CreateShip(Universe &universe, entt::entity civ, entt::entity orbit
 //@brief just like createShip with fleets but uses an orbit entity instead
 Node CreateShip(Node& starsystem, Node& fleet, Node& orbit, const std::string& shipName = "");
 
-Node CreateShip(Node& starsystem, Node& fleet, const components::types::Orbit& orbit, const std::string& shipName = "");
+[[nodiscard]] entt::entity LaunchShip(Universe& universe, const components::types::Orbit& orbit);
 
-entt::entity LaunchShip(Universe& universe, const components::types::Orbit& orbit);
+Node CreateShip(Node& starsystem, Node& fleet, const components::types::Orbit& orbit, const std::string& shipName = "");
 }  // namespace cqsp::common::actions
 >>>>>>> pr-309
 == == == = entt::entity CreateShip(Universe & universe, entt::entity fleetEnt, entt::entity starsystemEnt,

@@ -25,7 +25,7 @@
 
 #include <glm/gtx/string_cast.hpp>
 
-#include "common/actions/maneuver/maneuver.h"
+#include "common/actions/maneuver/basicmaneuver.h"
 #include "common/components/coordinates.h"
 #include "common/components/units.h"
 <<<<<<< HEAD:test/common/components/orbit_test.cpp
@@ -34,11 +34,12 @@
     =
 #include "common/actions/maneuver/maneuver.h"
 #include "common/systems/movement/sysmovement.h"
-        >>>>>>> pr-292:test/common/components/orbittest.cpp
+        >>>>>>> pr - 292 : test / common / components /
+                           orbittest.cpp
 #include "common/universe.h"
 #include "common/util/orbit/randomorbit.h"
 
-    using ::testing::AllOf;
+                           using ::testing::AllOf;
 using ::testing::Ge;
 using ::testing::Le;
 

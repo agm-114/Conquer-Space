@@ -22,33 +22,38 @@
 #include "common/components/coordinates.h"
 #include "common/universe.h"
 
-    <<<<<<< HEAD
+    <<<<<<< HEAD < < < < < < <
+    HEAD
 <<<<<<< HEAD:src/common/actions/cityactions.h namespace cqsp::common::actions {
-    Node
-    CreateCity(Node& planet, double lat, double longi);
+        Node
+        CreateCity(Node& planet, double lat, double longi);
 Node CreateCity(Node& planet, components::types::SurfaceCoordinate coords);
 == == == = namespace cqsp::common::actions {
     Node CreateCity(Node & planet, double lat, double longi);
     Node CreateCity(Node & planet, components::types::SurfaceCoordinate coords);
 >>>>>>> pr-309
-}  // namespace cqsp::common::actions
-== == == = namespace cqsp::common::systems::actions {
-    entt::entity CreateCity(Universe & universe, entt::entity planet, double lat, double longi);
-}  // cqsp::common::systems::actions
+    == == == = namespace cqsp::common::actions {
+        [[nodiscard]] Node CreateCity(Node & planet, double lat, double longi);
+        [[nodiscard]] Node CreateCity(Node & planet, components::types::SurfaceCoordinate coords);
+>>>>>>> main
+    }  // namespace cqsp::common::actions
+    == == == = namespace cqsp::common::systems::actions {
+        entt::entity CreateCity(Universe & universe, entt::entity planet, double lat, double longi);
+    }  // cqsp::common::systems::actions
 >>>>>>> pr_254:src/common/systems/actions/cityactions.h
-== == == =
+    == == == =
 #include <string>
 #include <vector>
 
-             < < < < < < < < HEAD : src / common / util / string.h namespace cqsp::util {
-    std::string strip(const std::string& inpt);
-    std::vector<std::string> split(const std::string& s, const std::string& delimiter);
-}  // namespace cqsp::util
-== == == ==
+                 < < < < < < < < HEAD : src / common / util / string.h namespace cqsp::util {
+        std::string strip(const std::string& inpt);
+        std::vector<std::string> split(const std::string& s, const std::string& delimiter);
+    }  // namespace cqsp::util
+    == == == ==
 #include "common/universe.h"
 
-    namespace cqsp::common::actions {
-    entt::entity CreateCity(Universe & universe, entt::entity planet, double lat, double longi);
-}  // namespace cqsp::common::actions
->>>>>>>> pr - 292 : src / common / actions / cityactions.h
+        namespace cqsp::common::actions {
+        entt::entity CreateCity(Universe & universe, entt::entity planet, double lat, double longi);
+    }  // namespace cqsp::common::actions
+    >>>>>>>> pr - 292 : src / common / actions / cityactions.h
 >>>>>>> pr-292

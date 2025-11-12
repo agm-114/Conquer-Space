@@ -172,6 +172,7 @@ void SysStarSystemTree::DoUI(int delta_time) {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                     void SysStarSystemTree::SeePlanetSelectable(entt::entity entity) {
                                         std::string planet_name = GetName(GetUniverse(), entity);
                                         == == == = void SysStarSystemTree::SeePlanetSelectable(entity entity) {
@@ -249,3 +250,44 @@ void SysStarSystemTree::DoUI(int delta_time) {
                                                 }
                                             }  // namespace cqsp::client::systems
 >>>>>>> pr-286
+                                            == == == = void SysStarSystemTree::DoChildTree(entt::entity entity) {
+                                                for (auto child : GetUniverse().get<OrbitalSystem>(entity).children) {
+                                                    std::string child_name = GetName(GetUniverse(), child);
+                                                    bool is_selected = (child == selected_planet);
+                                                    if (!GetUniverse().any_of<OrbitalSystem>(child)) {
+                                                        // Then just selectable
+                                                        if (CQSPGui::DefaultSelectable(
+                                                                child_name.c_str(), is_selected,
+                                                                ImGuiSelectableFlags_AllowDoubleClick)) {
+                                                            if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                                                                // Go to the planet
+                                                                scene::SeePlanet(GetUniverse(), child);
+                                                            }
+                                                        }
+                                                        gui::EntityTooltip(GetUniverse(), child);
+                                                    } else {
+                                                        if (ImGui::TreeNodeEx(child_name.c_str(),
+                                                                              ImGuiTreeNodeFlags_OpenOnArrow)) {
+                                                            // If it's double clicked
+                                                            if (ImGui::IsItemHovered() &&
+                                                                ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                                                                // Go to the planet
+                                                                scene::SeePlanet(GetUniverse(), child);
+                                                            }
+                                                            // Get children
+                                                            gui::EntityTooltip(GetUniverse(), child);
+                                                            DoChildTree(child);
+                                                            ImGui::TreePop();
+                                                        } else {
+                                                            if (ImGui::IsItemHovered() &&
+                                                                ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                                                                scene::SeePlanet(GetUniverse(), child);
+                                                            }
+                                                            gui::EntityTooltip(GetUniverse(), child);
+                                                        }
+                                                    }
+                                                    // If it has children we should
+                                                }
+                                            }
+                                        }  // namespace cqsp::client::systems
+>>>>>>> main

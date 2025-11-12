@@ -132,6 +132,7 @@
                 cqspcs::SysMarket::InitializeMarket(game);
             }
 
+<<<<<<< HEAD
             void Simulation::tick() {
                 m_universe.DisableTick();
                 m_universe.date.IncrementDate();
@@ -141,204 +142,206 @@
                 namespace cqspt = cqsp::common::components::types;
                 auto start = std::chrono::high_resolution_clock::now();
                 BEGIN_TIMED_BLOCK(Game_Loop);
-                == == == =
-
-                             namespace cqsp::common::systems::simulation {
-                    Simulation::Simulation(Game & game) : m_game(game), m_universe(game.GetUniverse()) {
-                        AddSystem<SysScript>();
-                        AddSystem<SysWalletReset>();
-
-                        AddSystem<SysScienceLab>();
-                        AddSystem<SysTechProgress>();
-
-                        // Economy progress
-                        AddSystem<SysMarketReset>();
-
-                        AddSystem<InfrastructureSim>();
-                        AddSystem<SysPopulationConsumption>();
-                        AddSystem<SysProduction>();
-
-                        // AddSystem<SysAgent>();
-                        AddSystem<SysMarket>();
-                        AddSystem<SysPlanetaryTrade>();
-                        AddSystem<history::SysMarketHistory>();
-
-                        // Movement
-                        AddSystem<SysOrbit>();
+                == == == = == == == = void Simulation::Init() {
+                    CreateSystems();
+                    for (auto &sys : system_list) {
+                        sys->Init();
                     }
+                }
+>>>>>>> main
 
-                    void Simulation::Init() {
-                        SysMarket::InitializeMarket(m_game);
+                namespace cqsp::common::systems::simulation {
+                Simulation::Simulation(Game &game) : m_game(game), m_universe(game.GetUniverse()) {
+                    AddSystem<SysScript>();
+                    AddSystem<SysWalletReset>();
+
+                    AddSystem<SysScienceLab>();
+                    AddSystem<SysTechProgress>();
+
+                    // Economy progress
+                    AddSystem<SysMarketReset>();
+
+                    AddSystem<InfrastructureSim>();
+                    AddSystem<SysPopulationConsumption>();
+                    AddSystem<SysProduction>();
+
+                    // AddSystem<SysAgent>();
+                    AddSystem<SysMarket>();
+                    AddSystem<SysPlanetaryTrade>();
+                    AddSystem<history::SysMarketHistory>();
+
+                    // Movement
+                    AddSystem<SysOrbit>();
+                }
+
+                void Simulation::Init() {
+                    SysMarket::InitializeMarket(m_game);
 >>>>>>> pr-290
 
-                        for (auto &sys : system_list) {
-                            if (m_universe.date.GetDate() % sys->Interval() == 0) {
-                                sys->DoSystem();
+                    for (auto &sys : system_list) {
+                        if (m_universe.date.GetDate() % sys->Interval() == 0) {
+                            sys->DoSystem();
 >>>>>>> pr_191
-                            }
+                        }
 >>>>>>> pr_28
 
 <<<<<<< HEAD
-                            // Register functions
+                        // Register functions
     script_interface.set_function("event_player", [&](sol::table event_table) {
-                                auto view = m_universe.view<conquerspace::common::components::Player>();
-                                for (auto b : view) {
-                                    auto &queue = m_universe.get_or_emplace<event::EventQueue>(b);
-                                    auto event = std::make_shared<event::Event>();
-                                    event->title = event_table["title"];
-                                    SPDLOG_INFO("Parsing event \"{}\"", event->title);
-                                    event->content = event_table["content"];
-                                    event->image = event_table["image"];
-                                    sol::optional<std::vector<sol::table>> optional = event_table["actions"];
-                                    if (optional) {
-                                        for (auto &action : *optional) {
-                                            if (action == sol::nil) {
-                                                continue;
-                                            }
-                                            auto event_result = std::make_shared<event::EventResult>();
-                                            event_result->name = action["name"];
-                                            sol::optional<std::string> tooltip = action["tooltip"];
-                                            if (tooltip) {
-                                                event_result->tooltip = *tooltip;
-                                            }
->>>>>>> pr_8
-
-                                            void Simulation::CreateSystems() {
-                                                AddSystem<SysScript>();
-                                                AddSystem<SysWalletReset>();
-
-                                                AddSystem<SysScienceLab>();
-                                                AddSystem<SysTechProgress>();
-
-                                                // Economy progress
-                                                AddSystem<SysMarketReset>();
-                                                AddSystem<SysSpacePort>();
-
-                                                AddSystem<InfrastructureSim>();
-                                                AddSystem<SysPopulationConsumption>();
-                                                AddSystem<SysProduction>();
-
-                                                // AddSystem<SysAgent>();
-                                                AddSystem<SysMarket>();
-                                                AddSystem<SysPlanetaryTrade>();
-                                                AddSystem<SysInterplanetaryTrade>();
-                                                AddSystem<history::SysMarketHistory>();
-
-                                                // Movement
-                                                AddSystem<SysOrbit>();
-                                            }
-
-                                            void Simulation::Init() {
-                                                for (auto &sys : system_list) {
-                                                    sys->Init();
-                                                }
-                                            }
-
-                                            void Simulation::tick() {
-                                                m_universe.DisableTick();
-                                                m_universe.date.IncrementDate();
-                                                // Get previous tick spacing
-<<<<<<< HEAD
-                                                == == == = namespace cqspc = conquerspace::common::components;
-                                                namespace cqsps = conquerspace::common::components::ships;
-                                                namespace cqspt = conquerspace::common::components::types;
->>>>>>> pr_4
-
-                                                auto start = std::chrono::high_resolution_clock::now();
-                                                BEGIN_TIMED_BLOCK(Game_Loop);
-
-                                                for (auto &sys : system_list) {
-                                                    if (m_universe.date.GetDate() % sys->Interval() == 0) {
-                                                        sys->DoSystem();
-                                                    }
-                                                }
-                                                END_TIMED_BLOCK(Game_Loop);
-                                                auto end = std::chrono::high_resolution_clock::now();
-                                                int len =
-                                                    std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
-                                                        .count();
-                                                const int expected_len = 250;
-                                                if (len > expected_len) {
-                                                    SPDLOG_WARN("Tick has taken more than {} ms at {} ms", expected_len,
-                                                                len);
-                                                }
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                                == == == = END_TIMED_BLOCK(Production);
-
-                                                BEGIN_TIMED_BLOCK(Resource_Consume);
-                                                // Consume resources
-                                                auto consume =
-                                                    m_universe
-                                                        .view<cqspc::ResourceConverter, cqspc::ResourceStockpile>();
-                                                for (entt::entity entity : consume) {
-                                                    // Do the same thing
-                                                    // Make resources
-                                                    cqspc::ResourceConverter &generator =
-                                                        m_universe.get<cqspc::ResourceConverter>(entity);
-                                                    cqspc::ResourceStockpile &resource_stockpile =
-                                                        m_universe.get<cqspc::ResourceStockpile>(entity);
-                                                    cqspc::Recipe &recipe =
-                                                        m_universe.get<cqspc::Recipe>(generator.recipe);
-                                                    // Create resources
-                                                    for (auto iterator = recipe.input.begin();
-                                                         iterator != recipe.input.end(); iterator++) {
-                                                        double resource_count = 0;
-                                                        if (resource_stockpile.find(iterator->first) !=
-                                                            resource_stockpile.end()) {
-                                                            resource_count = resource_stockpile[iterator->first];
-                                                        }
-                                                        float productivity = 1;
-                                                        if (m_universe.all_of<cqspc::FactoryProductivity>(entity)) {
-                                                            productivity =
-                                                                m_universe.get<cqspc::FactoryProductivity>(entity)
-                                                                    .productivity;
-                                                        }
-
-                                                        resource_count -= iterator->second * productivity;
-
-                                                        m_universe.emplace_or_replace<cqspc::Production>(entity);
-
-                                                        // Add to resource stockpile
-                                                        resource_stockpile[iterator->first] = resource_count;
-                                                    }
-                                                }
-                                                END_TIMED_BLOCK(Resource_Consume);
-
-                                                BEGIN_TIMED_BLOCK(Orbit_Sim);
-                                                auto bodies = m_universe.view<cqspt::Orbit>();
-                                                for (entt::entity body : bodies) {
-                                                    cqspt::updateOrbit(m_universe.get<cqspt::Orbit>(body));
-                                                }
-                                                END_TIMED_BLOCK(Orbit_Sim);
->>>>>>> pr_4
-                                            }
-                                        }  // namespace cqsp::common::systems::simulation
-                                        == == == =
-                                    }
-                                }
->>>>>>> pr_8
-                                == == == = void Simulation::tick() {
-                                    m_universe.DisableTick();
-                                    m_universe.date.IncrementDate();
-                                    // Get previous tick spacing
-
-                                    auto start = std::chrono::high_resolution_clock::now();
-                                    BEGIN_TIMED_BLOCK(Game_Loop);
-
-                                    for (auto &sys : system_list) {
-                                        if (m_universe.date.GetDate() % sys->Interval() == 0) {
-                                            sys->DoSystem();
+                            auto view = m_universe.view<conquerspace::common::components::Player>();
+                            for (auto b : view) {
+                                auto &queue = m_universe.get_or_emplace<event::EventQueue>(b);
+                                auto event = std::make_shared<event::Event>();
+                                event->title = event_table["title"];
+                                SPDLOG_INFO("Parsing event \"{}\"", event->title);
+                                event->content = event_table["content"];
+                                event->image = event_table["image"];
+                                sol::optional<std::vector<sol::table>> optional = event_table["actions"];
+                                if (optional) {
+                                    for (auto &action : *optional) {
+                                        if (action == sol::nil) {
+                                            continue;
                                         }
-                                    }
-                                    END_TIMED_BLOCK(Game_Loop);
-                                    auto end = std::chrono::high_resolution_clock::now();
-                                    int len =
-                                        std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-                                    const int expected_len = 250;
-                                    if (len > expected_len) {
-                                        SPDLOG_WARN("Tick has taken more than {} ms at {} ms", expected_len, len);
+                                        auto event_result = std::make_shared<event::EventResult>();
+                                        event_result->name = action["name"];
+                                        sol::optional<std::string> tooltip = action["tooltip"];
+                                        if (tooltip) {
+                                            event_result->tooltip = *tooltip;
+                                        }
+>>>>>>> pr_8
+
+                                        void Simulation::CreateSystems() {
+                                            AddSystem<SysScript>();
+                                            AddSystem<SysWalletReset>();
+
+                                            AddSystem<SysScienceLab>();
+                                            AddSystem<SysTechProgress>();
+
+                                            // Economy progress
+                                            AddSystem<SysMarketReset>();
+                                            AddSystem<SysSpacePort>();
+
+                                            AddSystem<InfrastructureSim>();
+                                            AddSystem<SysPopulationConsumption>();
+                                            AddSystem<SysProduction>();
+
+                                            // AddSystem<SysAgent>();
+                                            AddSystem<SysMarket>();
+                                            AddSystem<SysPlanetaryTrade>();
+                                            AddSystem<SysInterplanetaryTrade>();
+                                            AddSystem<history::SysMarketHistory>();
+
+                                            // Movement
+                                            AddSystem<SysOrbit>();
+                                        }
+
+                                        void Simulation::Init() {
+                                            for (auto &sys : system_list) {
+                                                sys->Init();
+                                            }
+                                        }
+
+                                        void Simulation::tick() {
+                                            m_universe.DisableTick();
+                                            m_universe.date.IncrementDate();
+                                            // Get previous tick spacing
+<<<<<<< HEAD
+                                            == == == = namespace cqspc = conquerspace::common::components;
+                                            namespace cqsps = conquerspace::common::components::ships;
+                                            namespace cqspt = conquerspace::common::components::types;
+>>>>>>> pr_4
+
+                                            auto start = std::chrono::high_resolution_clock::now();
+                                            BEGIN_TIMED_BLOCK(Game_Loop);
+
+                                            for (auto &sys : system_list) {
+                                                if (m_universe.date.GetDate() % sys->Interval() == 0) {
+                                                    sys->DoSystem();
+                                                }
+                                            }
+                                            END_TIMED_BLOCK(Game_Loop);
+                                            auto end = std::chrono::high_resolution_clock::now();
+                                            int len = std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+                                                          .count();
+                                            const int expected_len = 250;
+                                            if (len > expected_len) {
+                                                SPDLOG_WARN("Tick has taken more than {} ms at {} ms", expected_len,
+                                                            len);
+                                            }
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                            == == == = END_TIMED_BLOCK(Production);
+
+                                            BEGIN_TIMED_BLOCK(Resource_Consume);
+                                            // Consume resources
+                                            auto consume =
+                                                m_universe.view<cqspc::ResourceConverter, cqspc::ResourceStockpile>();
+                                            for (entt::entity entity : consume) {
+                                                // Do the same thing
+                                                // Make resources
+                                                cqspc::ResourceConverter &generator =
+                                                    m_universe.get<cqspc::ResourceConverter>(entity);
+                                                cqspc::ResourceStockpile &resource_stockpile =
+                                                    m_universe.get<cqspc::ResourceStockpile>(entity);
+                                                cqspc::Recipe &recipe = m_universe.get<cqspc::Recipe>(generator.recipe);
+                                                // Create resources
+                                                for (auto iterator = recipe.input.begin();
+                                                     iterator != recipe.input.end(); iterator++) {
+                                                    double resource_count = 0;
+                                                    if (resource_stockpile.find(iterator->first) !=
+                                                        resource_stockpile.end()) {
+                                                        resource_count = resource_stockpile[iterator->first];
+                                                    }
+                                                    float productivity = 1;
+                                                    if (m_universe.all_of<cqspc::FactoryProductivity>(entity)) {
+                                                        productivity =
+                                                            m_universe.get<cqspc::FactoryProductivity>(entity)
+                                                                .productivity;
+                                                    }
+
+                                                    resource_count -= iterator->second * productivity;
+
+                                                    m_universe.emplace_or_replace<cqspc::Production>(entity);
+
+                                                    // Add to resource stockpile
+                                                    resource_stockpile[iterator->first] = resource_count;
+                                                }
+                                            }
+                                            END_TIMED_BLOCK(Resource_Consume);
+
+                                            BEGIN_TIMED_BLOCK(Orbit_Sim);
+                                            auto bodies = m_universe.view<cqspt::Orbit>();
+                                            for (entt::entity body : bodies) {
+                                                cqspt::updateOrbit(m_universe.get<cqspt::Orbit>(body));
+                                            }
+                                            END_TIMED_BLOCK(Orbit_Sim);
+>>>>>>> pr_4
+                                        }
+                                    }  // namespace cqsp::common::systems::simulation
+                                    == == == =
+                                }
+                            }
+>>>>>>> pr_8
+                            == == == = void Simulation::tick() {
+                                m_universe.DisableTick();
+                                m_universe.date.IncrementDate();
+                                // Get previous tick spacing
+
+                                auto start = std::chrono::high_resolution_clock::now();
+                                BEGIN_TIMED_BLOCK(Game_Loop);
+
+                                for (auto &sys : system_list) {
+                                    if (m_universe.date.GetDate() % sys->Interval() == 0) {
+                                        sys->DoSystem();
                                     }
                                 }
+                                END_TIMED_BLOCK(Game_Loop);
+                                auto end = std::chrono::high_resolution_clock::now();
+                                int len = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+                                const int expected_len = 250;
+                                if (len > expected_len) {
+                                    SPDLOG_WARN("Tick has taken more than {} ms at {} ms", expected_len, len);
+                                }
+                            }
 }  // namespace cqsp::common::systems::simulation
 >>>>>>> pr-290

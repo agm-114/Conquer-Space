@@ -22,13 +22,14 @@
 #include <glm/vec3.hpp>
 
 #include "common/actions/maneuver/hohmann.h"
-#include "common/components/movement.h"
+#include "common/components/maneuver.h"
 #include "common/components/orbit.h"
-    <<<<<<< HEAD == == == =
+    <<<<<<<HEAD == == == =
 #include "common/actions/maneuver/hohmann.h"
-    >>>>>>> pr - 292
+               >>>>>>>
+        pr - 292
 
-                namespace cqsp::common::systems {
+    namespace cqsp::common::systems {
     // Tools for rendezvous
     // Coplanar rendezvous
     // Basically a Hohmann transfer at the right time

@@ -23,20 +23,25 @@
 
 #include <algorithm>
 
-#include "common/actions/maneuver/maneuver.h"
-#include "common/actions/maneuver/rendezvous.h"
-#include "common/components/movement.h"
-#include "common/components/orbit.h"
-#include "common/components/surface.h"
-        <<<<<<< HEAD
-#include "common/util/nameutil.h"
-        == == ==
-    =
-#include "common/actions/maneuver/maneuver.h"
-#include "common/actions/maneuver/rendezvous.h"
-        >>>>>>> pr-292
+#include <tracy/Tracy.hpp>
 
-    namespace cqsp::common::systems::commands {
+#include "common/actions/maneuver/basicmaneuver.h"
+#include "common/actions/maneuver/rendezvous.h"
+#include "common/actions/maneuver/transfers.h"
+#include "common/components/maneuver.h"
+#include "common/components/orbit.h"
+#include "common/components/ships.h"
+#include "common/components/surface.h"
+        <<<<<<<HEAD
+#include "common/util/nameutil.h"
+                   == == ==
+               =
+#include "common/actions/maneuver/maneuver.h"
+#include "common/actions/maneuver/rendezvous.h"
+                   >>>>>>>
+            pr - 292
+
+        namespace cqsp::common::systems::commands {
 
     namespace types = components::types;
 
@@ -56,6 +61,7 @@
         if (!universe.any_of<Orbit>(entity)) {
             return;
         }
+<<<<<<< HEAD
         Orbit& orbit = universe.get<Orbit>(entity);
 
         // One huge switch statement is not how I want it to be but what can I do ¯\_(ツ)_/¯
@@ -168,6 +174,33 @@
             default:
                 break;
         }
+    == == == = case Command::InterceptAndCircularizeBody: {
+        // We should intercept the body and stuff
+    } break;
+    case Command::ExitSOI: {
+        if (!universe.any_of<OrbitScalar>(command_entity)) {
+            break;
+        }
+        auto& scalar_change = universe.get<OrbitScalar>(command_entity);
+        auto& orbit = universe.get<Orbit>(entity);
+        auto maneuver = common::systems::TransferFromBody(universe, orbit, universe.get<types::Kinematics>(entity),
+                                                          scalar_change.value);
+        PushManeuver(universe, entity, maneuver);
+    } break;
+    case Command::SelfDestruct: {
+        // Self destruct
+        universe.emplace_or_replace<components::ships::Crash>(entity);
+    } break;
+    default:
+        break;
+    }
+}
+
+bool ProcessCommandQueue(Universe& universe, entt::entity body, Trigger trigger) {
+    ZoneScoped;
+    if (!universe.any_of<components::CommandQueue>(body)) {
+        return false;
+>>>>>>> main
     }
 
     bool ProcessCommandQueue(Universe & universe, entt::entity body, Trigger trigger) {
@@ -257,6 +290,7 @@
         queue.maneuvers.emplace_back(maneuver, universe.date() + offset);
     }
 
+<<<<<<< HEAD
     void PushManeuvers(Universe & universe, entt::entity entity, std::initializer_list<components::Maneuver_t> maneuver,
                        double offset) {
         // Now push back all the commands or something
@@ -322,4 +356,77 @@
         }
         return entt::null;
     }
+    == == == = void PushManeuvers(Universe & universe, entt::entity entity, components::HohmannPair_t hohmann_pair,
+                                  double offset) {
+        auto& queue = universe.get_or_emplace<components::CommandQueue>(entity);
+        queue.maneuvers.emplace_back(hohmann_pair.first, universe.date() + offset);
+        queue.maneuvers.emplace_back(hohmann_pair.second, universe.date() + offset);
+    }
+
+    void LandOnMoon(Universe & universe, entt::entity agent, entt::entity target, entt::entity city) {
+        // If the current body is the moon, then we don't really need to bother
+        auto& orbit = universe.get<components::types::Orbit>(agent);
+        if (orbit.reference_body != target) {
+            TransferToMoon(universe, agent, target);
+        }
+        // Lower the periapsis to about 90% of the radius
+        // In theory we'll do the math to land on the moon properly but eh
+        auto& body = universe.get<components::bodies::Body>(target);
+        double landing_radius = body.radius * 0.9;
+        entt::entity land_action = universe.create();
+        universe.emplace<Trigger>(land_action, Trigger::OnManeuver);
+        universe.emplace<Command>(land_action, Command::SetPeriapsis);
+        universe.emplace<OrbitScalar>(land_action, landing_radius);
+
+        // then land on the city on the moon
+        entt::entity dock_city = universe.create();
+        universe.emplace<Trigger>(dock_city, Trigger::OnCrash);
+        universe.emplace<Command>(dock_city, Command::LandOnBody);
+        universe.emplace<OrbitEntityTarget>(dock_city, city);
+
+        auto& command_queue = universe.get_or_emplace<components::CommandQueue>(agent);
+        command_queue.commands.push_back(land_action);
+        command_queue.commands.push_back(dock_city);
+    }
+
+    components::Maneuver_t MakeManeuver(const glm::dvec3& vector, double time) { return std::make_pair(vector, time); }
+
+    std::vector<entt::entity> GetSOIHierarchy(Universe & universe, entt::entity source) {
+        std::vector<entt::entity> source_list;
+        entt::entity parent_body = universe.get<Orbit>(source).reference_body;
+        source_list.push_back(source);
+
+        while (parent_body != entt::null) {
+            source_list.push_back(parent_body);
+            parent_body = universe.get<Orbit>(parent_body).reference_body;
+        }
+        return std::move(source_list);
+    }
+
+    entt::entity GetCommonSOI(Universe & universe, entt::entity source, entt::entity target) {
+        // Get common ancestor
+        std::vector<entt::entity> source_list = GetSOIHierarchy(universe, source);
+        std::vector<entt::entity> target_list = GetSOIHierarchy(universe, target);
+        size_t i;
+        for (i = 1; i < std::min(source_list.size(), target_list.size()); i++) {
+            if (source_list[source_list.size() - i] != target_list[target_list.size() - i]) {
+                return source_list[source_list.size() - i + 1];
+            }
+        }
+        if (i == std::min(source_list.size(), target_list.size())) {
+            return source_list[source_list.size() - i];
+        }
+        return source_list[source_list.size() - 1];
+    }
+
+    void LeaveSOI(Universe & universe, entt::entity agent, double altitude) {
+        entt::entity escape_action = universe.create();
+        universe.emplace<Trigger>(escape_action, Trigger::OnManeuver);
+        universe.emplace<Command>(escape_action, Command::ExitSOI);
+        universe.emplace<OrbitScalar>(escape_action, altitude);
+
+        auto& command_queue = universe.get_or_emplace<components::CommandQueue>(agent);
+        command_queue.commands.push_back(escape_action);
+    }
+>>>>>>> main
 }  // namespace cqsp::common::systems::commands

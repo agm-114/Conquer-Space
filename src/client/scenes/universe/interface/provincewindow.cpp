@@ -24,6 +24,7 @@
 #include "client/scenes/universe/interface/sysstockpileui.h"
 #include "client/scenes/universe/interface/systooltips.h"
 #include "client/scenes/universe/views/starsystemview.h"
+#include "common/actions/maneuver/commands.h"
 #include "common/actions/shiplaunchaction.h"
 #include "common/components/infrastructure.h"
 #include "common/components/market.h"
@@ -183,6 +184,7 @@ void SysProvinceInformation::DoUI(int delta_time) {
                 }
                 == == == = if (CQSPGui::DefaultSelectable(fmt::format("{}", GetName(GetUniverse(), entity)).c_str())) {
                     current_city = entity;
+                    changed_city = true;
                     view_mode = ViewMode::CITY_VIEW;
 >>>>>>> pr-288
                 }
@@ -402,6 +404,7 @@ void SysProvinceInformation::DoUI(int delta_time) {
                                             // Then other labor information
 >>>>>>> pr-288
 
+<<<<<<< HEAD
                                             ImGui::TextFmt(
                                                 "Spending: {}",
                                                 NumberToHumanString(static_cast<uint64_t>(pop_segement.spending)));
@@ -462,165 +465,321 @@ void SysProvinceInformation::DoUI(int delta_time) {
                                                     ImGui::EndTabBar();
                                                 }
                                             }
+                                            == == == = if (changed_city) {
+                                                // Try to minimize this
+                                                double latitude = city_coord.r_latitude();
+                                                double temp_azimuth =
+                                                    components::types::GetLaunchInclination(city_coord.r_latitude(), 0);
+                                                int idx = 0;
+                                                while (idx < 10) {
+                                                    double derivative =
+                                                        -latitude * cos((temp_azimuth)) /
+                                                        sqrt(1 - latitude * latitude * sin(temp_azimuth) *
+                                                                     sin(temp_azimuth));
+                                                    double inclination = components::types::GetLaunchInclination(
+                                                        city_coord.r_latitude(), temp_azimuth);
+                                                    temp_azimuth -= derivative / inclination;
+                                                    idx++;
+                                                }
+                                                azimuth = temp_azimuth;
+                                            }
+                                            ImGui::SliderFloat("Semi Major Axis", &semi_major_axis, 6000, 100000);
+                                            ImGui::SliderFloat("Eccentricity", &eccentricity, 0, 0.9999);
+                                            ImGui::SliderAngle("Launch Azimuth", &azimuth, 0, 360);
+                                            ImGui::SliderAngle("Argument of perapsis", &arg_of_perapsis, 0, 360);
+                                            ImGui::SliderAngle("Longitude of the ascending node", &LAN, 0, 360);
+                                            if (ImGui::Button("Launch!")) {
+                                                // Get reference body
+                                                entt::entity reference_body = city_coord.planet;
+                                                // Launch inclination will be the inclination of the thing
+                                                double axial =
+                                                    GetUniverse().get<components::bodies::Body>(reference_body).axial;
+                                                double inc = city_coord.r_latitude();
+                                                inc += axial;
 
-                                            void SysProvinceInformation::CityView() {
-                                                // Get city information
-                                                if (CQSPGui::ArrowButton("cityinformationpanelback", ImGuiDir_Left)) {
-                                                    view_mode = ViewMode::COUNTRY_VIEW;
+                                                types::Orbit orb(semi_major_axis, eccentricity,
+                                                                 components::types::GetLaunchInclination(
+                                                                     city_coord.r_latitude(), (azimuth)),
+                                                                 LAN, arg_of_perapsis, 0, reference_body);
+                                                entt::entity ship = common::actions::LaunchShip(GetUniverse(), orb);
+                                                // Also compute the value
+                                                GetUniverse().emplace<ctx::VisibleOrbit>(ship);
+
+                                                common::systems::commands::LeaveSOI(GetUniverse(), ship, 1000);
+                                                // Add maneuver like 1000 seconds in the future
+                                                common::systems::commands::PushManeuver(
+                                                    GetUniverse(), ship,
+                                                    common::systems::commands::MakeManeuver(glm::dvec3(0, 0, 0), 1000));
+
+                                                // Also self destruct after leaving soi
+                                                entt::entity escape_action = GetUniverse().create();
+                                                GetUniverse().emplace<common::components::Trigger>(
+                                                    escape_action, common::components::Trigger::OnExitSOI);
+                                                GetUniverse().emplace<common::components::Command>(
+                                                    escape_action, common::components::Command::SelfDestruct);
+
+                                                auto& command_queue =
+                                                    GetUniverse().get_or_emplace<components::CommandQueue>(ship);
+                                                command_queue.commands.push_back(escape_action);
+                                            }
+                                            double periapsis = semi_major_axis * (1 - eccentricity);
+                                            if (GetUniverse().get<components::bodies::Body>(city_coord.planet).radius >
+                                                periapsis) {
+                                                ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f),
+                                                                   "Orbit's periapsis is below the planet radius (%f), "
+                                                                   "so it will crash",
+                                                                   periapsis);
+                                            }
+                                            ImGui::TextFmt("Launch Inclination: {}",
+                                                           types::toDegree(types::GetLaunchInclination(
+                                                               city_coord.r_latitude(), (azimuth))));
+                                        }
+>>>>>>> main
+
+                                        void SysProvinceInformation::CityView() {
+                                            // Get city information
+                                            if (CQSPGui::ArrowButton("cityinformationpanelback", ImGuiDir_Left)) {
+                                                view_mode = ViewMode::COUNTRY_VIEW;
+                                            }
+                                            ImGui::SameLine();
+                                            ImGui::TextFmt("{}",
+                                                           GetUniverse().get<components::Name>(current_city).name);
+                                            ImGui::SameLine();
+                                            if (ImGui::Button("Focus on city")) {
+                                                // Focus city
+                                                GetUniverse().emplace_or_replace<FocusedCity>(current_city);
+                                            }
+                                            ImGui::Separator();
+                                            if (GetUniverse().all_of<Settlement>(current_city)) {
+                                                int size =
+                                                    GetUniverse().get<Settlement>(current_city).population.size();
+                                                for (auto seg_entity :
+                                                     GetUniverse().get<Settlement>(current_city).population) {
+                                                    auto& pop_segement =
+                                                        GetUniverse().get<PopulationSegment>(seg_entity);
+                                                    ImGui::TextFmt("Population: {}",
+                                                                   LongToHumanString(pop_segement.population));
                                                 }
-                                                ImGui::SameLine();
-                                                ImGui::TextFmt("{}",
-                                                               GetUniverse().get<components::Name>(current_city).name);
-                                                ImGui::SameLine();
-                                                if (ImGui::Button("Focus on city")) {
-                                                    // Focus city
-                                                    GetUniverse().emplace_or_replace<FocusedCity>(current_city);
+                                            } else {
+                                                ImGui::TextFmt("No population");
+                                            }
+
+                                            // Now do time zone
+                                            if (GetUniverse().all_of<components::CityTimeZone>(current_city)) {
+                                                // Set time zone
+                                                auto& tz = GetUniverse().get<components::CityTimeZone>(current_city);
+                                                auto& tz_def = GetUniverse().get<components::TimeZone>(tz.time_zone);
+                                                int time = (int)(GetUniverse().date.GetDate() + tz_def.time_diff) % 24;
+                                                if (time < 0) {
+                                                    time = time + 24;
                                                 }
+
+                                                const std::string& tz_name =
+                                                    GetUniverse().get<components::Identifier>(tz.time_zone).identifier;
+                                                int hour = GetUniverse().date.GetHour(tz_def.time_diff);
+                                                ImGui::TextFmt("Time: {} {}:{} ({})",
+                                                               GetUniverse().date.ToString(tz_def.time_diff), hour,
+                                                               GetUniverse().date.GetMinute(), tz_name);
+                                            }
+
+                                            // Other industry information
+                                            if (GetUniverse().all_of<components::IndustrialZone>(current_city)) {
+                                                CityIndustryTabs();
+                                            } else {
+                                                ImGui::Text("City has no Industry");
+                                            }
+                                        }
+
+                                        void SysProvinceInformation::DisplayWallet(entt::entity entity) {
+                                            if (GetUniverse().all_of<Wallet>(entity)) {
+                                                Wallet& wallet = GetUniverse().get<Wallet>(entity);
+                                                ImGui::TextFmt("GDP Contribution: {}",
+                                                               LongToHumanString(wallet.GetGDPChange()));
+                                                ImGui::TextFmt("Balance: {}", LongToHumanString(wallet.GetBalance()));
+                                                ImGui::TextFmt("Balance change: {}",
+                                                               LongToHumanString(wallet.GetChange()));
+                                            } else {
+                                                ImGui::TextFmt("No wallet");
+                                            }
+                                        }
+
+                                        void SysProvinceInformation::CityIndustryTabs() {
+                                            if (ImGui::BeginTabBar("CityTabs", ImGuiTabBarFlags_None)) {
+                                                if (ImGui::BeginTabItem("Demographics")) {
+                                                    DemographicsTab();
+                                                    ImGui::EndTabItem();
+                                                }
+                                                if (ImGui::BeginTabItem("Industries")) {
+                                                    IndustryTab();
+                                                    ImGui::EndTabItem();
+                                                }
+                                                if (ImGui::BeginTabItem("Infrastructure")) {
+                                                    InfrastructureTab();
+                                                    ImGui::EndTabItem();
+                                                }
+                                                if (ImGui::BeginTabItem("Space Port")) {
+                                                    SpacePortTab();
+                                                    ImGui::EndTabItem();
+                                                }
+                                                if (ImGui::BeginTabItem("Economy")) {
+                                                    // Show economy window
+
+                                                    components::Market& market =
+                                                        GetUniverse().get<components::Market>(current_city);
+                                                    // List the market's connected cities
+                                                    ImGui::TextFmt("Connected cities");
+                                                    for (entt::entity entity : market.connected_markets) {
+                                                        ImGui::TextFmt("{}", GetName(GetUniverse(), entity));
+                                                    }
+                                                    ImGui::Separator();
+                                                    // Now market wallet
+                                                    DisplayWallet(current_city);
+                                                    MarketInformationTable(GetUniverse(), current_city);
+                                                    ImGui::EndTabItem();
+                                                }
+                                                ImGui::EndTabBar();
+                                            }
+                                        }
+
+                                        void SysProvinceInformation::DemographicsTab() {
+                                            auto& settlement = GetUniverse().get<Settlement>(current_city);
+                                            for (auto& seg_entity : settlement.population) {
+                                                ImGui::TextFmt(
+                                                    "Population: {}",
+                                                    LongToHumanString(
+                                                        GetUniverse().get<PopulationSegment>(seg_entity).population));
+                                                gui::EntityTooltip(GetUniverse(), seg_entity);
+                                                if (GetUniverse().all_of<components::Hunger>(seg_entity)) {
+                                                    ImGui::TextFmt("Hungry");
+                                                }
+                                                ImGui::TextFmt(
+                                                    "Labor Force: {}",
+                                                    LongToHumanString(
+                                                        GetUniverse().get<PopulationSegment>(seg_entity).labor_force));
+                                                // Then other labor information
+
+                                                // Get spending for population
+                                                DisplayWallet(current_city);
+                                                // Market
+                                                if (GetUniverse().all_of<components::Market>(current_city)) {
+                                                    if (ImGui::IsItemHovered()) {
+                                                        CQSPGui::SimpleTextTooltip(
+                                                            "Click for detailed market information");
+                                                    }
+                                                }
+                                                if (ImGui::CollapsingHeader("Resource Consumption")) {
+                                                    if (GetUniverse().all_of<components::ResourceConsumption>(
+                                                            seg_entity)) {
+                                                        auto& res_consumption =
+                                                            GetUniverse().get<components::ResourceConsumption>(
+                                                                seg_entity);
+                                                        DrawLedgerTable("Resource consumption", GetUniverse(),
+                                                                        res_consumption);
+                                                    }
+                                                }
+                                                // Display the data
                                                 ImGui::Separator();
-                                                if (GetUniverse().all_of<Settlement>(current_city)) {
-                                                    int size =
-                                                        GetUniverse().get<Settlement>(current_city).population.size();
-                                                    for (auto seg_entity :
-                                                         GetUniverse().get<Settlement>(current_city).population) {
-                                                        auto& pop_segement =
-                                                            GetUniverse().get<PopulationSegment>(seg_entity);
-                                                        ImGui::TextFmt("Population: {}",
-                                                                       LongToHumanString(pop_segement.population));
-                                                    }
-                                                } else {
-                                                    ImGui::TextFmt("No population");
-                                                }
+                                            }
+                                        }
 
-                                                // Now do time zone
-                                                if (GetUniverse().all_of<components::CityTimeZone>(current_city)) {
-                                                    // Set time zone
-                                                    auto& tz =
-                                                        GetUniverse().get<components::CityTimeZone>(current_city);
-                                                    auto& tz_def =
-                                                        GetUniverse().get<components::TimeZone>(tz.time_zone);
-                                                    int time =
-                                                        (int)(GetUniverse().date.GetDate() + tz_def.time_diff) % 24;
-                                                    if (time < 0) {
-                                                        time = time + 24;
-                                                    }
-
-                                                    const std::string& tz_name =
-                                                        GetUniverse()
-                                                            .get<components::Identifier>(tz.time_zone)
-                                                            .identifier;
-                                                    int hour = GetUniverse().date.GetHour(tz_def.time_diff);
-                                                    ImGui::TextFmt("Time: {} {}:{} ({})",
-                                                                   GetUniverse().date.ToString(tz_def.time_diff), hour,
-                                                                   GetUniverse().date.GetMinute(), tz_name);
+                                        void SysProvinceInformation::IndustryTab() {
+                                            IndustryListWindow();
+                                            auto& city_industry =
+                                                GetUniverse().get<components::IndustrialZone>(current_city);
+                                            int height = 300;
+                                            ImGui::TextFmt("Factories: {}", city_industry.industries.size());
+                                            if (ImGui::SmallButton("Factory list")) {
+                                                // Put all the economy window information
+                                                city_factory_info = true;
+                                            }
+                                            if (ImGui::IsItemHovered()) {
+                                                ImGui::BeginTooltip();
+                                                for (auto& at : city_industry.industries) {
+                                                    ImGui::TextFmt("{}",
+                                                                   common::util::GetEntityType(GetUniverse(), at));
                                                 }
-
-                                                // Other industry information
-                                                if (GetUniverse().all_of<components::IndustrialZone>(current_city)) {
-                                                    CityIndustryTabs();
-                                                } else {
-                                                    ImGui::Text("City has no Industry");
-                                                }
+                                                ImGui::EndTooltip();
                                             }
 
-                                            void SysProvinceInformation::DisplayWallet(entt::entity entity) {
-                                                if (GetUniverse().all_of<Wallet>(entity)) {
-                                                    Wallet& wallet = GetUniverse().get<Wallet>(entity);
-                                                    ImGui::TextFmt("GDP Contribution: {}",
-                                                                   LongToHumanString(wallet.GetGDPChange()));
-                                                    ImGui::TextFmt("Balance: {}",
-                                                                   LongToHumanString(wallet.GetBalance()));
-                                                    ImGui::TextFmt("Balance change: {}",
-                                                                   LongToHumanString(wallet.GetChange()));
-                                                } else {
-                                                    ImGui::TextFmt("No wallet");
-                                                }
+                                            // Calculate the number of stuff
+                                            uint64_t labor_demand = 0;
+                                            uint64_t labor_fufillment = 0;
+                                            for (auto& factory : city_industry.industries) {
+                                                const auto& employ = GetUniverse().get<components::Employer>(factory);
+                                                labor_demand += employ.population_needed;
+                                                labor_fufillment += employ.population_fufilled;
+                                            }
+                                            double percentag = (double)labor_fufillment / (double)labor_demand * 100.;
+                                            ImGui::TextFmt("Labor fufillment: {}/{} ({}%%)",
+                                                           cqsp::util::LongToHumanString(labor_fufillment),
+                                                           cqsp::util::LongToHumanString(labor_demand), percentag);
+
+                                            IndustryTabGenericChild<components::Service>(
+                                                "Service Sector", "Company",
+                                                ImVec2(ImGui::GetContentRegionAvail().x * 0.5f -
+                                                           ImGui::GetStyle().ItemSpacing.y,
+                                                       height));
+>>>>>>> pr-286
+
+                                            // Get spending for population
+                                            DisplayWallet(seg_entity);
+                                            if (GetUniverse().all_of<Wallet>(seg_entity)) {
+                                                Wallet& wallet = GetUniverse().get<Wallet>(seg_entity);
+                                                ImGui::TextFmt("GDP per capita: {}",
+                                                               wallet.GetGDPChange() / pop_segement.population);
                                             }
 
-                                            void SysProvinceInformation::CityIndustryTabs() {
-                                                if (ImGui::BeginTabBar("CityTabs", ImGuiTabBarFlags_None)) {
-                                                    if (ImGui::BeginTabItem("Demographics")) {
-                                                        DemographicsTab();
-                                                        ImGui::EndTabItem();
-                                                    }
-                                                    if (ImGui::BeginTabItem("Industries")) {
-                                                        IndustryTab();
-                                                        ImGui::EndTabItem();
-                                                    }
-                                                    if (ImGui::BeginTabItem("Infrastructure")) {
-                                                        InfrastructureTab();
-                                                        ImGui::EndTabItem();
-                                                    }
-                                                    if (ImGui::BeginTabItem("Space Port")) {
-                                                        SpacePortTab();
-                                                        ImGui::EndTabItem();
-                                                    }
-                                                    if (ImGui::BeginTabItem("Economy")) {
-                                                        // Show economy window
-
-                                                        components::Market& market =
-                                                            GetUniverse().get<components::Market>(current_city);
-                                                        // List the market's connected cities
-                                                        ImGui::TextFmt("Connected cities");
-                                                        for (entt::entity entity : market.connected_markets) {
-                                                            ImGui::TextFmt("{}", GetName(GetUniverse(), entity));
-                                                        }
-                                                        ImGui::Separator();
-                                                        // Now market wallet
-                                                        DisplayWallet(current_city);
-                                                        MarketInformationTable(GetUniverse(), current_city);
-                                                        ImGui::EndTabItem();
-                                                    }
-                                                    ImGui::EndTabBar();
-                                                }
-                                            }
-
-                                            void SysProvinceInformation::DemographicsTab() {
-                                                auto& settlement = GetUniverse().get<Settlement>(current_city);
-                                                for (auto& seg_entity : settlement.population) {
-                                                    ImGui::TextFmt(
-                                                        "Population: {}",
-                                                        LongToHumanString(GetUniverse()
-                                                                              .get<PopulationSegment>(seg_entity)
-                                                                              .population));
-                                                    gui::EntityTooltip(GetUniverse(), seg_entity);
-                                                    if (GetUniverse().all_of<components::Hunger>(seg_entity)) {
-                                                        ImGui::TextFmt("Hungry");
-                                                    }
-                                                    ImGui::TextFmt(
-                                                        "Labor Force: {}",
-                                                        LongToHumanString(GetUniverse()
-                                                                              .get<PopulationSegment>(seg_entity)
-                                                                              .labor_force));
+<<<<<<< HEAD
+                                            if (ImGui::CollapsingHeader("Resource Consumption")) {
+                                                if (GetUniverse().all_of<components::ResourceConsumption>(seg_entity)) {
+                                                    auto& res_consumption =
+                                                        GetUniverse().get<components::ResourceConsumption>(seg_entity);
+                                                    DrawLedgerTable("Resource consumption", GetUniverse(),
+                                                                    res_consumption);
+                                                    == == ==
+                                                        = ImGui::TextFmt(
+                                                            "Labor Force: {}",
+                                                            LongToHumanString(GetUniverse()
+                                                                                  .get<PopulationSegment>(seg_entity)
+                                                                                  .labor_force));
                                                     // Then other labor information
 
                                                     // Get spending for population
-                                                    DisplayWallet(current_city);
+                                                    if (GetUniverse().all_of<components::Wallet>(seg_entity)) {
+                                                        auto& wallet =
+                                                            GetUniverse().get<components::Wallet>(seg_entity);
+                                                        ImGui::TextFmt("Spending: {}",
+                                                                       LongToHumanString(wallet.GetGDPChange()));
+                                                    }
                                                     // Market
-                                                    if (GetUniverse().all_of<components::Market>(current_city)) {
+                                                    if (GetUniverse().all_of<Market>(current_city)) {
                                                         if (ImGui::IsItemHovered()) {
                                                             CQSPGui::SimpleTextTooltip(
                                                                 "Click for detailed market information");
-                                                        }
-                                                    }
-                                                    if (ImGui::CollapsingHeader("Resource Consumption")) {
-                                                        if (GetUniverse().all_of<components::ResourceConsumption>(
-                                                                seg_entity)) {
-                                                            auto& res_consumption =
-                                                                GetUniverse().get<components::ResourceConsumption>(
-                                                                    seg_entity);
-                                                            DrawLedgerTable("Resource consumption", GetUniverse(),
-                                                                            res_consumption);
+>>>>>>> pr_254
                                                         }
                                                     }
                                                     // Display the data
                                                     ImGui::Separator();
                                                 }
                                             }
+                                            == == == = IndustryTabGenericChild<components::Factory>(
+                                                         "Manufacturing Sector", "Factories", ImVec2(-1, height));
+
+                                            IndustryTabGenericChild<components::Mine>(
+                                                "Mining Sector ", " Mines ",
+                                                ImVec2(ImGui::GetContentRegionAvail().x * 0.5f -
+                                                           ImGui::GetStyle().ItemSpacing.y,
+                                                       height));
+>>>>>>> pr-286
 
                                             void SysProvinceInformation::IndustryTab() {
-                                                IndustryListWindow();
+<<<<<<< HEAD
                                                 auto& city_industry =
                                                     GetUniverse().get<components::IndustrialZone>(current_city);
+                                                == == == = IndustryListWindow();
+                                                auto& city_industry = GetUniverse().get<IndustrialZone>(current_city);
+>>>>>>> pr_254
                                                 int height = 300;
                                                 ImGui::TextFmt("Factories: {}", city_industry.industries.size());
                                                 if (ImGui::SmallButton("Factory list")) {
@@ -647,125 +806,192 @@ void SysProvinceInformation::DoUI(int delta_time) {
                                                 }
                                                 double percentag =
                                                     (double)labor_fufillment / (double)labor_demand * 100.;
-                                                ImGui::TextFmt("Labor fufillment: {}/{} ({}%%)",
-                                                               cqsp::util::LongToHumanString(labor_fufillment),
-                                                               cqsp::util::LongToHumanString(labor_demand), percentag);
+<<<<<<< HEAD
+                                                ImGui::TextFmt("Labor fufillment: {}/{} ({}%)",
+                                                               cqsp::util::NumberToHumanString(labor_fufillment),
+                                                               cqsp::util::NumberToHumanString(labor_demand),
+                                                               percentag);
+                                                == == == = ImGui::TextFmt("Labor fufillment: {}/{} ({}%%)",
+                                                                          LongToHumanString(labor_fufillment),
+                                                                          LongToHumanString(labor_demand), percentag);
+>>>>>>> pr_254
 
+<<<<<<< HEAD
                                                 IndustryTabGenericChild<components::Service>(
                                                     "Service Sector", "Company",
                                                     ImVec2(ImGui::GetContentRegionAvail().x * 0.5f -
                                                                ImGui::GetStyle().ItemSpacing.y,
                                                            height));
->>>>>>> pr-286
 
-                                                // Get spending for population
-                                                DisplayWallet(seg_entity);
-                                                if (GetUniverse().all_of<Wallet>(seg_entity)) {
-                                                    Wallet& wallet = GetUniverse().get<Wallet>(seg_entity);
-                                                    ImGui::TextFmt("GDP per capita: {}",
-                                                                   wallet.GetGDPChange() / pop_segement.population);
-                                                }
-
-<<<<<<< HEAD
-                                                if (ImGui::CollapsingHeader("Resource Consumption")) {
-                                                    if (GetUniverse().all_of<components::ResourceConsumption>(
-                                                            seg_entity)) {
-                                                        auto& res_consumption =
-                                                            GetUniverse().get<components::ResourceConsumption>(
-                                                                seg_entity);
-                                                        DrawLedgerTable("Resource consumption", GetUniverse(),
-                                                                        res_consumption);
-                                                        == == ==
-                                                            = ImGui::TextFmt("Labor Force: {}",
-                                                                             LongToHumanString(
-                                                                                 GetUniverse()
-                                                                                     .get<PopulationSegment>(seg_entity)
-                                                                                     .labor_force));
-                                                        // Then other labor information
-
-                                                        // Get spending for population
-                                                        if (GetUniverse().all_of<components::Wallet>(seg_entity)) {
-                                                            auto& wallet =
-                                                                GetUniverse().get<components::Wallet>(seg_entity);
-                                                            ImGui::TextFmt("Spending: {}",
-                                                                           LongToHumanString(wallet.GetGDPChange()));
-                                                        }
-                                                        // Market
-                                                        if (GetUniverse().all_of<Market>(current_city)) {
-                                                            if (ImGui::IsItemHovered()) {
-                                                                CQSPGui::SimpleTextTooltip(
-                                                                    "Click for detailed market information");
->>>>>>> pr_254
-                                                            }
-                                                        }
-                                                        // Display the data
-                                                        ImGui::Separator();
+                                                ImGui::SameLine();
+                                                == == == = void SysProvinceInformation::InfrastructureTab() {
+                                                    auto& infras =
+                                                        GetUniverse().get<infrastructure::CityInfrastructure>(
+                                                            current_city);
+                                                    ImGui::TextFmt("Default transport cost per m3: {}",
+                                                                   infras.default_purchase_cost);
+                                                    ImGui::TextFmt("Improvement per m3: {}", infras.improvement);
+                                                    // List all the stuff
+                                                    // Compile the highway to get the total cost reduction
+                                                    if (GetUniverse().any_of<infrastructure::Highway>(current_city)) {
+                                                        ImGui::TextFmt("Highway: {}",
+                                                                       GetUniverse()
+                                                                           .get<infrastructure::Highway>(current_city)
+                                                                           .extent);
                                                     }
                                                 }
-                                                == == == = IndustryTabGenericChild<components::Factory>(
-                                                             "Manufacturing Sector", "Factories", ImVec2(-1, height));
 
-                                                IndustryTabGenericChild<components::Mine>(
-                                                    "Mining Sector ", " Mines ",
-                                                    ImVec2(ImGui::GetContentRegionAvail().x * 0.5f -
-                                                               ImGui::GetStyle().ItemSpacing.y,
-                                                           height));
->>>>>>> pr-286
-
-                                                void SysProvinceInformation::IndustryTab() {
-<<<<<<< HEAD
+                                                void SysProvinceInformation::IndustryListWindow() {
+                                                    if (!city_factory_info) {
+                                                        return;
+                                                    }
+                                                    ImGui::Begin("Name", &city_factory_info);
+                                                    // Loop through market industry
                                                     auto& city_industry =
                                                         GetUniverse().get<components::IndustrialZone>(current_city);
-                                                    == == == = IndustryListWindow();
-                                                    auto& city_industry =
-                                                        GetUniverse().get<IndustrialZone>(current_city);
->>>>>>> pr_254
-                                                    int height = 300;
-                                                    ImGui::TextFmt("Factories: {}", city_industry.industries.size());
-                                                    if (ImGui::SmallButton("Factory list")) {
-                                                        // Put all the economy window information
-                                                        city_factory_info = true;
-                                                    }
-                                                    if (ImGui::IsItemHovered()) {
-                                                        ImGui::BeginTooltip();
-                                                        for (auto& at : city_industry.industries) {
-                                                            ImGui::TextFmt(
-                                                                "{}", common::util::GetEntityType(GetUniverse(), at));
-                                                        }
-                                                        ImGui::EndTooltip();
-                                                    }
+>>>>>>> pr-286
 
-                                                    // Calculate the number of stuff
-                                                    uint64_t labor_demand = 0;
-                                                    uint64_t labor_fufillment = 0;
-                                                    for (auto& factory : city_industry.industries) {
-                                                        const auto& employ =
-                                                            GetUniverse().get<components::Employer>(factory);
-                                                        labor_demand += employ.population_needed;
-                                                        labor_fufillment += employ.population_fufilled;
-                                                    }
-                                                    double percentag =
-                                                        (double)labor_fufillment / (double)labor_demand * 100.;
 <<<<<<< HEAD
-                                                    ImGui::TextFmt("Labor fufillment: {}/{} ({}%)",
-                                                                   cqsp::util::NumberToHumanString(labor_fufillment),
-                                                                   cqsp::util::NumberToHumanString(labor_demand),
-                                                                   percentag);
-                                                    == == == = ImGui::TextFmt("Labor fufillment: {}/{} ({}%%)",
-                                                                              LongToHumanString(labor_fufillment),
-                                                                              LongToHumanString(labor_demand),
-                                                                              percentag);
+                                                    IndustryTabGenericChild<components::Factory>(
+                                                        "Manufacturing Sector", "Factories", ImVec2(-1, height));
+                                                    == == == = IndustryTabGenericChild<Factory>("Manufacturing Sector",
+                                                                                                "Factories",
+                                                                                                ImVec2(-1, height));
 >>>>>>> pr_254
 
 <<<<<<< HEAD
-                                                    IndustryTabGenericChild<components::Service>(
-                                                        "Service Sector", "Company",
+                                                    IndustryTabGenericChild<components::Mine>(
+                                                        "Mining Sector ", " Mines ",
                                                         ImVec2(ImGui::GetContentRegionAvail().x * 0.5f -
                                                                    ImGui::GetStyle().ItemSpacing.y,
                                                                height));
 
                                                     ImGui::SameLine();
-                                                    == == == = void SysProvinceInformation::InfrastructureTab() {
+                                                }
+                                                == == == = template <typename T>
+                                                         void SysProvinceInformation::IndustryTabGenericChild(
+                                                             const std::string& tabname,
+                                                             const std::string& industryname, const ImVec2& size) {
+                                                    ImGui::BeginChild(
+                                                        tabname.c_str(), size, true,
+                                                        ImGuiWindowFlags_HorizontalScrollbar | window_flags);
+                                                    auto& city_industry =
+                                                        GetUniverse().get<components::IndustrialZone>(current_city);
+                                                    ImGui::TextFmt("{}", tabname);
+                                                    // List all the stuff it produces
+
+                                                    components::ResourceLedger input_resources;
+                                                    components::ResourceLedger output_resources;
+                                                    double GDP_calculation = 0;
+                                                    int count = 0;
+                                                    for (auto industry : city_industry.industries) {
+                                                        if (GetUniverse().all_of<components::Production, T>(industry)) {
+                                                            count++;
+                                                            const components::Production& generator =
+                                                                GetUniverse().get<components::Production>(industry);
+                                                            const components::Recipe& recipe =
+                                                                GetUniverse().get<components::Recipe>(generator.recipe);
+                                                            const components::IndustrySize& ratio =
+                                                                GetUniverse().get<components::IndustrySize>(industry);
+>>>>>>> pr-286
+
+                                                            void SysProvinceInformation::SpacePortTab() {
+<<<<<<< HEAD
+                                                                if (ImGui::BeginTabBar("SpacePortTabs",
+                                                                                       ImGuiTabBarFlags_None)) {
+                                                                    if (ImGui::BeginTabItem("Launch")) {
+                                                                        LaunchTab();
+                                                                        ImGui::EndTabItem();
+                                                                    }
+                                                                    if (ImGui::BeginTabItem("Docked Ships")) {
+                                                                        DockedTab();
+                                                                        ImGui::EndTabItem();
+                                                                    }
+                                                                    if (ImGui::BeginTabItem("Orders")) {
+                                                                        SpacePortOrdersTab();
+                                                                        ImGui::EndTabItem();
+                                                                    }
+                                                                    if (ImGui::BeginTabItem("Resources")) {
+                                                                        SpacePortResourceTab();
+                                                                        ImGui::EndTabItem();
+                                                                    }
+                                                                    ImGui::EndTabBar();
+                                                                }
+                                                                == == == =
+                                                                             // Set the things
+                                                                    static float semi_major_axis = 8000;
+                                                                static float azimuth = 0;
+                                                                static float eccentricity = 0;
+                                                                static float arg_of_perapsis = 0;
+                                                                static float LAN = 0;
+                                                                auto& city_coord =
+                                                                    GetUniverse()
+                                                                        .get<components::types::SurfaceCoordinate>(
+                                                                            current_city);
+
+<<<<<<< HEAD
+                                                                ImGui::SliderFloat("Semi Major Axis", &semi_major_axis,
+                                                                                   6000, 100000);
+                                                                ImGui::SliderFloat("Eccentricity", &eccentricity, 0,
+                                                                                   0.9999);
+                                                                ImGui::SliderAngle("Launch Azimuth", &azimuth, 0, 360);
+                                                                ImGui::SliderAngle("Argument of perapsis",
+                                                                                   &arg_of_perapsis, 0, 360);
+                                                                ImGui::SliderAngle("Longitude of the ascending node",
+                                                                                   &LAN, 0, 360);
+                                                                if (ImGui::Button("Launch!")) {
+                                                                    // Get reference body
+                                                                    entity reference_body = city_coord.planet;
+                                                                    // Launch inclination will be the inclination of the thing
+                                                                    double axial = GetUniverse()
+                                                                                       .get<components::bodies::Body>(
+                                                                                           reference_body)
+                                                                                       .axial;
+                                                                    double inc = city_coord.r_latitude();
+                                                                    inc += axial;
+                                                                    == == ==
+                                                                        = if (GetUniverse().all_of<components::Wallet>(
+                                                                                  industry)) {
+                                                                        GDP_calculation +=
+                                                                            GetUniverse()
+                                                                                .get<components::Wallet>(industry)
+                                                                                .GetGDPChange();
+                                                                    }
+                                                                }
+                                                            }
+                                                            ImGui::TextFmt("GDP: {}",
+                                                                           LongToHumanString(GDP_calculation));
+                                                            ImGui::TextFmt("{} Count: {}", industryname, count);
+>>>>>>> pr-286
+
+                                                            components::types::Orbit orb;
+                                                            orb.reference_body = reference_body;
+                                                            orb.inclination = components::types::GetLaunchInclination(
+                                                                city_coord.r_latitude(), azimuth);
+                                                            orb.semi_major_axis = semi_major_axis;
+                                                            orb.eccentricity = eccentricity;
+                                                            orb.w = arg_of_perapsis;
+                                                            orb.LAN = LAN;
+                                                            orb.epoch = GetUniverse().date.ToSecond();
+                                                            cqsp::common::systems::actions::LaunchShip(GetUniverse(),
+                                                                                                       orb);
+                                                        }
+                                                        double periapsis = semi_major_axis * (1 - eccentricity);
+                                                        if (GetUniverse().get<bodies::Body>(city_coord.planet).radius >
+                                                            periapsis) {
+                                                            ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f),
+                                                                               "Orbit's periapsis is below the planet "
+                                                                               "radius (%f), so it will crash",
+                                                                               periapsis);
+                                                        }
+                                                        ImGui::TextFmt("Launch Inclination: {}",
+                                                                       components::types::toDegree(
+                                                                           components::types::GetLaunchInclination(
+                                                                               city_coord.r_latitude(), azimuth)));
+>>>>>>> pr_254
+                                                    }
+
+                                                    void SysProvinceInformation::InfrastructureTab() {
                                                         auto& infras =
                                                             GetUniverse().get<infrastructure::CityInfrastructure>(
                                                                 current_city);
@@ -788,548 +1014,164 @@ void SysProvinceInformation::DoUI(int delta_time) {
                                                         if (!city_factory_info) {
                                                             return;
                                                         }
-                                                        ImGui::Begin("Name", &city_factory_info);
+                                                        ImGui::Begin("Name##industry_list_window", &city_factory_info);
                                                         // Loop through market industry
-                                                        auto& city_industry =
-                                                            GetUniverse().get<components::IndustrialZone>(current_city);
->>>>>>> pr-286
-
 <<<<<<< HEAD
-                                                        IndustryTabGenericChild<components::Factory>(
-                                                            "Manufacturing Sector", "Factories", ImVec2(-1, height));
-                                                        == == == = IndustryTabGenericChild<Factory>(
-                                                                     "Manufacturing Sector", "Factories",
-                                                                     ImVec2(-1, height));
->>>>>>> pr_254
-
-<<<<<<< HEAD
-                                                        IndustryTabGenericChild<components::Mine>(
-                                                            "Mining Sector ", " Mines ",
-                                                            ImVec2(ImGui::GetContentRegionAvail().x * 0.5f -
-                                                                       ImGui::GetStyle().ItemSpacing.y,
-                                                                   height));
-
-                                                        ImGui::SameLine();
-                                                    }
-                                                    == == == = template <typename T>
-                                                             void SysProvinceInformation::IndustryTabGenericChild(
-                                                                 const std::string& tabname,
-                                                                 const std::string& industryname, const ImVec2& size) {
-                                                        ImGui::BeginChild(
-                                                            tabname.c_str(), size, true,
-                                                            ImGuiWindowFlags_HorizontalScrollbar | window_flags);
-                                                        auto& city_industry =
-                                                            GetUniverse().get<components::IndustrialZone>(current_city);
-                                                        ImGui::TextFmt("{}", tabname);
-                                                        // List all the stuff it produces
-
-                                                        components::ResourceLedger input_resources;
-                                                        components::ResourceLedger output_resources;
-                                                        double GDP_calculation = 0;
-                                                        int count = 0;
-                                                        for (auto industry : city_industry.industries) {
-                                                            if (GetUniverse().all_of<components::Production, T>(
-                                                                    industry)) {
-                                                                count++;
-                                                                const components::Production& generator =
-                                                                    GetUniverse().get<components::Production>(industry);
-                                                                const components::Recipe& recipe =
-                                                                    GetUniverse().get<components::Recipe>(
-                                                                        generator.recipe);
-                                                                const components::IndustrySize& ratio =
-                                                                    GetUniverse().get<components::IndustrySize>(
-                                                                        industry);
->>>>>>> pr-286
-
-                                                                void SysProvinceInformation::SpacePortTab() {
-<<<<<<< HEAD
-                                                                    if (ImGui::BeginTabBar("SpacePortTabs",
-                                                                                           ImGuiTabBarFlags_None)) {
-                                                                        if (ImGui::BeginTabItem("Launch")) {
-                                                                            LaunchTab();
-                                                                            ImGui::EndTabItem();
-                                                                        }
-                                                                        if (ImGui::BeginTabItem("Docked Ships")) {
-                                                                            DockedTab();
-                                                                            ImGui::EndTabItem();
-                                                                        }
-                                                                        if (ImGui::BeginTabItem("Orders")) {
-                                                                            SpacePortOrdersTab();
-                                                                            ImGui::EndTabItem();
-                                                                        }
-                                                                        if (ImGui::BeginTabItem("Resources")) {
-                                                                            SpacePortResourceTab();
-                                                                            ImGui::EndTabItem();
-                                                                        }
-                                                                        ImGui::EndTabBar();
-                                                                    }
-                                                                    == == == =
-                                                                                 // Set the things
-                                                                        static float semi_major_axis = 8000;
-                                                                    static float azimuth = 0;
-                                                                    static float eccentricity = 0;
-                                                                    static float arg_of_perapsis = 0;
-                                                                    static float LAN = 0;
-                                                                    auto& city_coord =
-                                                                        GetUniverse()
-                                                                            .get<components::types::SurfaceCoordinate>(
-                                                                                current_city);
-
-<<<<<<< HEAD
-                                                                    ImGui::SliderFloat("Semi Major Axis",
-                                                                                       &semi_major_axis, 6000, 100000);
-                                                                    ImGui::SliderFloat("Eccentricity", &eccentricity, 0,
-                                                                                       0.9999);
-                                                                    ImGui::SliderAngle("Launch Azimuth", &azimuth, 0,
-                                                                                       360);
-                                                                    ImGui::SliderAngle("Argument of perapsis",
-                                                                                       &arg_of_perapsis, 0, 360);
-                                                                    ImGui::SliderAngle(
-                                                                        "Longitude of the ascending node", &LAN, 0,
-                                                                        360);
-                                                                    if (ImGui::Button("Launch!")) {
-                                                                        // Get reference body
-                                                                        entity reference_body = city_coord.planet;
-                                                                        // Launch inclination will be the inclination of the thing
-                                                                        double axial =
-                                                                            GetUniverse()
-                                                                                .get<components::bodies::Body>(
-                                                                                    reference_body)
-                                                                                .axial;
-                                                                        double inc = city_coord.r_latitude();
-                                                                        inc += axial;
-                                                                        == == == = if (GetUniverse()
-                                                                                           .all_of<components::Wallet>(
-                                                                                               industry)) {
-                                                                            GDP_calculation +=
-                                                                                GetUniverse()
-                                                                                    .get<components::Wallet>(industry)
-                                                                                    .GetGDPChange();
-                                                                        }
-                                                                    }
-                                                                }
-                                                                ImGui::TextFmt("GDP: {}",
-                                                                               LongToHumanString(GDP_calculation));
-                                                                ImGui::TextFmt("{} Count: {}", industryname, count);
->>>>>>> pr-286
-
-                                                                components::types::Orbit orb;
-                                                                orb.reference_body = reference_body;
-                                                                orb.inclination =
-                                                                    components::types::GetLaunchInclination(
-                                                                        city_coord.r_latitude(), azimuth);
-                                                                orb.semi_major_axis = semi_major_axis;
-                                                                orb.eccentricity = eccentricity;
-                                                                orb.w = arg_of_perapsis;
-                                                                orb.LAN = LAN;
-                                                                orb.epoch = GetUniverse().date.ToSecond();
-                                                                cqsp::common::systems::actions::LaunchShip(
-                                                                    GetUniverse(), orb);
-                                                            }
-                                                            double periapsis = semi_major_axis * (1 - eccentricity);
-                                                            if (GetUniverse()
-                                                                    .get<bodies::Body>(city_coord.planet)
-                                                                    .radius > periapsis) {
-                                                                ImGui::TextColored(
-                                                                    ImVec4(1.0f, 0.0f, 1.0f, 1.0f),
-                                                                    "Orbit's periapsis is below the planet "
-                                                                    "radius (%f), so it will crash",
-                                                                    periapsis);
-                                                            }
-                                                            ImGui::TextFmt("Launch Inclination: {}",
-                                                                           components::types::toDegree(
-                                                                               components::types::GetLaunchInclination(
-                                                                                   city_coord.r_latitude(), azimuth)));
->>>>>>> pr_254
-                                                        }
-
-                                                        void SysProvinceInformation::InfrastructureTab() {
-                                                            auto& infras =
-                                                                GetUniverse().get<infrastructure::CityInfrastructure>(
-                                                                    current_city);
-                                                            ImGui::TextFmt("Default transport cost per m3: {}",
-                                                                           infras.default_purchase_cost);
-                                                            ImGui::TextFmt("Improvement per m3: {}",
-                                                                           infras.improvement);
-                                                            // List all the stuff
-                                                            // Compile the highway to get the total cost reduction
-                                                            if (GetUniverse().any_of<infrastructure::Highway>(
-                                                                    current_city)) {
-                                                                ImGui::TextFmt(
-                                                                    "Highway: {}",
-                                                                    GetUniverse()
-                                                                        .get<infrastructure::Highway>(current_city)
-                                                                        .extent);
-                                                            }
-                                                        }
-
-                                                        void SysProvinceInformation::IndustryListWindow() {
-                                                            if (!city_factory_info) {
-                                                                return;
-                                                            }
-                                                            ImGui::Begin("Name##industry_list_window",
-                                                                         &city_factory_info);
-                                                            // Loop through market industry
-<<<<<<< HEAD
-                                                            if (ImGui::BeginTable(
-                                                                    "industry_list_table", 9,
-                                                                    ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
-                                                                ImGui::TableSetupColumn("Production Type");
-                                                                ImGui::TableSetupColumn("Size");
-                                                                ImGui::TableSetupColumn("Utilization");
-                                                                ImGui::TableSetupColumn("Utilization Delta");
-                                                                ImGui::TableSetupColumn("Utilization Delta");
-                                                                ImGui::TableSetupColumn("Hired Workers");
-                                                                ImGui::TableSetupColumn("Wage");
-                                                                ImGui::TableSetupColumn("Revenue");
-                                                                ImGui::TableSetupColumn("Profit");
-                                                                ImGui::TableHeadersRow();
-                                                                auto& city_industry =
-                                                                    GetUniverse().get<components::IndustrialZone>(
-                                                                        current_city);
-                                                                for (entt::entity industry : city_industry.industries) {
-                                                                    ImGui::TableNextRow();
-                                                                    ImGui::TableSetColumnIndex(0);
-                                                                    ImGui::TextFmt("{}", common::util::GetName(
-                                                                                             GetUniverse(), industry));
-                                                                    if (ImGui::IsItemHovered()) {
-                                                                        systems::gui::EntityTooltip(GetUniverse(),
-                                                                                                    industry);
-                                                                    }
-
-<<<<<<< HEAD
-                                                                    if (GetUniverse().all_of<components::IndustrySize>(
-                                                                            industry)) {
-                                                                        auto& industry_component =
-                                                                            GetUniverse().get<components::IndustrySize>(
-                                                                                industry);
-
-                                                                        ImGui::TableSetColumnIndex(1);
-                                                                        if (!industry_component.shortage) {
-                                                                            ImGui::TextFmt(
-                                                                                "{}",
-                                                                                NumberToHumanString(
-                                                                                    static_cast<int64_t>(
-                                                                                        industry_component.size)));
-                                                                        } else {
-                                                                            ImGui::TextFmtColored(
-                                                                                ImVec4(0.75, 0, 0, 1), "{}",
-                                                                                NumberToHumanString(
-                                                                                    static_cast<int64_t>(
-                                                                                        industry_component.size)));
-                                                                            if (ImGui::IsItemHovered()) {
-                                                                                ImGui::BeginTooltip();
-                                                                                ImGui::TextFmt("Resource Shortage!");
-                                                                                ImGui::EndTooltip();
-                                                                            }
-                                                                        }
-                                                                        ImGui::TableSetColumnIndex(2);
-                                                                        ImGui::TextFmt(
-                                                                            "{}",
-                                                                            NumberToHumanString(static_cast<int64_t>(
-                                                                                industry_component.utilization)));
-                                                                        ImGui::TableSetColumnIndex(3);
-                                                                        double diff = industry_component.diff - 1;
-                                                                        diff *= 100;
-                                                                        const char* format_string = "{:.2f}%";
-                                                                        if (diff > 0) {
-                                                                            ImGui::TextFmtColored(
-                                                                                ImVec4(0, 0.75, 0, 1),
-                                                                                fmt::runtime(format_string), diff);
-                                                                        } else if (diff < 0) {
-                                                                            ImGui::TextFmtColored(
-                                                                                ImVec4(0.75, 0, 0, 1),
-                                                                                fmt::runtime(format_string), diff);
-                                                                        } else {
-                                                                            ImGui::TextFmt(fmt::runtime(format_string),
-                                                                                           diff);
-                                                                        }
-                                                                        ImGui::TableSetColumnIndex(4);
-                                                                        ImGui::TextFmt("{}",
-                                                                                       industry_component.diff_delta);
-                                                                    }
-                                                                    if (GetUniverse().all_of<components::Employer>(
-                                                                            industry)) {
-                                                                        ImGui::TableSetColumnIndex(5);
-                                                                        auto& employer =
-                                                                            GetUniverse().get<components::Employer>(
-                                                                                industry);
-                                                                        ImGui::TextFmt(
-                                                                            "{}",
-                                                                            NumberToHumanString(static_cast<int64_t>(
-                                                                                employer.population_fufilled)));
-                                                                    }
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                                                    if (GetUniverse().all_of<components::IndustrySize>(
-                                                                            industry)) {
-                                                                        auto& industry_component =
-                                                                            GetUniverse().get<components::IndustrySize>(
-                                                                                industry);
-                                                                        == == == = types::Orbit orb;
-                                                                        orb.reference_body = reference_body;
-                                                                        orb.inclination =
-                                                                            components::types::GetLaunchInclination(
-                                                                                city_coord.r_latitude(), azimuth);
-                                                                        orb.semi_major_axis = semi_major_axis;
-                                                                        orb.eccentricity = eccentricity;
-                                                                        orb.w = arg_of_perapsis;
-                                                                        orb.LAN = LAN;
-                                                                        orb.epoch = GetUniverse().date.ToSecond();
-                                                                        common::actions::LaunchShip(GetUniverse(), orb);
-                                                                    }
-                                                                    double periapsis =
-                                                                        semi_major_axis * (1 - eccentricity);
-                                                                    if (GetUniverse()
-                                                                            .get<components::bodies::Body>(
-                                                                                city_coord.planet)
-                                                                            .radius > periapsis) {
-                                                                        ImGui::TextColored(
-                                                                            ImVec4(1.0f, 0.0f, 1.0f, 1.0f),
-                                                                            "Orbit's periapsis is below the planet "
-                                                                            "radius "
-                                                                            "(%f), so it will crash",
-                                                                            periapsis);
-                                                                    }
-                                                                    ImGui::TextFmt(
-                                                                        "Launch Inclination: {}",
-                                                                        types::toDegree(types::GetLaunchInclination(
-                                                                            city_coord.r_latitude(), azimuth)));
-                                                                }
->>>>>>> pr-292
-
-                                                                ImGui::TableSetColumnIndex(6);
-                                                                ImGui::TextFmt("{}",
-                                                                               NumberToHumanString(static_cast<int64_t>(
-                                                                                   industry_component.wages)));
-                                                            }
-                                                            if (GetUniverse().all_of<components::CostBreakdown>(
-                                                                    industry)) {
-                                                                auto& income_component =
-                                                                    GetUniverse().get<components::CostBreakdown>(
-                                                                        industry);
-                                                                == == == = void SysProvinceInformation::LaunchTab() {
-                                                                    // Set the things
-                                                                    static float semi_major_axis = 8000;
-                                                                    static float azimuth = 0;
-                                                                    static float eccentricity = 0;
-                                                                    static float arg_of_perapsis = 0;
-                                                                    static float LAN = 0;
-                                                                    auto& city_coord =
-                                                                        GetUniverse().get<types::SurfaceCoordinate>(
-                                                                            current_city);
->>>>>>> pr-288
-
-                                                                    ImGui::TableSetColumnIndex(7);
-                                                                    ImGui::TextFmt(
-                                                                        "{}", NumberToHumanString(static_cast<int64_t>(
-                                                                                  income_component.revenue)));
-                                                                    ImGui::TableSetColumnIndex(8);
-                                                                    ImGui::TextFmt(
-                                                                        "{}", NumberToHumanString(static_cast<int64_t>(
-                                                                                  income_component.profit)));
-                                                                }
-                                                                == == ==
-                                                                    = auto& city_industry =
-                                                                        GetUniverse().get<IndustrialZone>(current_city);
-                                                                == == == = void SysProvinceInformation::LaunchTab() {
-                                                                    // Set the things
-                                                                    static float semi_major_axis = 8000;
-                                                                    static float azimuth = 0;
-                                                                    static float eccentricity = 0;
-                                                                    static float arg_of_perapsis = 0;
-                                                                    static float LAN = 0;
-                                                                    auto& city_coord =
-                                                                        GetUniverse().get<types::SurfaceCoordinate>(
-                                                                            current_city);
-
-                                                                    ImGui::SliderFloat("Semi Major Axis",
-                                                                                       &semi_major_axis, 6000, 100000);
-                                                                    ImGui::SliderFloat("Eccentricity", &eccentricity, 0,
-                                                                                       0.9999);
-                                                                    ImGui::SliderAngle("Launch Azimuth", &azimuth, 0,
-                                                                                       360);
-                                                                    ImGui::SliderAngle("Argument of perapsis",
-                                                                                       &arg_of_perapsis, 0, 360);
-                                                                    ImGui::SliderAngle(
-                                                                        "Longitude of the ascending node", &LAN, 0,
-                                                                        360);
-                                                                    if (ImGui::Button("Launch!")) {
-                                                                        // Get reference body
-                                                                        entt::entity reference_body = city_coord.planet;
-                                                                        // Launch inclination will be the inclination of the thing
-                                                                        double axial =
-                                                                            GetUniverse()
-                                                                                .get<components::bodies::Body>(
-                                                                                    reference_body)
-                                                                                .axial;
-                                                                        double inc = city_coord.r_latitude();
-                                                                        inc += axial;
-
-                                                                        types::Orbit orb;
-                                                                        orb.reference_body = reference_body;
-                                                                        orb.inclination =
-                                                                            components::types::GetLaunchInclination(
-                                                                                city_coord.r_latitude(), azimuth);
-                                                                        orb.semi_major_axis = semi_major_axis;
-                                                                        orb.eccentricity = eccentricity;
-                                                                        orb.w = arg_of_perapsis;
-                                                                        orb.LAN = LAN;
-                                                                        orb.epoch = GetUniverse().date.ToSecond();
-                                                                        cqsp::common::systems::actions::LaunchShip(
-                                                                            GetUniverse(), orb);
-                                                                    }
-                                                                    double periapsis =
-                                                                        semi_major_axis * (1 - eccentricity);
-                                                                    if (GetUniverse()
-                                                                            .get<components::bodies::Body>(
-                                                                                city_coord.planet)
-                                                                            .radius > periapsis) {
-                                                                        ImGui::TextColored(
-                                                                            ImVec4(1.0f, 0.0f, 1.0f, 1.0f),
-                                                                            "Orbit's periapsis is below the planet "
-                                                                            "radius (%f), so it will crash",
-                                                                            periapsis);
-                                                                    }
-                                                                    ImGui::TextFmt(
-                                                                        "Launch Inclination: {}",
-                                                                        types::toDegree(types::GetLaunchInclination(
-                                                                            city_coord.r_latitude(), azimuth)));
-                                                                }
-
-                                                                void SysProvinceInformation::DockedTab() {
-                                                                    if (!GetUniverse().any_of<components::DockedShips>(
-                                                                            current_city)) {
-                                                                        return;
-                                                                    }
-                                                                    auto& docked_ships =
-                                                                        GetUniverse().get<components::DockedShips>(
-                                                                            current_city);
->>>>>>> pr-286
-
-<<<<<<< HEAD
-                                                                    for (entity industry : city_industry.industries) {
-                                                                        ImGui::TextFmt(
-                                                                            "{}", common::util::GetName(GetUniverse(),
-                                                                                                        industry));
-                                                                        if (ImGui::IsItemHovered()) {
-                                                                            systems::gui::EntityTooltip(GetUniverse(),
-                                                                                                        industry);
->>>>>>> pr_254
-                                                                        }
-                                                                        ImGui::EndTable();
-                                                                    }
-                                                                    ImGui::End();
-                                                                }
-                                                                == == == = types::Orbit orb;
-                                                                orb.reference_body = reference_body;
-                                                                orb.inclination =
-                                                                    components::types::GetLaunchInclination(
-                                                                        city_coord.r_latitude(), azimuth);
-                                                                orb.semi_major_axis = semi_major_axis;
-                                                                orb.eccentricity = eccentricity;
-                                                                orb.w = arg_of_perapsis;
-                                                                orb.LAN = LAN;
-                                                                orb.epoch = GetUniverse().date.ToSecond();
-                                                                common::systems::actions::LaunchShip(GetUniverse(),
-                                                                                                     orb);
-                                                            }
-                                                            double periapsis = semi_major_axis * (1 - eccentricity);
-                                                            if (GetUniverse()
-                                                                    .get<components::bodies::Body>(city_coord.planet)
-                                                                    .radius > periapsis) {
-                                                                ImGui::TextColored(
-                                                                    ImVec4(1.0f, 0.0f, 1.0f, 1.0f),
-                                                                    "Orbit's periapsis is below the planet radius "
-                                                                    "(%f), so it will crash",
-                                                                    periapsis);
-                                                            }
-                                                            ImGui::TextFmt("Launch Inclination: {}",
-                                                                           types::toDegree(types::GetLaunchInclination(
-                                                                               city_coord.r_latitude(), azimuth)));
-                                                        }
->>>>>>> pr-288
-
-                                                        template <typename T>
-                                                        void SysProvinceInformation::IndustryTabGenericChild(
-                                                            const std::string& tabname, const std::string& industryname,
-                                                            const ImVec2& size) {
-                                                            ImGui::BeginChild(
-                                                                tabname.c_str(), size, true,
-                                                                ImGuiWindowFlags_HorizontalScrollbar | window_flags);
-<<<<<<< HEAD
+                                                        if (ImGui::BeginTable(
+                                                                "industry_list_table", 9,
+                                                                ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
+                                                            ImGui::TableSetupColumn("Production Type");
+                                                            ImGui::TableSetupColumn("Size");
+                                                            ImGui::TableSetupColumn("Utilization");
+                                                            ImGui::TableSetupColumn("Utilization Delta");
+                                                            ImGui::TableSetupColumn("Utilization Delta");
+                                                            ImGui::TableSetupColumn("Hired Workers");
+                                                            ImGui::TableSetupColumn("Wage");
+                                                            ImGui::TableSetupColumn("Revenue");
+                                                            ImGui::TableSetupColumn("Profit");
+                                                            ImGui::TableHeadersRow();
                                                             auto& city_industry =
                                                                 GetUniverse().get<components::IndustrialZone>(
                                                                     current_city);
+                                                            for (entt::entity industry : city_industry.industries) {
+                                                                ImGui::TableNextRow();
+                                                                ImGui::TableSetColumnIndex(0);
+                                                                ImGui::TextFmt("{}", common::util::GetName(
+                                                                                         GetUniverse(), industry));
+                                                                if (ImGui::IsItemHovered()) {
+                                                                    systems::gui::EntityTooltip(GetUniverse(),
+                                                                                                industry);
+                                                                }
+
+<<<<<<< HEAD
+                                                                if (GetUniverse().all_of<components::IndustrySize>(
+                                                                        industry)) {
+                                                                    auto& industry_component =
+                                                                        GetUniverse().get<components::IndustrySize>(
+                                                                            industry);
+
+                                                                    ImGui::TableSetColumnIndex(1);
+                                                                    if (!industry_component.shortage) {
+                                                                        ImGui::TextFmt(
+                                                                            "{}",
+                                                                            NumberToHumanString(static_cast<int64_t>(
+                                                                                industry_component.size)));
+                                                                    } else {
+                                                                        ImGui::TextFmtColored(
+                                                                            ImVec4(0.75, 0, 0, 1), "{}",
+                                                                            NumberToHumanString(static_cast<int64_t>(
+                                                                                industry_component.size)));
+                                                                        if (ImGui::IsItemHovered()) {
+                                                                            ImGui::BeginTooltip();
+                                                                            ImGui::TextFmt("Resource Shortage!");
+                                                                            ImGui::EndTooltip();
+                                                                        }
+                                                                    }
+                                                                    ImGui::TableSetColumnIndex(2);
+                                                                    ImGui::TextFmt(
+                                                                        "{}", NumberToHumanString(static_cast<int64_t>(
+                                                                                  industry_component.utilization)));
+                                                                    ImGui::TableSetColumnIndex(3);
+                                                                    double diff = industry_component.diff - 1;
+                                                                    diff *= 100;
+                                                                    const char* format_string = "{:.2f}%";
+                                                                    if (diff > 0) {
+                                                                        ImGui::TextFmtColored(
+                                                                            ImVec4(0, 0.75, 0, 1),
+                                                                            fmt::runtime(format_string), diff);
+                                                                    } else if (diff < 0) {
+                                                                        ImGui::TextFmtColored(
+                                                                            ImVec4(0.75, 0, 0, 1),
+                                                                            fmt::runtime(format_string), diff);
+                                                                    } else {
+                                                                        ImGui::TextFmt(fmt::runtime(format_string),
+                                                                                       diff);
+                                                                    }
+                                                                    ImGui::TableSetColumnIndex(4);
+                                                                    ImGui::TextFmt("{}", industry_component.diff_delta);
+                                                                }
+                                                                if (GetUniverse().all_of<components::Employer>(
+                                                                        industry)) {
+                                                                    ImGui::TableSetColumnIndex(5);
+                                                                    auto& employer =
+                                                                        GetUniverse().get<components::Employer>(
+                                                                            industry);
+                                                                    ImGui::TextFmt(
+                                                                        "{}", NumberToHumanString(static_cast<int64_t>(
+                                                                                  employer.population_fufilled)));
+                                                                }
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                                                if (GetUniverse().all_of<components::IndustrySize>(
+                                                                        industry)) {
+                                                                    auto& industry_component =
+                                                                        GetUniverse().get<components::IndustrySize>(
+                                                                            industry);
+                                                                    == == == = types::Orbit orb;
+                                                                    orb.reference_body = reference_body;
+                                                                    orb.inclination =
+                                                                        components::types::GetLaunchInclination(
+                                                                            city_coord.r_latitude(), azimuth);
+                                                                    orb.semi_major_axis = semi_major_axis;
+                                                                    orb.eccentricity = eccentricity;
+                                                                    orb.w = arg_of_perapsis;
+                                                                    orb.LAN = LAN;
+                                                                    orb.epoch = GetUniverse().date.ToSecond();
+                                                                    common::actions::LaunchShip(GetUniverse(), orb);
+                                                                }
+                                                                double periapsis = semi_major_axis * (1 - eccentricity);
+                                                                if (GetUniverse()
+                                                                        .get<components::bodies::Body>(
+                                                                            city_coord.planet)
+                                                                        .radius > periapsis) {
+                                                                    ImGui::TextColored(
+                                                                        ImVec4(1.0f, 0.0f, 1.0f, 1.0f),
+                                                                        "Orbit's periapsis is below the planet "
+                                                                        "radius "
+                                                                        "(%f), so it will crash",
+                                                                        periapsis);
+                                                                }
+                                                                ImGui::TextFmt(
+                                                                    "Launch Inclination: {}",
+                                                                    types::toDegree(types::GetLaunchInclination(
+                                                                        city_coord.r_latitude(), azimuth)));
+                                                            }
+>>>>>>> pr-292
+
+                                                            ImGui::TableSetColumnIndex(6);
+                                                            ImGui::TextFmt("{}",
+                                                                           NumberToHumanString(static_cast<int64_t>(
+                                                                               industry_component.wages)));
+                                                        }
+                                                        if (GetUniverse().all_of<components::CostBreakdown>(industry)) {
+                                                            auto& income_component =
+                                                                GetUniverse().get<components::CostBreakdown>(industry);
+                                                            == == == = void SysProvinceInformation::LaunchTab() {
+                                                                // Set the things
+                                                                static float semi_major_axis = 8000;
+                                                                static float azimuth = 0;
+                                                                static float eccentricity = 0;
+                                                                static float arg_of_perapsis = 0;
+                                                                static float LAN = 0;
+                                                                auto& city_coord =
+                                                                    GetUniverse().get<types::SurfaceCoordinate>(
+                                                                        current_city);
+>>>>>>> pr-288
+
+                                                                ImGui::TableSetColumnIndex(7);
+                                                                ImGui::TextFmt("{}",
+                                                                               NumberToHumanString(static_cast<int64_t>(
+                                                                                   income_component.revenue)));
+                                                                ImGui::TableSetColumnIndex(8);
+                                                                ImGui::TextFmt("{}",
+                                                                               NumberToHumanString(static_cast<int64_t>(
+                                                                                   income_component.profit)));
+                                                            }
                                                             == == ==
                                                                 = auto& city_industry =
                                                                     GetUniverse().get<IndustrialZone>(current_city);
->>>>>>> pr_254
-                                                            ImGui::TextFmt("{}", tabname);
-                                                            // List all the stuff it produces
-
-                                                            components::ResourceLedger input_resources;
-                                                            components::ResourceLedger output_resources;
-                                                            double GDP_calculation = 0;
-                                                            int count = 0;
-                                                            for (auto industry : city_industry.industries) {
-<<<<<<< HEAD
-                                                                if (GetUniverse().all_of<components::Production, T>(
-                                                                        industry)) {
-                                                                    count++;
-                                                                    const components::Production& generator =
-                                                                        GetUniverse().get<components::Production>(
-                                                                            industry);
-                                                                    == == == = if (GetUniverse().all_of<Production, T>(
-                                                                                       industry)) {
-                                                                        count++;
-                                                                        const Production& generator =
-                                                                            GetUniverse().get<Production>(industry);
->>>>>>> pr_254
-                                                                        const components::Recipe& recipe =
-                                                                            GetUniverse().get<components::Recipe>(
-                                                                                generator.recipe);
-                                                                        const components::IndustrySize& ratio =
-                                                                            GetUniverse().get<components::IndustrySize>(
-                                                                                industry);
-
-                                                                        input_resources +=
-                                                                            (recipe.input * ratio.utilization) +
-                                                                            (recipe.capitalcost * ratio.size);
-                                                                        output_resources[recipe.output.entity] +=
-                                                                            recipe.output.amount * ratio.utilization;
-
-                                                                        if (GetUniverse().all_of<components::Wallet>(
-                                                                                industry)) {
-                                                                            GDP_calculation +=
-                                                                                GetUniverse()
-                                                                                    .get<components::Wallet>(industry)
-                                                                                    .GetGDPChange();
-                                                                        }
-                                                                    }
-                                                                }
-<<<<<<< HEAD
-                                                                ImGui::TextFmt("GDP: {}",
-                                                                               NumberToHumanString(GDP_calculation));
-                                                                == == ==
-                                                                    = ImGui::TextFmt(
-                                                                        "GDP: {}", LongToHumanString(GDP_calculation));
->>>>>>> pr_254
-                                                                ImGui::TextFmt("{} Count: {}", industryname, count);
-
-                                                                ImGui::Text("Output");
-                                                                // Output table
-                                                                DrawLedgerTable(tabname + "output", GetUniverse(),
-                                                                                output_resources);
-
-                                                                ImGui::Text("Input");
-                                                                DrawLedgerTable(tabname + "input", GetUniverse(),
-                                                                                input_resources);
-                                                                ImGui::EndChild();
-                                                            }
-
-                                                            void SysProvinceInformation::LaunchTab() {
+                                                            == == == = void SysProvinceInformation::LaunchTab() {
                                                                 // Set the things
                                                                 static float semi_major_axis = 8000;
                                                                 static float azimuth = 0;
@@ -1360,14 +1202,18 @@ void SysProvinceInformation::DoUI(int delta_time) {
                                                                     double inc = city_coord.r_latitude();
                                                                     inc += axial;
 
-                                                                    types::Orbit orb(
-                                                                        semi_major_axis, eccentricity,
+                                                                    types::Orbit orb;
+                                                                    orb.reference_body = reference_body;
+                                                                    orb.inclination =
                                                                         components::types::GetLaunchInclination(
-                                                                            city_coord.r_latitude(), azimuth),
-                                                                        LAN, arg_of_perapsis, 0, reference_body);
-                                                                    entt::entity ship =
-                                                                        common::actions::LaunchShip(GetUniverse(), orb);
-                                                                    GetUniverse().emplace<ctx::VisibleOrbit>(ship);
+                                                                            city_coord.r_latitude(), azimuth);
+                                                                    orb.semi_major_axis = semi_major_axis;
+                                                                    orb.eccentricity = eccentricity;
+                                                                    orb.w = arg_of_perapsis;
+                                                                    orb.LAN = LAN;
+                                                                    orb.epoch = GetUniverse().date.ToSecond();
+                                                                    cqsp::common::systems::actions::LaunchShip(
+                                                                        GetUniverse(), orb);
                                                                 }
                                                                 double periapsis = semi_major_axis * (1 - eccentricity);
                                                                 if (GetUniverse()
@@ -1394,65 +1240,241 @@ void SysProvinceInformation::DoUI(int delta_time) {
                                                                 auto& docked_ships =
                                                                     GetUniverse().get<components::DockedShips>(
                                                                         current_city);
+>>>>>>> pr-286
 
-                                                                for (entt::entity docked : docked_ships.docked_ships) {
-                                                                    ImGui::Selectable(
-                                                                        common::util::GetName(GetUniverse(), docked)
-                                                                            .c_str());
+<<<<<<< HEAD
+                                                                for (entity industry : city_industry.industries) {
+                                                                    ImGui::TextFmt("{}", common::util::GetName(
+                                                                                             GetUniverse(), industry));
                                                                     if (ImGui::IsItemHovered()) {
                                                                         systems::gui::EntityTooltip(GetUniverse(),
-                                                                                                    docked);
-                                                                    }
-                                                                }
-                                                            }
-
-                                                            void SysProvinceInformation::SpacePortOrdersTab() {
-                                                                // Just list it for a basic UI
-                                                                auto& space_port =
-                                                                    GetUniverse()
-                                                                        .get<components::infrastructure::SpacePort>(
-                                                                            current_city);
-                                                                for (auto& [target, queue] : space_port.deliveries) {
-                                                                    for (auto& transport : queue) {
-                                                                        ImGui::TextFmt(
-                                                                            "To {}: {} {}/{}",
-                                                                            common::util::GetName(GetUniverse(),
-                                                                                                  target),
-                                                                            common::util::GetName(GetUniverse(),
-                                                                                                  transport.good),
-                                                                            transport.fulfilled, transport.amount);
-                                                                    }
-                                                                }
-                                                            }
-
-                                                            void SysProvinceInformation::SpacePortResourceTab() {
-                                                                auto& space_port =
-                                                                    GetUniverse()
-                                                                        .get<components::infrastructure::SpacePort>(
-                                                                            current_city);
-                                                                if (ImGui::BeginTable("space_port_resource_tables", 2,
-                                                                                      ImGuiTableFlags_Borders |
-                                                                                          ImGuiTableFlags_RowBg)) {
-                                                                    ImGui::TableSetupColumn("Good");
-                                                                    ImGui::TableSetupColumn("Output Resources");
-
-                                                                    ImGui::TableHeadersRow();
-                                                                    auto goodsview =
-                                                                        GetUniverse().view<components::Price>();
-
-                                                                    for (entt::entity good_entity : goodsview) {
-                                                                        ImGui::TableNextRow();
-                                                                        ImGui::TableSetColumnIndex(0);
-                                                                        ImGui::TextFmt(
-                                                                            "{}", GetName(GetUniverse(), good_entity));
-                                                                        ImGui::TableSetColumnIndex(1);
-                                                                        ImGui::TextFmt(
-                                                                            "{}",
-                                                                            util::NumberToHumanString(
-                                                                                space_port
-                                                                                    .output_resources[good_entity]));
+                                                                                                    industry);
+>>>>>>> pr_254
                                                                     }
                                                                     ImGui::EndTable();
                                                                 }
+                                                                ImGui::End();
                                                             }
-                                                        }  // namespace cqsp::client::systems
+                                                            == == == = types::Orbit orb;
+                                                            orb.reference_body = reference_body;
+                                                            orb.inclination = components::types::GetLaunchInclination(
+                                                                city_coord.r_latitude(), azimuth);
+                                                            orb.semi_major_axis = semi_major_axis;
+                                                            orb.eccentricity = eccentricity;
+                                                            orb.w = arg_of_perapsis;
+                                                            orb.LAN = LAN;
+                                                            orb.epoch = GetUniverse().date.ToSecond();
+                                                            common::systems::actions::LaunchShip(GetUniverse(), orb);
+                                                        }
+                                                        double periapsis = semi_major_axis * (1 - eccentricity);
+                                                        if (GetUniverse()
+                                                                .get<components::bodies::Body>(city_coord.planet)
+                                                                .radius > periapsis) {
+                                                            ImGui::TextColored(
+                                                                ImVec4(1.0f, 0.0f, 1.0f, 1.0f),
+                                                                "Orbit's periapsis is below the planet radius "
+                                                                "(%f), so it will crash",
+                                                                periapsis);
+                                                        }
+                                                        ImGui::TextFmt("Launch Inclination: {}",
+                                                                       types::toDegree(types::GetLaunchInclination(
+                                                                           city_coord.r_latitude(), azimuth)));
+                                                    }
+>>>>>>> pr-288
+
+                                                    template <typename T>
+                                                    void SysProvinceInformation::IndustryTabGenericChild(
+                                                        const std::string& tabname, const std::string& industryname,
+                                                        const ImVec2& size) {
+                                                        ImGui::BeginChild(
+                                                            tabname.c_str(), size, true,
+                                                            ImGuiWindowFlags_HorizontalScrollbar | window_flags);
+<<<<<<< HEAD
+                                                        auto& city_industry =
+                                                            GetUniverse().get<components::IndustrialZone>(current_city);
+                                                        == == == = auto& city_industry =
+                                                                     GetUniverse().get<IndustrialZone>(current_city);
+>>>>>>> pr_254
+                                                        ImGui::TextFmt("{}", tabname);
+                                                        // List all the stuff it produces
+
+                                                        components::ResourceLedger input_resources;
+                                                        components::ResourceLedger output_resources;
+                                                        double GDP_calculation = 0;
+                                                        int count = 0;
+                                                        for (auto industry : city_industry.industries) {
+<<<<<<< HEAD
+                                                            if (GetUniverse().all_of<components::Production, T>(
+                                                                    industry)) {
+                                                                count++;
+                                                                const components::Production& generator =
+                                                                    GetUniverse().get<components::Production>(industry);
+                                                                == == == = if (GetUniverse().all_of<Production, T>(
+                                                                                   industry)) {
+                                                                    count++;
+                                                                    const Production& generator =
+                                                                        GetUniverse().get<Production>(industry);
+>>>>>>> pr_254
+                                                                    const components::Recipe& recipe =
+                                                                        GetUniverse().get<components::Recipe>(
+                                                                            generator.recipe);
+                                                                    const components::IndustrySize& ratio =
+                                                                        GetUniverse().get<components::IndustrySize>(
+                                                                            industry);
+
+                                                                    input_resources +=
+                                                                        (recipe.input * ratio.utilization) +
+                                                                        (recipe.capitalcost * ratio.size);
+                                                                    output_resources[recipe.output.entity] +=
+                                                                        recipe.output.amount * ratio.utilization;
+
+                                                                    if (GetUniverse().all_of<components::Wallet>(
+                                                                            industry)) {
+                                                                        GDP_calculation +=
+                                                                            GetUniverse()
+                                                                                .get<components::Wallet>(industry)
+                                                                                .GetGDPChange();
+                                                                    }
+                                                                }
+                                                            }
+<<<<<<< HEAD
+                                                            ImGui::TextFmt("GDP: {}",
+                                                                           NumberToHumanString(GDP_calculation));
+                                                            == == == = ImGui::TextFmt(
+                                                                         "GDP: {}", LongToHumanString(GDP_calculation));
+>>>>>>> pr_254
+                                                            ImGui::TextFmt("{} Count: {}", industryname, count);
+
+                                                            ImGui::Text("Output");
+                                                            // Output table
+                                                            DrawLedgerTable(tabname + "output", GetUniverse(),
+                                                                            output_resources);
+
+                                                            ImGui::Text("Input");
+                                                            DrawLedgerTable(tabname + "input", GetUniverse(),
+                                                                            input_resources);
+                                                            ImGui::EndChild();
+                                                        }
+
+                                                        void SysProvinceInformation::LaunchTab() {
+                                                            // Set the things
+                                                            static float semi_major_axis = 8000;
+                                                            static float azimuth = 0;
+                                                            static float eccentricity = 0;
+                                                            static float arg_of_perapsis = 0;
+                                                            static float LAN = 0;
+                                                            auto& city_coord =
+                                                                GetUniverse().get<types::SurfaceCoordinate>(
+                                                                    current_city);
+
+                                                            ImGui::SliderFloat("Semi Major Axis", &semi_major_axis,
+                                                                               6000, 100000);
+                                                            ImGui::SliderFloat("Eccentricity", &eccentricity, 0,
+                                                                               0.9999);
+                                                            ImGui::SliderAngle("Launch Azimuth", &azimuth, 0, 360);
+                                                            ImGui::SliderAngle("Argument of perapsis", &arg_of_perapsis,
+                                                                               0, 360);
+                                                            ImGui::SliderAngle("Longitude of the ascending node", &LAN,
+                                                                               0, 360);
+                                                            if (ImGui::Button("Launch!")) {
+                                                                // Get reference body
+                                                                entt::entity reference_body = city_coord.planet;
+                                                                // Launch inclination will be the inclination of the thing
+                                                                double axial =
+                                                                    GetUniverse()
+                                                                        .get<components::bodies::Body>(reference_body)
+                                                                        .axial;
+                                                                double inc = city_coord.r_latitude();
+                                                                inc += axial;
+
+                                                                types::Orbit orb(
+                                                                    semi_major_axis, eccentricity,
+                                                                    components::types::GetLaunchInclination(
+                                                                        city_coord.r_latitude(), azimuth),
+                                                                    LAN, arg_of_perapsis, 0, reference_body);
+                                                                entt::entity ship =
+                                                                    common::actions::LaunchShip(GetUniverse(), orb);
+                                                                GetUniverse().emplace<ctx::VisibleOrbit>(ship);
+                                                            }
+                                                            double periapsis = semi_major_axis * (1 - eccentricity);
+                                                            if (GetUniverse()
+                                                                    .get<components::bodies::Body>(city_coord.planet)
+                                                                    .radius > periapsis) {
+                                                                ImGui::TextColored(
+                                                                    ImVec4(1.0f, 0.0f, 1.0f, 1.0f),
+                                                                    "Orbit's periapsis is below the planet "
+                                                                    "radius (%f), so it will crash",
+                                                                    periapsis);
+                                                            }
+                                                            ImGui::TextFmt("Launch Inclination: {}",
+                                                                           types::toDegree(types::GetLaunchInclination(
+                                                                               city_coord.r_latitude(), azimuth)));
+                                                        }
+
+                                                        void SysProvinceInformation::DockedTab() {
+                                                            if (!GetUniverse().any_of<components::DockedShips>(
+                                                                    current_city)) {
+                                                                return;
+                                                            }
+                                                            auto& docked_ships =
+                                                                GetUniverse().get<components::DockedShips>(
+                                                                    current_city);
+
+                                                            for (entt::entity docked : docked_ships.docked_ships) {
+                                                                ImGui::Selectable(
+                                                                    common::util::GetName(GetUniverse(), docked)
+                                                                        .c_str());
+                                                                if (ImGui::IsItemHovered()) {
+                                                                    systems::gui::EntityTooltip(GetUniverse(), docked);
+                                                                }
+                                                            }
+                                                        }
+
+                                                        void SysProvinceInformation::SpacePortOrdersTab() {
+                                                            // Just list it for a basic UI
+                                                            auto& space_port =
+                                                                GetUniverse()
+                                                                    .get<components::infrastructure::SpacePort>(
+                                                                        current_city);
+                                                            for (auto& [target, queue] : space_port.deliveries) {
+                                                                for (auto& transport : queue) {
+                                                                    ImGui::TextFmt(
+                                                                        "To {}: {} {}/{}",
+                                                                        common::util::GetName(GetUniverse(), target),
+                                                                        common::util::GetName(GetUniverse(),
+                                                                                              transport.good),
+                                                                        transport.fulfilled, transport.amount);
+                                                                }
+                                                            }
+                                                        }
+
+                                                        void SysProvinceInformation::SpacePortResourceTab() {
+                                                            auto& space_port =
+                                                                GetUniverse()
+                                                                    .get<components::infrastructure::SpacePort>(
+                                                                        current_city);
+                                                            if (ImGui::BeginTable(
+                                                                    "space_port_resource_tables", 2,
+                                                                    ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
+                                                                ImGui::TableSetupColumn("Good");
+                                                                ImGui::TableSetupColumn("Output Resources");
+
+                                                                ImGui::TableHeadersRow();
+                                                                auto goodsview =
+                                                                    GetUniverse().view<components::Price>();
+
+                                                                for (entt::entity good_entity : goodsview) {
+                                                                    ImGui::TableNextRow();
+                                                                    ImGui::TableSetColumnIndex(0);
+                                                                    ImGui::TextFmt("{}",
+                                                                                   GetName(GetUniverse(), good_entity));
+                                                                    ImGui::TableSetColumnIndex(1);
+                                                                    ImGui::TextFmt(
+                                                                        "{}",
+                                                                        util::NumberToHumanString(
+                                                                            space_port.output_resources[good_entity]));
+                                                                }
+                                                                ImGui::EndTable();
+                                                            }
+                                                        }
+                                                    }  // namespace cqsp::client::systems

@@ -90,8 +90,12 @@ bool game_halted = false;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         simulation = std::make_unique<Simulation>(dynamic_cast<ConquerSpace*>(GetApp().GetGame())->GetGame());
         simulation->CreateSystems();
+        == == == = simulation =
+                     std::make_unique<Simulation>(dynamic_cast<ConquerSpace*>(GetApp().GetGame())->GetGame());
+>>>>>>> main
 
         system_renderer = std::make_unique<systems::SysStarSystemRenderer>(GetUniverse(), GetApp());
         == == == = simulation =
@@ -110,7 +114,17 @@ bool game_halted = false;
 
         system_renderer->SeeStarSystem();
 
+<<<<<<< HEAD
         SeePlanet(GetUniverse(), GetUniverse().planets["earth"]);
+        == == == = AddUISystem<systems::SpaceshipWindow>();
+        //AddUISystem<cqsps::SysFieldViewer>();
+        //AddUISystem<cqsps::SysTechnologyProjectViewer>();
+        //AddUISystem<cqsps::SysTechnologyViewer>();
+        AddUISystem<systems::SysProvinceInformation>();
+        AddUISystem<systems::SysOrbitFilter>();
+        AddUISystem<systems::ImGuiInterface>();
+        //AddUISystem<systems::SysPlanetMarketInformation>();
+>>>>>>> main
 
         //AddUISystem<cqsps::SysTurnSaveWindow>();
         AddUISystem<systems::SysStarSystemTree>();

@@ -30,6 +30,7 @@
 
     /// <summary>
     /// </summary>
+<<<<<<< HEAD:src/common/components/movement.h
     struct Maneuver {
         /// <summary>
         /// Delta v applied with respect to the orbital vector
@@ -44,6 +45,13 @@
         explicit Maneuver(const std::pair<glm::dvec3, double>& maneuver)
             : delta_v(maneuver.first), time(maneuver.second) {}
         /*
+=======
+    const glm::dvec3 delta_v;
+    const double time;
+    Maneuver() = delete;
+    explicit Maneuver(const std::pair<glm::dvec3, double>& maneuver) : delta_v(maneuver.first), time(maneuver.second) {}
+    /*
+>>>>>>> main:src/common/components/maneuver.h
     * @param maneuver maneuver pair
     * @param offset seconds to offset how far in the future or in the past to put this maneuver
     */
