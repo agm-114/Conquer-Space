@@ -20,8 +20,11 @@
 
 #include "common/components/orbit.h"
 #include "common/components/units.h"
+<<<<<<< HEAD:test/common/systems/hohmann_test.cpp == == == =
+#include "common/actions/maneuver/hohmann.h"
+               >>>>>>> pr-292:test/common/systems/hohmanntest.cpp
 
-TEST(Hohmann, BasicHohmannTest) {
+    TEST(Hohmann, BasicHohmannTest) {
     namespace cqspt = cqsp::common::components::types;
     namespace cqsps = cqsp::common::systems;
     // Make a random orbit, apply an impulse, and ensure the position is te same

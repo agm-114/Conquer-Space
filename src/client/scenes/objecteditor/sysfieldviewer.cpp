@@ -206,6 +206,7 @@ void SysFieldViewer::DoUI(int delta_time) {
                 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                 void CreateNewNode(common::Universe & universe, FieldNodeInformation & map) {
                     == == == = void CreateNewNode(Universe & universe, FieldNodeInformation & map) {
 >>>>>>> pr_254
@@ -498,3 +499,32 @@ void SysFieldViewer::DoUI(int delta_time) {
                                                 ImGui::End();
                                             }
                                         }  // namespace cqsp::client::systems
+                                        == == == = void SysFieldNodeViewer::FieldHjsonViewerWindow() {
+                                            ImGui::SetNextWindowSize(ImVec2(300, 400), ImGuiCond_Appearing);
+                                            ImGui::Begin("Field Hjson viewer");
+                                            if (ImGui::Button("Make Fields to Hjson")) {
+                                                // Make the hjson
+                                                auto fields = common::loading::WriteFields(GetUniverse());
+                                                Hjson::EncoderOptions eo;
+                                                eo.indentBy = "    ";  // 4 spaces
+                                                hjson_content = Hjson::Marshal(fields, eo);
+                                            }
+                                            ImGui::SameLine();
+                                            if (ImGui::Button("Save to file")) {
+                                                // Write to the hjson file, which should remain the same
+                                                std::filesystem::path p = common::util::GetCqspDataPath();
+                                                std::filesystem::path default_path =
+                                                    p / "core" / "data" / "science" / "fields" / "default.hjson";
+                                                // Update content
+                                                std::ofstream output(default_path, std::ios::trunc);
+                                                Hjson::EncoderOptions eo;
+                                                eo.indentBy = "    ";  // 4 spaces
+                                                auto fields = common::loading::WriteFields(GetUniverse());
+                                                Hjson::MarshalToFile(fields, default_path.string(), eo);
+                                            }
+                                            ImGui::InputTextMultiline("field_hjson_viewer", &hjson_content,
+                                                                      ImVec2(-1, -1));
+                                            ImGui::End();
+                                        }
+                                    }  // namespace cqsp::client::systems
+>>>>>>> pr-292

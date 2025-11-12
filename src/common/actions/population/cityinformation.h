@@ -16,10 +16,26 @@
  */
 #pragma once
 
+<<<<<<< HEAD == == == = < < < < < < < < HEAD : src / common / components /
+                                    tags.h
+#include <string>
+#include <vector>
+                                    namespace cqsp::common::components {
+    /**
+ * Tags for the entity.
+ */
+    struct Tags {
+     public:
+        std::vector<std::string> tags;
+    };
+}  // namespace cqsp::common::components
+== == == ==
+>>>>>>> pr-292
 #include <entt/entt.hpp>
 
 #include "common/universe.h"
 
+    <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD:src/common/actions/population/cityinformation.h namespace cqsp::common::actions { uint64_t GetCityPopulation(Node & city); }  // namespace cqsp::common::actions
     == == ==
@@ -31,3 +47,8 @@
     uint64_t GetCityPopulation(Node & city);
 }  // namespace cqsp::common::actions
 >>>>>>> pr-309
+== == == = namespace cqsp::common::actions {
+    uint64_t GetCityPopulation(const Universe& universe, entt::entity city);
+}  // namespace cqsp::common::actions
+>>>>>>>> pr - 292 : src / common / actions / population / cityinformation.h
+>>>>>>> pr-292

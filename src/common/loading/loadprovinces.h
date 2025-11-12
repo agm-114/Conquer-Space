@@ -23,7 +23,10 @@
 #include "common/universe.h"
 
 namespace cqsp::common::loading {
+<<<<<<< HEAD
 void LoadProvinces(Node& planet, const std::string& text);
+== == == = void LoadProvinces(Universe & universe, entt::entity planet, const std::string& text);
+>>>>>>> pr-292
 void LoadAdjProvinces(Universe& universe, Hjson::Value& adjacency_map);
 void LoadAllProvinces(Universe& universe);
 }  // namespace cqsp::common::loading

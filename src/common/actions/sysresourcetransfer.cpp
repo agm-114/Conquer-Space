@@ -18,10 +18,12 @@
 
 #include "common/components/resource.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD:src/common/actions/sysresourcetransfer.cpp namespace cqsp::common::actions { using components::ResourceStockpile;
 
 <<<<<<< HEAD
-bool TransferResources(Node& from, Node& to, Node& good, double amount) {
+    bool
+    TransferResources(Node& from, Node& to, Node& good, double amount) {
     // Get resource stockpile
     if (!(from.all_of<ResourceStockpile>() && to.all_of<ResourceStockpile>() && good.all_of<components::Good>())) {
         == == == = namespace components = cqsp::common::components;
@@ -89,3 +91,30 @@ bool TransferResources(Node& from, Node& to, Node& good, double amount) {
             }  // namespace cqsp::common::actions
             == == == =
 >>>>>>> pr_254:src/common/systems/actions/sysresourcetransfer.cpp
+                         == == == = namespace cqsp::common::actions {
+                using components::ResourceStockpile;
+
+                bool TransferResources(entt::registry & registry, entt::entity from, entt::entity to, entt::entity good,
+                                       double amount) {
+                    // Get resource stockpile
+                    if (!(registry.all_of<ResourceStockpile>(from) && registry.all_of<ResourceStockpile>(to) &&
+                          registry.all_of<components::Good>(good))) {
+                        return false;
+                    }
+
+                    // Get resource stockpile
+                    auto& from_stockpile = registry.get<ResourceStockpile>(from);
+                    auto& to_stockpile = registry.get<ResourceStockpile>(from);
+                    // Transfer resources
+                    if (from_stockpile.HasGood(good)) {
+                        // Then we can transfer
+                        if (from_stockpile[good] >= amount) {
+                            from_stockpile[good] -= amount;
+                            to_stockpile[good] += amount;
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }  // namespace cqsp::common::actions
+>>>>>>> pr-292

@@ -20,8 +20,12 @@
 #include "common/actions/maneuver/rendezvous.h"
 #include "common/components/orbit.h"
 #include "common/components/units.h"
+<<<<<<< HEAD:test/common/systems/basic_maneuver_test.cpp == == == =
+#include "common/actions/maneuver/maneuver.h"
+#include "common/actions/maneuver/rendezvous.h"
+               >>>>>>> pr-292:test/common/systems/maneuvertest.cpp
 
-TEST(Maneuver, CircularCircularizeApogeeTest) {
+    TEST(Maneuver, CircularCircularizeApogeeTest) {
     namespace cqspt = cqsp::common::components::types;
     namespace cqsps = cqsp::common::systems;
     // Make a random orbit, apply an impulse, and ensure the position is te same

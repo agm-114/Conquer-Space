@@ -16,21 +16,18 @@
  */
 #pragma once
 
-#include <hjson.h>
-
-#include <string>
-
-<<<<<<< HEAD
-#include "common/actions/science/technologyactions.h"
 #include "common/loading/hjsonloader.h"
-    == == ==
-    =
-#include "common/actions/science/technologyactions.h"
-#include "common/loading/hjsonloader.h"
-        >>>>>>> pr-292
-#include "common/universe.h"
 
-    namespace cqsp::common::loading {
-    void LoadTechnologies(Universe & universe, Hjson::Value & value);
+namespace cqsp::common::loading {
+class PlanetLoader : public HjsonLoader {
+ public:
+    explicit PlanetLoader(Universe& universe) : HjsonLoader(universe) {}
 
+    const Hjson::Value& GetDefaultValues() override { return default_val; }
+    bool LoadValue(const Hjson::Value& values, Node& node) override;
+    void PostLoad(const Node& node) override;
+
+ private:
+    Hjson::Value default_val;
+};
 }  // namespace cqsp::common::loading

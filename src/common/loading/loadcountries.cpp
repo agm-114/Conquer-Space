@@ -16,11 +16,12 @@
  */
 #include "common/loading/loadcountries.h"
 
+<<<<<<< HEAD
 #include "common/components/market.h"
 #include "common/components/name.h"
 #include "common/components/organizations.h"
 
-<<<<<<< HEAD
+    <<<<<<< HEAD
 <<<<<<< HEAD:src/common/loading/loadcountries.cpp namespace cqsp::common::loading {
     bool
     CountryLoader::LoadValue(const Hjson::Value& values, Node& node) {
@@ -60,3 +61,24 @@
     }
 }  // namespace cqsp::common::loading
 >>>>>>> pr-303
+== == == =
+#include "common/components/economy.h"
+#include "common/components/name.h"
+#include "common/components/organizations.h"
+
+             namespace cqsp::common::loading {
+    bool CountryLoader::LoadValue(const Hjson::Value& values, entt::entity entity) {
+        // Just make the country
+        universe.emplace<components::Country>(entity);
+        universe.countries[universe.get<components::Identifier>(entity).identifier] = entity;
+
+        // Add the list of liabilities the country has?
+
+        if (!values["wallet"].empty()) {
+            auto& wallet = universe.emplace<components::Wallet>(entity);
+            wallet = values["wallet"];
+        }
+        return true;
+    }
+}  // namespace cqsp::common::loading
+>>>>>>> pr-292

@@ -23,6 +23,7 @@
 #include "common/components/name.h"
 #include "common/loading/loadutil.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD:src/common/loading/hjsonloader.cpp namespace cqsp::common::loading {
     /**
  * Loads the hjson struct for an entire asset.
@@ -142,3 +143,52 @@
                 }  // namespace cqsp::common::loading
                 == == == =
 >>>>>>> pr_254:src/common/systems/loading/hjsonloader.cpp
+                             == == == = namespace cqsp::common::loading {
+                    int HjsonLoader::LoadHjson(const Hjson::Value& values) {
+                        int assets = 0;
+                        std::vector<entt::entity> entity_list;
+                        for (int i = 0; i < values.size(); i++) {
+                            Hjson::Value value = values[i];
+
+                            entt::entity entity = universe.create();
+                            if (NeedIdentifier()) {
+                                if (!LoadInitialValues(universe, entity, value)) {
+                                    SPDLOG_WARN("No identifier");
+                                    universe.destroy(entity);
+                                    continue;
+                                }
+                            } else {
+                                LoadInitialValues(universe, entity, value);
+                            }
+
+                            value = Hjson::Merge(GetDefaultValues(), value);
+
+                            // Catch errors
+                            bool success = false;
+                            try {
+                                success = LoadValue(value, entity);
+                            } catch (Hjson::index_out_of_bounds& ioob) {
+                                auto& id = universe.get<components::Identifier>(entity).identifier;
+                                SPDLOG_WARN("Index out of bounds for {}: {}", id, ioob.what());
+                            } catch (Hjson::type_mismatch& tm) {
+                                auto& id = universe.get<components::Identifier>(entity).identifier;
+                                SPDLOG_WARN("Type mismatch for {}: {}", id, tm.what());
+                            }
+
+                            if (!success) {
+                                universe.destroy(entity);
+                                continue;
+                            }
+                            entity_list.push_back(entity);
+                            assets++;
+                        }
+
+                        // Load all the assets again to parse?
+                        for (entt::entity entity : entity_list) {
+                            PostLoad(entity);
+                        }
+
+                        return assets;
+                    }
+                }  // namespace cqsp::common::loading
+>>>>>>> pr-292

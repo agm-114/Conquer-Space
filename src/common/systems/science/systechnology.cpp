@@ -25,7 +25,8 @@
 
 <<<<<<< HEAD namespace cqsp::common::systems { namespace science = components::science;
 
-void SysTechProgress::DoSystem() {
+    void
+    SysTechProgress::DoSystem() {
     ZoneScoped;
     auto fields = GetUniverse().nodes<science::ScientificResearch>();
 
@@ -94,5 +95,14 @@ void SysTechProgress::DoSystem() {
                 }
             }
         }
+<<<<<<< HEAD
     }  // namespace cqsp::common::systems
 >>>>>>> pr-303
+    == == == = for (entt::entity r : completed_techs) {
+        actions::ResearchTech(GetUniverse(), entity, r);
+        research.current_research.erase(r);
+    }
+}
+}
+}  // namespace cqsp::common::systems
+>>>>>>> pr-292

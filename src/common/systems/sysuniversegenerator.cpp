@@ -21,16 +21,20 @@
 
 #include <string>
 
+<<<<<<< HEAD
 #include "common/actions/economy/markethelpers.h"
 #include "common/actions/factoryconstructaction.h"
+    == == ==
+    =
+>>>>>>> pr-292
 #include "common/actions/shiplaunchaction.h"
 #include "common/components/area.h"
 #include "common/components/bodies.h"
-<<<<<<< HEAD
+        <<<<<<< HEAD
 #include "common/components/coordinates.h"
 #include "common/components/market.h"
 #include "common/components/name.h"
-    == == ==
+        == == ==
     =
 #include "common/components/movement.h"
         >>>>>>> pr_8
@@ -41,6 +45,12 @@
 #include "common/components/ships.h"
             < < < < < < < HEAD
 #include "common/components/surface.h"
+            <<<<<<< HEAD ==
+        == ==
+    =
+#include "common/actions/economy/markethelpers.h"
+#include "common/actions/factoryconstructaction.h"
+        >>>>>>> pr-292
 #include "common/util/random/stdrandom.h"
         == == ==
     =

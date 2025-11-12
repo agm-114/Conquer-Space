@@ -31,9 +31,12 @@
 #include "common/components/science.h"
 #include "common/components/ships.h"
 #include "common/components/surface.h"
+<<<<<<< HEAD == == == =
+#include "common/actions/population/cityinformation.h"
+               >>>>>>> pr-292
 #include "common/util/utilnumberdisplay.h"
 
-namespace components = cqsp::common::components;
+    namespace components = cqsp::common::components;
 
 using components::Identifier;
 using components::Name;

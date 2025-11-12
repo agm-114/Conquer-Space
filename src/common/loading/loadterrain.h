@@ -21,5 +21,8 @@
 #include "common/universe.h"
 
 namespace cqsp::common::loading {
-void LoadTerrainData(cqsp::common::Universe&, Hjson::Value&);
+< < < < < < < <
+    HEAD : src / common / loading / loadterrain.h void LoadTerrainData(cqsp::common::Universe&, Hjson::Value&);
+== == == == void LoadNameLists(cqsp::common::Universe&, Hjson::Value&);
+>>>>>>>> pr - 292 : src / common / loading / loadnames.h
 }  // namespace cqsp::common::loading

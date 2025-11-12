@@ -29,95 +29,100 @@
 #include "common/actions/names/namegenerator.h"
 #include "common/components/market.h"
 #include "common/components/stardate.h"
+<<<<<<< HEAD
 #include "common/systems/economy/economyconfig.h"
+    == == ==
+    =
+#include "common/actions/names/namegenerator.h"
+        >>>>>>> pr-292
 #include "common/util/random/random.h"
 
-namespace cqsp::common {
+    namespace cqsp::common {
 
-class Node;
+    class Node;
 
-class Universe : public entt::registry {
- public:
-    explicit Universe(std::string uuid);
-    Universe();
+    class Universe : public entt::registry {
+     public:
+        explicit Universe(std::string uuid);
+        Universe();
 
-    components::StarDate date;
+        components::StarDate date;
 
-    std::map<std::string, entt::entity> goods;
-    std::vector<entt::entity> consumergoods;
-    std::map<std::string, entt::entity> recipes;
-    std::map<std::string, entt::entity> terrain_data;
-    std::map<std::string, actions::NameGenerator> name_generators;
-    std::map<std::string, entt::entity> fields;
-    std::map<std::string, entt::entity> technologies;
-    std::map<std::string, entt::entity> planets;
-    std::map<std::string, entt::entity> time_zones;
-    std::map<std::string, entt::entity> countries;
-    std::map<std::string, entt::entity> provinces;
-    std::map<std::string, entt::entity> cities;
-    // color -> province map
-    std::map<entt::entity, std::map<int, entt::entity>> province_colors;
-    // province -> color
-    std::map<entt::entity, std::map<entt::entity, int>> colors_province;
-    entt::entity sun;
+        std::map<std::string, entt::entity> goods;
+        std::vector<entt::entity> consumergoods;
+        std::map<std::string, entt::entity> recipes;
+        std::map<std::string, entt::entity> terrain_data;
+        std::map<std::string, actions::NameGenerator> name_generators;
+        std::map<std::string, entt::entity> fields;
+        std::map<std::string, entt::entity> technologies;
+        std::map<std::string, entt::entity> planets;
+        std::map<std::string, entt::entity> time_zones;
+        std::map<std::string, entt::entity> countries;
+        std::map<std::string, entt::entity> provinces;
+        std::map<std::string, entt::entity> cities;
+        // color -> province map
+        std::map<entt::entity, std::map<int, entt::entity>> province_colors;
+        // province -> color
+        std::map<entt::entity, std::map<entt::entity, int>> colors_province;
+        entt::entity sun;
 
-    void EnableTick() { to_tick = true; }
-    void DisableTick() { to_tick = false; }
-    bool ToTick() { return to_tick; }
-    void ToggleTick() { to_tick = !to_tick; }
+        void EnableTick() { to_tick = true; }
+        void DisableTick() { to_tick = false; }
+        bool ToTick() { return to_tick; }
+        void ToggleTick() { to_tick = !to_tick; }
 
-    int GetDate() { return date.GetDate(); }
-    std::unique_ptr<cqsp::common::util::IRandom> random;
-    std::string uuid;
+        int GetDate() { return date.GetDate(); }
+        std::unique_ptr<cqsp::common::util::IRandom> random;
+        std::string uuid;
 
-    /// <summary>
-    /// What is the current fraction of the wait of the tick we are processing
-    /// </summary>
-    double tick_fraction = 0;
-    std::function<Node(entt::entity)> nodeFactory;
-    auto NodeTransform() const { return std::views::transform(nodeFactory); }
-    std::vector<Node> Convert(const std::vector<entt::entity>& entities) const;
-    std::set<Node> Convert(const std::set<entt::entity>& entities) const;
+        /// <summary>
+        /// What is the current fraction of the wait of the tick we are processing
+        /// </summary>
+        double tick_fraction = 0;
+        std::function<Node(entt::entity)> nodeFactory;
+        auto NodeTransform() const { return std::views::transform(nodeFactory); }
+        std::vector<Node> Convert(const std::vector<entt::entity>& entities) const;
+        std::set<Node> Convert(const std::set<entt::entity>& entities) const;
 
-    template <typename... Components>
-    auto nodes() {
-        return this->template view<Components...>() | NodeTransform();
-    }
-    template <typename... Components>
-    auto nodes() const {
-        return this->template view<Components...>() | NodeTransform();
-    }
-    template <typename... Components, typename... Exclude>
-    auto nodes(entt::exclude_t<Exclude...> exclude) {
-        return this->template view<Components...>(exclude) | NodeTransform();
-    }
-    template <typename... Components, typename... Exclude>
-    auto nodes(entt::exclude_t<Exclude...> exclude) const {
-        return this->template view<Components...>(exclude) | NodeTransform();
-    }
+        template <typename... Components>
+        auto nodes() {
+            return this->template view<Components...>() | NodeTransform();
+        }
+        template <typename... Components>
+        auto nodes() const {
+            return this->template view<Components...>() | NodeTransform();
+        }
+        template <typename... Components, typename... Exclude>
+        auto nodes(entt::exclude_t<Exclude...> exclude) {
+            return this->template view<Components...>(exclude) | NodeTransform();
+        }
+        template <typename... Components, typename... Exclude>
+        auto nodes(entt::exclude_t<Exclude...> exclude) const {
+            return this->template view<Components...>(exclude) | NodeTransform();
+        }
 
-    systems::EconomyConfig economy_config;
+        systems::EconomyConfig economy_config;
 
- private:
-    bool to_tick = false;
-};
+     private:
+        bool to_tick = false;
+    };
 
-class Node : public entt::handle {
- public:
-    explicit Node(const Universe& universe, const entt::entity entity);
-    Node(const entt::handle handle, const entt::entity entity);
-    explicit Node(Universe& universe);
-    Universe& universe() const;
-    std::vector<Node> Convert(const std::vector<entt::entity>& entities) const;
-    std::set<Node> Convert(const std::set<entt::entity>& entities) const;
-    Node Convert(const entt::entity entity) const;
+    class Node : public entt::handle {
+     public:
+        explicit Node(const Universe& universe, const entt::entity entity);
+        Node(const entt::handle handle, const entt::entity entity);
+        explicit Node(Universe& universe);
+        Universe& universe() const;
+        std::vector<Node> Convert(const std::vector<entt::entity>& entities) const;
+        std::set<Node> Convert(const std::set<entt::entity>& entities) const;
+        Node Convert(const entt::entity entity) const;
 
-    // Overload equivalence against entt::null_t
-    friend bool operator==(const Node& lhs, const entt::null_t&) { return lhs.entity() == entt::null; }
-    friend bool operator==(const entt::null_t&, const Node& rhs) { return rhs.entity() == entt::null; }
-    friend bool operator!=(const Node& lhs, const entt::null_t&) { return lhs.entity() != entt::null; }
-    friend bool operator!=(const entt::null_t&, const Node& rhs) { return rhs.entity() != entt::null; }
-};
+        // Overload equivalence against entt::null_t
+        friend bool operator==(const Node& lhs, const entt::null_t&) { return lhs.entity() == entt::null; }
+        friend bool operator==(const entt::null_t&, const Node& rhs) { return rhs.entity() == entt::null; }
+        friend bool operator!=(const Node& lhs, const entt::null_t&) { return lhs.entity() != entt::null; }
+        friend bool operator!=(const entt::null_t&, const Node& rhs) { return rhs.entity() != entt::null; }
+    };
 
 }  // namespace cqsp::common
 

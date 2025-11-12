@@ -16,8 +16,14 @@
  */
 #include "common/systems/economy/sysagent.h"
 
+<<<<<<< HEAD
 #include "common/actions/economy/markethelpers.h"
 #include "common/components/market.h"
+    == == ==
+    =
+#include "common/actions/economy/markethelpers.h"
+#include "common/components/economy.h"
+        >>>>>>> pr-292
 
 <<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::common::systems {

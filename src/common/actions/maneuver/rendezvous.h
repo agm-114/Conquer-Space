@@ -23,11 +23,14 @@
 #include "common/actions/maneuver/hohmann.h"
 #include "common/components/movement.h"
 #include "common/components/orbit.h"
+<<<<<<< HEAD == == == =
+#include "common/actions/maneuver/hohmann.h"
+               >>>>>>> pr-292
 
-namespace cqsp::common::systems {
-// Tools for rendezvous
-// Coplanar rendezvous
-// Basically a Hohmann transfer at the right time
-components::HohmannPair_t CoplanarIntercept(const components::types::Orbit& start_orbit,
-                                            const components::types::Orbit& end_orbit, double epoch);
+    namespace cqsp::common::systems {
+    // Tools for rendezvous
+    // Coplanar rendezvous
+    // Basically a Hohmann transfer at the right time
+    components::HohmannPair_t CoplanarIntercept(const components::types::Orbit& start_orbit,
+                                                const components::types::Orbit& end_orbit, double epoch);
 }  // namespace cqsp::common::systems
