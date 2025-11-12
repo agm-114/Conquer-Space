@@ -23,16 +23,31 @@
 #include "common/components/orbit.h"
 #include "common/components/organizations.h"
 #include "common/components/player.h"
+<<<<<<< HEAD == == == =
+#include "common/components/movement.h"
+               >>>>>>> pr_8
 #include "common/components/population.h"
 #include "common/components/resource.h"
+               <<<<<<< HEAD
 #include "common/components/surface.h"
 #include "engine/gui.h"
 #include "engine/renderer/primitives/cube.h"
 #include "engine/renderer/primitives/polygon.h"
 #include "engine/renderer/primitives/uvsphere.h"
 #include "engine/renderer/renderer.h"
+               == == ==
+    =
 
-bool game_halted = false;
+#include "client/systems/gui/sysevent.h"
+#include "client/systems/syscommand.h"
+#include "client/systems/sysdebuggui.h"
+#include "client/systems/syspausemenu.h"
+#include "client/systems/sysplanetviewer.h"
+#include "client/systems/sysstarsystemtree.h"
+#include "client/systems/systurnsavewindow.h"
+        >>>>>>> pr_8
+
+    bool game_halted = false;
 
 conquerspace::scene::UniverseScene::UniverseScene(conquerspace::engine::Application& app) : Scene(app) {}
 
@@ -64,6 +79,7 @@ void conquerspace::scene::UniverseScene::Init() {
     AddUISystem<conquerspace::client::systems::SysStarSystemTree>();
     AddUISystem<conquerspace::client::systems::SysPauseMenu>();
     AddUISystem<conquerspace::client::systems::SysDebugMenu>();
+    AddUISystem<conquerspace::client::systems::SysCommand>();
     AddUISystem<conquerspace::client::systems::gui::SysEvent>();
     simulation->tick();
 }

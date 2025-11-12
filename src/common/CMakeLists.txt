@@ -37,6 +37,7 @@ add_library(cqsp-core ${SOURCE_FILES})
 target_link_libraries(cqsp-core PUBLIC 
     EnTT::EnTT
     hjson
+<<<<<<< HEAD
     spdlog::spdlog
     glm::glm
     ${LUA_LIBRARY}
@@ -44,4 +45,12 @@ target_link_libraries(cqsp-core PUBLIC
     sol2
     stb
     debug Tracy::TracyClient
+=======
+    spdlog
+    glm
+    liblua-static
+    fmt
+    libnoise
+    libnoise-utils
+>>>>>>> pr_8
 )

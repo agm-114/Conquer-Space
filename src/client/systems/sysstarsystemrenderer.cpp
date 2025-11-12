@@ -14,6 +14,10 @@
 #include "common/components/orbit.h"
 #include "common/components/organizations.h"
 #include "common/components/player.h"
+<<<<<<< HEAD == == == =
+#include "common/components/movement.h"
+#include "common/components/name.h"
+               >>>>>>> pr_8
 #include "common/components/ships.h"
 #include "engine/renderer/primitives/cube.h"
 #include "engine/renderer/primitives/pane.h"
@@ -21,15 +25,11 @@
 #include "engine/renderer/primitives/uvsphere.h"
 #include "engine/renderer/renderer.h"
 
-conquerspace::client::systems::SysStarSystemRenderer::SysStarSystemRenderer(
-    conquerspace::common::components::Universe &_u, conquerspace::engine::Application &_a)
+    conquerspace::client::systems::SysStarSystemRenderer::SysStarSystemRenderer(
+        conquerspace::common::components::Universe & _u, conquerspace::engine::Application &_a)
     : m_universe(_u),
-      m_app(_a),
-      scroll(5),
-      view_x(0),
-      view_y(0),
-      view_center(glm::vec3(1, 1, 1)),
-      sun_color(glm::vec3(10, 10, 10)) {}
+        m_app(_a), scroll(5), view_x(0), view_y(0), view_center(glm::vec3(1, 1, 1)), sun_color(glm::vec3(10, 10, 10)) {
+}
 
 void conquerspace::client::systems::SysStarSystemRenderer::Initialize() {
     // Initialize meshes, etc
@@ -399,9 +399,12 @@ void conquerspace::client::systems::SysStarSystemRenderer::DrawTerrainlessPlanet
 glm::vec3 conquerspace::client::systems::SysStarSystemRenderer::CalculateObjectPos(entt::entity &ent) {
     namespace cqspb = conquerspace::common::components::bodies;
     namespace cqspt = conquerspace::common::components::types;
+<<<<<<< HEAD
     cqspt::Orbit &orbit = m_app.GetUniverse().get<cqspt::Orbit>(ent);
     cqspt::Vec2 &vec = cqspt::toVec2(orbit);
     return glm::vec3(vec.x / divider, 0, vec.y / divider);
+    == == == = return m_app.GetUniverse().get<cqspt::Kinematics>(ent).postion;
+>>>>>>> pr_8
 }
 
 glm::vec3 conquerspace::client::systems::SysStarSystemRenderer::CalculateCenteredObject(entt::entity &ent) {
@@ -474,46 +477,62 @@ entt::entity conquerspace::client::systems::SysStarSystemRenderer::GetMouseOnObj
     namespace cqspb = conquerspace::common::components::bodies;
 
     // Loop through objects
+<<<<<<< HEAD
     auto bodies = m_app.GetUniverse().view<ToRender, conquerspace::common::components::bodies::Body>();
     for (auto [ent_id, body] : bodies.each()) {
-        glm::vec3 object_pos = CalculateCenteredObject(ent_id);
+        == == == = auto bodies = m_app.GetUniverse().view<ToRender>();
+        for (entt::entity ent_id : bodies) {
+>>>>>>> pr_8
+            glm::vec3 object_pos = CalculateCenteredObject(ent_id);
+            bool planet = m_app.GetUniverse().all_of<cqspb::Body>(ent_id);
 
-        // Check if the sphere is rendered or not
-        if (glm::distance(object_pos, cam_pos) > 100) {
-            // Calculate circle
-            glm::vec3 pos = glm::project(object_pos, camera_matrix, projection, viewport);
-            if (pos.z >= 1) {
-                continue;
-            }
+            // Check if the sphere is rendered or not
+            if (planet && glm::distance(object_pos, cam_pos) > 100) {
+                // Calculate circle
+                glm::vec3 pos = glm::project(object_pos, camera_matrix, projection, viewport);
+                if (pos.z >= 1) {
+                    continue;
+                }
 
-            // Check if it's intersecting
-            float dim = circle_size * m_app.GetWindowHeight();
-            if (glm::distance(glm::vec2(pos.x, m_app.GetWindowHeight() - pos.y), glm::vec2(mouse_x, mouse_y)) <= dim) {
-                m_app.GetUniverse().emplace<MouseOverEntity>(ent_id);
-                return ent_id;
-            }
-        } else {
-            // Normalize 3d device coordinates
-            float x = (2.0f * mouse_x) / m_app.GetWindowWidth() - 1.0f;
-            float y = 1.0f - (2.0f * mouse_y) / m_app.GetWindowHeight();
-            float z = 1.0f;
+<<<<<<< HEAD
+                // Check if it's intersecting
+                float dim = circle_size * m_app.GetWindowHeight();
+                if (glm::distance(glm::vec2(pos.x, m_app.GetWindowHeight() - pos.y), glm::vec2(mouse_x, mouse_y)) <=
+                    dim) {
+                    m_app.GetUniverse().emplace<MouseOverEntity>(ent_id);
+                    return ent_id;
+                }
+                == == == =
+                             // Check if it's intersecting
+                    float dim = circle_size * m_app.GetWindowHeight();
+                if (glm::distance(glm::vec2(pos.x, m_app.GetWindowHeight() - pos.y), glm::vec2(mouse_x, mouse_y)) <=
+                    dim) {
+                    m_app.GetUniverse().emplace<MouseOverEntity>(ent_id);
+                    return ent_id;
+                }
+>>>>>>> pr_8
+            } else {
+                // Normalize 3d device coordinates
+                float x = (2.0f * mouse_x) / m_app.GetWindowWidth() - 1.0f;
+                float y = 1.0f - (2.0f * mouse_y) / m_app.GetWindowHeight();
+                float z = 1.0f;
 
-            glm::vec3 ray_wor = CalculateMouseRay(glm::vec3(x, y, z));
+                glm::vec3 ray_wor = CalculateMouseRay(glm::vec3(x, y, z));
 
-            float radius = 1;
-            if (m_app.GetUniverse().all_of<cqspb::LightEmitter>(ent_id)) {
-                radius = 10;
-            }
+                float radius = 1;
+                if (m_app.GetUniverse().all_of<cqspb::LightEmitter>(ent_id)) {
+                    radius = 10;
+                }
 
-            // Check for intersection for sphere
-            glm::vec3 sub = cam_pos - object_pos;
-            float b = glm::dot(ray_wor, sub);
-            float c = glm::dot(sub, sub) - radius * radius;
-            if ((b * b - c) >= 0) {
-                m_app.GetUniverse().emplace<MouseOverEntity>(ent_id);
-                return ent_id;
+                // Check for intersection for sphere
+                glm::vec3 sub = cam_pos - object_pos;
+                float b = glm::dot(ray_wor, sub);
+                float c = glm::dot(sub, sub) - radius * radius;
+                if ((b * b - c) >= 0) {
+                    m_app.GetUniverse().emplace<MouseOverEntity>(ent_id);
+                    return ent_id;
+                }
             }
         }
+        return entt::null;
     }
-    return entt::null;
-}

@@ -26,18 +26,23 @@
 #include "common/actions/shiplaunchaction.h"
 #include "common/components/area.h"
 #include "common/components/bodies.h"
+<<<<<<< HEAD
 #include "common/components/coordinates.h"
 #include "common/components/market.h"
 #include "common/components/name.h"
+    == == ==
+    =
+#include "common/components/movement.h"
+        >>>>>>> pr_8
 #include "common/components/organizations.h"
 #include "common/components/player.h"
 #include "common/components/population.h"
 #include "common/components/resource.h"
 #include "common/components/ships.h"
-<<<<<<< HEAD
+        <<<<<<< HEAD
 #include "common/components/surface.h"
 #include "common/util/random/stdrandom.h"
-    == == ==
+        == == ==
     =
 >>>>>>> pr_4
 
@@ -93,9 +98,18 @@
 
                 universe.emplace<cqspb::LightEmitter>(star);
 
+<<<<<<< HEAD
                 universe.get<cqspb::StarSystem>(system).bodies.push_back(star);
                 return star;
             });
+            == == == = script_engine.set_function("set_orbit", [&](entt::entity orbital_entity, double distance,
+                                                                   double theta, double eccentricity, double argument) {
+                cqspt::Orbit& orb =
+                    universe.emplace<cqspt::Orbit>(orbital_entity, theta, distance, eccentricity, argument, 40);
+                universe.emplace<cqspt::Kinematics>(orbital_entity);
+                cqspt::findPeriod(orb);
+            });
+>>>>>>> pr_8
 
             script_engine.set_function("set_orbit", [&](entt::entity orbital_entity, double distance, double theta,
                                                         double eccentricity, double argument) {
@@ -205,6 +219,7 @@
                                            cqspt::findPeriod(orbship);
                                        });
 
+<<<<<<< HEAD
 >>>>>>> pr_4
             script_engine["goods"] = universe.goods;
             script_engine["recipes"] = universe.recipes;
@@ -219,9 +234,39 @@
             auto player = universe.countries["usa"];
             //universe.emplace<components::Civilization>(player);
             universe.emplace<components::Player>(player);
+            == == == = universe.emplace<cqspc::ResourceStockpile>(mine);
+            return mine;
+        });
 
-            // Add top level fleet
-            /*
+        script_engine.set_function(
+            "create_terrain", [&](entt::entity planet, int seed) { universe.emplace<cqspb::Terrain>(planet, seed); });
+
+        script_engine.set_function("create_ship", [&](entt::entity civ, entt::entity orbit, entt::entity starsystem) {
+            entt::entity ship = universe.create();
+            universe.emplace<cqsps::Ship>(ship);
+            universe.emplace<cqspt::Kinematics>(ship);
+            //cqspt::Kinematics orb = universe.get<cqspt::Kinematics>(orbit);
+            //cqspt::updatePos(orb);
+            universe.get<cqspb::StarSystem>(starsystem).bodies.push_back(ship);
+            return ship;
+        });
+
+        script_engine["goods"] = universe.goods;
+        script_engine["recipes"] = universe.recipes;
+
+        // Create player
+        auto player = universe.create();
+        universe.emplace<cqspc::Organization>(player);
+        universe.emplace<cqspc::Player>(player);
+
+        for (int i = 0; i < 9; i++) {
+            auto civ = universe.create();
+            universe.emplace<cqspc::Organization>(civ);
+        }
+>>>>>>> pr_8
+
+        // Add top level fleet
+        /*
     auto playerFleet = universe.create();
     universe.emplace<components::Name>(playerFleet, "navy");
     universe.emplace<components::ships::Fleet>(playerFleet, player);
@@ -233,7 +278,7 @@
     universe.get<ships::Fleet>(universe.get<components::Civilization>(player).top_level_fleet)
         .subfleets.push_back(playerSubFleet);
         */
-            /*
+        /*
     sol::optional<sol::table> generator = script_engine["generators"]["data"][1];
     if (generator) {
         (*generator)["civ_init"]();
@@ -247,6 +292,6 @@
     } else {
         SPDLOG_ERROR("No generator");
     }*/
-            SPDLOG_INFO("Done generating");
-        }
-    }  // namespace cqsp::common::systems::universegenerator
+        SPDLOG_INFO("Done generating");
+    }
+}  // namespace cqsp::common::systems::universegenerator

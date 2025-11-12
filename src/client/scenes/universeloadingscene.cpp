@@ -20,54 +20,66 @@
 
 #include <string>
 
+<<<<<<< HEAD
 #include "client/components/clientctx.h"
 #include "client/scenes/universe/universescene.h"
 #include "client/systems/assetloading.h"
 #include "client/systems/universeloader.h"
+    == == ==
+    =
+#include <sol/sol.hpp>
+
+#include "client/scenes/universescene.h"
+#include "common/components/bodies.h"
+#include "common/components/movement.h"
+#include "common/components/name.h"
+#include "common/components/resource.h"
+#include "common/universe.h"
+        >>>>>>> pr_8
 #include "common/systems/sysuniversegenerator.h"
 #include "common/util/save/savegame.h"
 
-namespace cqsp::client::scene {
+    namespace cqsp::client::scene {
 
-UniverseLoadingScene::UniverseLoadingScene(engine::Application& app) : ClientScene(app) {}
+    UniverseLoadingScene::UniverseLoadingScene(engine::Application & app) : ClientScene(app) {}
 
-UniverseLoadingScene::~UniverseLoadingScene() {
-    GetApp().CloseDocument("../data/core/gui/screens/universe_loading_screen.rml");
-}
-
-void UniverseLoadingScene::Init() {
-    auto loading = [&]() { LoadCurrentUniverse(); };
-
-    m_completed_loading = false;
-    thread = std::make_unique<std::thread>(loading);
-    document = GetApp().LoadDocument("../data/core/gui/screens/universe_loading_screen.rml");
-    if (document != nullptr) {
-        document->Show();
-    }
-}
-
-void UniverseLoadingScene::Update(float deltaTime) {
-    if (m_completed_loading && thread->joinable()) {
-        // Switch scene
-        thread->join();
-        GetApp().SetScene<UniverseScene>();
-    }
-}
-
-void UniverseLoadingScene::Ui(float deltaTime) {}
-
-void UniverseLoadingScene::Render(float deltaTime) {}
-
-void UniverseLoadingScene::LoadCurrentUniverse() {
-    LoadUniverse(GetAssetManager(), *dynamic_cast<ConquerSpace*>(GetApp().GetGame()));
-    // Load saves
-    if (GetUniverse().ctx().contains<ctx::GameLoad>()) {
-        const std::string& load_dir = GetUniverse().ctx().at<ctx::GameLoad>().load_dir;
-        SPDLOG_INFO("Loading save {}", load_dir);
-        common::save::load_game(GetUniverse(), load_dir);
+    UniverseLoadingScene::~UniverseLoadingScene() {
+        GetApp().CloseDocument("../data/core/gui/screens/universe_loading_screen.rml");
     }
 
-    SPDLOG_INFO("Done loading the universe, entering game");
-    m_completed_loading = true;
-}
+    void UniverseLoadingScene::Init() {
+        auto loading = [&]() { LoadCurrentUniverse(); };
+
+        m_completed_loading = false;
+        thread = std::make_unique<std::thread>(loading);
+        document = GetApp().LoadDocument("../data/core/gui/screens/universe_loading_screen.rml");
+        if (document != nullptr) {
+            document->Show();
+        }
+    }
+
+    void UniverseLoadingScene::Update(float deltaTime) {
+        if (m_completed_loading && thread->joinable()) {
+            // Switch scene
+            thread->join();
+            GetApp().SetScene<UniverseScene>();
+        }
+    }
+
+    void UniverseLoadingScene::Ui(float deltaTime) {}
+
+    void UniverseLoadingScene::Render(float deltaTime) {}
+
+    void UniverseLoadingScene::LoadCurrentUniverse() {
+        LoadUniverse(GetAssetManager(), *dynamic_cast<ConquerSpace*>(GetApp().GetGame()));
+        // Load saves
+        if (GetUniverse().ctx().contains<ctx::GameLoad>()) {
+            const std::string& load_dir = GetUniverse().ctx().at<ctx::GameLoad>().load_dir;
+            SPDLOG_INFO("Loading save {}", load_dir);
+            common::save::load_game(GetUniverse(), load_dir);
+        }
+
+        SPDLOG_INFO("Done loading the universe, entering game");
+        m_completed_loading = true;
+    }
 }  // namespace cqsp::client::scene
