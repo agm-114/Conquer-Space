@@ -20,8 +20,14 @@
 
 #include "common/components/science.h"
 
-void cqsp::common::systems::SysScienceLab::DoSystem() {
+using cqsp::common::components::science::Lab;
+using cqsp::common::components::science::ScientificProgress;
+using cqsp::common::systems::SysScienceLab;
+using entt::entity;
+
+void SysScienceLab::DoSystem() {
     ZoneScoped;
+<<<<<<< HEAD
     auto labs = GetUniverse().nodes<components::science::Lab>();
     // Add to the science
     for (Node lab_node : labs) {
@@ -30,9 +36,18 @@ void cqsp::common::systems::SysScienceLab::DoSystem() {
         // Progress the science, I guess
         // Get the science progress, and add to it, somehow
         auto& science_progress = lab_node.get_or_emplace<components::science::ScientificProgress>();
-        // Progress science
-        science_progress.science_progress.MultiplyAdd(lab.science_contribution, Interval());
+        == == == =
+                     // Add to the science
+            for (entity entity : GetUniverse().view<Lab>()) {
+            // Add to the scientific progress of the area, I guess
+            auto& lab = GetUniverse().get<Lab>(entity);
+            // Progress the science, I guess
+            // Get the science progress, and add to it, somehow
+            auto& science_progress = GetUniverse().get_or_emplace<ScientificProgress>(entity);
+>>>>>>> pr_254
+            // Progress science
+            science_progress.science_progress.MultiplyAdd(lab.science_contribution, Interval());
 
-        // If the research is done, then research tech
+            // If the research is done, then research tech
+        }
     }
-}

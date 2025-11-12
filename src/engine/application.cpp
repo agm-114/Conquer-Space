@@ -176,7 +176,7 @@ void Application::InitAudio() {
 
 void Application::InitRmlUi() {
     // Begin by installing the custom interfaces.
-    m_system_interface = std::make_unique<SystemInterface_GLFW>();
+    m_system_interface = std::make_unique<RmlGLFW::SystemInterface_GLFW>();
     m_system_interface->SetWindow((static_cast<GLWindow*>(GetWindow())->window));
     m_render_interface = std::make_unique<RenderInterface_GL3>();
 

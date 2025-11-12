@@ -42,6 +42,8 @@ struct ProgramData;
 struct FramebufferData;
 }  // namespace Gfx
 
+namespace RmlGL3 {
+
 class RenderInterface_GL3 : public Rml::RenderInterface {
  public:
     RenderInterface_GL3();
@@ -223,7 +225,7 @@ class RenderInterface_GL3 : public Rml::RenderInterface {
     };
     GLStateBackup glstate_backup = {};
 };
-
+}  // namespace RmlGL3
 /**
     Helper functions for the OpenGL 3 renderer.
  */

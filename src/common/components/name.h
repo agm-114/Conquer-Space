@@ -22,7 +22,11 @@
 #include <vector>
 
 namespace cqsp::common::components {
-struct Name {
+<<<<<<< HEAD
+== == == =
+
+>>>>>>> pr_254
+             struct Name {
     std::string name;
     operator const std::string&() const { return name; }
 };

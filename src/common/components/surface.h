@@ -92,8 +92,11 @@ struct ProvinceColor {
 
 // Capital city
 struct CapitalCity {};
+<<<<<<< HEAD
 
 struct DockedShips {
     std::vector<entt::entity> docked_ships;
 };
+== == == =
+>>>>>>> pr_254
 }  // namespace cqsp::common::components

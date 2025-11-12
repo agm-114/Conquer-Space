@@ -267,7 +267,7 @@ Shader::~Shader() {
         glDeleteShader(id);
     }
 }
-namespace {
+namespace cqsp::asset {
 GLenum GetUniformType(GLuint program, const char* name) {
     GLuint in[1];
     glGetUniformIndices(program, 1, &name, in);
@@ -429,8 +429,8 @@ std::map<Hjson::Type, std::string> hjson_type_set {
     {Hjson::Type::Undefined, "Undefined"}, {Hjson::Type::Null, "Null"},   {Hjson::Type::Bool, "Bool"},
     {Hjson::Type::Double, "Double"},       {Hjson::Type::Int64, "Int64"}, {Hjson::Type::String, "String"},
     {Hjson::Type::Vector, "Vector"},       {Hjson::Type::Map, "Map"}};
-}  // namespace
 
+<<<<<<< HEAD
 void ShaderDefinition::SetShaderUniform(ShaderProgram_t& shader, std::pair<const std::string, Hjson::Value>& value) {
     GLenum type = GetUniformType(shader->program, value.first.c_str());
     switch (type) {
@@ -497,7 +497,9 @@ void ShaderDefinition::SetShaderUniform(ShaderProgram_t& shader, std::pair<const
     }
 }
 
-ShaderProgram_t ShaderDefinition::MakeShader() {
+== == == =
+>>>>>>> pr_254
+             ShaderProgram_t ShaderDefinition::MakeShader() {
     Shader vert_shader(vert, ShaderType::VERT);
     Shader frag_shader(frag, ShaderType::FRAG);
 
@@ -520,8 +522,13 @@ ShaderProgram_t ShaderDefinition::MakeShader() {
     return shader;
 }
 
+<<<<<<< HEAD
 void ShaderProgram::bindTexture(int texture, unsigned int texture_id) {
     glActiveTexture(GL_TEXTURE0 + texture);
     glBindTexture(GL_TEXTURE_2D, texture_id);
 }
 }  // namespace cqsp::asset
+== == == =
+}  // namespace cqsp::asset
+
+>>>>>>> pr_254

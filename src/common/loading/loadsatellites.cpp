@@ -38,6 +38,16 @@ using bodies::Body;
 using types::Orbit;
 using types::toRadian;
 
+<<<<<<< HEAD:src/common/loading/loadsatellites.cpp
+== == == = namespace types = cqsp::common::components::types;
+namespace components = cqsp::common::components;
+namespace bodies = components::bodies;
+namespace types = components::types;
+
+using types::Orbit;
+
+namespace cqsp::common::systems::loading {
+>>>>>>> pr_254:src/common/systems/loading/loadsatellites.cpp
 namespace {
 std::string trim(const std::string& str, const std::string& whitespace = " \t") {
     const auto strBegin = str.find_first_not_of(whitespace);
@@ -77,7 +87,7 @@ Orbit GetOrbit(const std::string& line_one, const std::string& line_two, const d
     double mean_motion = std::stod(vstrings[7]);
 
     double T = (24 * 3600) / mean_motion;
-    double a = pow(T * T * GM / (4.0 * components::types::PI * components::types::PI),
+    double a = pow(T * T * GM / (4.0 * types::PI * types::PI),
                    1. / 3.0);  // semi_major_axis
 
     orbit.eccentricity = e;
@@ -130,6 +140,7 @@ void LoadSatellites(Universe& universe, std::string& string) {
 
         // Add to earth
         auto orbit = GetOrbit(line_one, line_two, GM);
+<<<<<<< HEAD:src/common/loading/loadsatellites.cpp
         orbit.inclination += universe.get<Body>(earth).axial * cos(orbit.inclination);
         // orbit.M0 += universe.get<components::bodies::Body>(earth).axial;
         orbit.reference_body = earth;
@@ -137,6 +148,14 @@ void LoadSatellites(Universe& universe, std::string& string) {
         earth.get<bodies::OrbitalSystem>().push_back(satellite);
         satellite.emplace<Orbit>(orbit);
         satellite.emplace<components::ships::Ship>();
+        == == == = orbit.inclination += universe.get<bodies::Body>(earth).axial * cos(orbit.inclination);
+        // orbit.M0 += universe.get<components::bodies::Body>(earth).axial;
+        orbit.reference_body = earth;
+        // The math works
+        universe.get<bodies::OrbitalSystem>(earth).push_back(satellite);
+        universe.emplace<Orbit>(satellite, orbit);
+        universe.emplace<components::ships::Ship>(satellite);
+>>>>>>> pr_254:src/common/systems/loading/loadsatellites.cpp
     }
 }
 

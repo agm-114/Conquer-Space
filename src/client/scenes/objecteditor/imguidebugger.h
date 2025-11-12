@@ -21,7 +21,11 @@
 namespace cqsp::client::systems {
 class ImGuiDebugger : public SysUserInterface {
  public:
-    explicit ImGuiDebugger(engine::Application& app) : SysUserInterface(app) {}
+<<<<<<< HEAD:src/client/scenes/objecteditor/imguidebugger.h
+    explicit ImGuiDebugger(engine::Application& app)
+        : SysUserInterface(app) {} == == ==
+        = explicit SysGoodViewer(engine::Application & app) : SysUserInterface(app) {}
+>>>>>>> pr_254:src/client/scenes/objecteditor/goodviewer.h
 
     void Init();
     void DoUI(int delta_time);

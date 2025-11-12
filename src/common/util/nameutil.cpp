@@ -33,7 +33,14 @@
 #include "common/components/surface.h"
 #include "common/util/utilnumberdisplay.h"
 
+namespace components = cqsp::common::components;
+
+using components::Identifier;
+using components::Name;
+using entt::entity;
+
 namespace cqsp::common::util {
+<<<<<<< HEAD
 namespace components = cqsp::common::components;
 std::string GetName(const Universe& universe, entt::entity entity) {
     if (!universe.valid(entity)) {
@@ -43,32 +50,44 @@ std::string GetName(const Universe& universe, entt::entity entity) {
         return universe.get<components::Name>(entity);
     } else if (universe.all_of<components::Identifier>(entity)) {
         return universe.get<components::Identifier>(entity);
-    } else {
-        return fmt::format("{}", GetEntityType(universe, entity));
-    }
-}
+        == == == = std::string GetName(const Universe& universe, entity entity) {
+            if (!universe.valid(entity)) {
+                return "";
+            }
+            if (universe.all_of<Name>(entity)) {
+                return universe.get<Name>(entity);
+            } else if (universe.all_of<Identifier>(entity)) {
+                return universe.get<Identifier>(entity);
+>>>>>>> pr_254
+            } else {
+                return fmt::format("{}", GetEntityType(universe, entity));
+            }
+        }
 
-/**
+<<<<<<< HEAD
+        /**
  * I feel like this is a very inefficient way of getting the name
  * Perhaps we could just have a component that stores the name, and we
  * can get rid of this complex and honestly unwieldy function.
  */
-std::string GetEntityType(const Universe& universe, entt::entity entity) {
-    // Then get type of entity
-    if (entity == entt::null) {
-        return "Null Entity";
-    }
-    if (universe.all_of<components::bodies::Star>(entity)) {
-        return "Star";
-    } else if (universe.all_of<components::bodies::Planet>(entity)) {
-        return "Planet";
-    } else if (universe.any_of<components::Settlement, components::Habitation>(entity)) {
-        return "City";
-    } else if (universe.any_of<components::Production>(entity)) {
-        auto& generator = universe.get<components::Production>(entity);
-        return fmt::format("{} Factory", GetName(universe, generator.recipe));
-    } else if (universe.any_of<components::Mine>(entity)) {
-        /*
+        std::string GetEntityType(const Universe& universe, entt::entity entity) {
+            == == == = std::string GetEntityType(const Universe& universe, entity entity) {
+>>>>>>> pr_254
+                // Then get type of entity
+                if (entity == entt::null) {
+                    return "Null Entity";
+                }
+                if (universe.all_of<components::bodies::Star>(entity)) {
+                    return "Star";
+                } else if (universe.all_of<components::bodies::Planet>(entity)) {
+                    return "Planet";
+                } else if (universe.any_of<components::Settlement, components::Habitation>(entity)) {
+                    return "City";
+                } else if (universe.any_of<components::Production>(entity)) {
+                    auto& generator = universe.get<components::Production>(entity);
+                    return fmt::format("{} Factory", GetName(universe, generator.recipe));
+                } else if (universe.any_of<components::Mine>(entity)) {
+                    /*
         std::string production = "";
         auto& generator = universe.get<components::ResourceGenerator>(entity);
         for (auto it = generator.begin(); it != generator.end(); ++it) {
@@ -80,22 +99,25 @@ std::string GetEntityType(const Universe& universe, entt::entity entity) {
         }
         return fmt::format("{} Mine", production);
         */
-        return "Mine";
-    } else if (universe.any_of<components::Player>(entity)) {
-        return "Player";
-    } else if (universe.any_of<components::Country>(entity)) {
-        return "Country";
-    } else if (universe.any_of<components::Province>(entity)) {
-        return "Province";
-    } else if (universe.any_of<components::Organization>(entity)) {
-        return "Organization";
-    } else if (universe.any_of<components::science::Lab>(entity)) {
-        return "Science Lab";
-    } else if (universe.any_of<components::Commercial>(entity)) {
-        return "Commercial";
-    } else if (universe.any_of<components::ships::Ship>(entity)) {
-        return "Ship";
-    }
-    return "Unknown";
-}
-}  // namespace cqsp::common::util
+<<<<<<< HEAD
+                    return "Mine";
+                    == == == =
+>>>>>>> pr_254
+                } else if (universe.any_of<components::Player>(entity)) {
+                    return "Player";
+                } else if (universe.any_of<components::Country>(entity)) {
+                    return "Country";
+                } else if (universe.any_of<components::Province>(entity)) {
+                    return "Province";
+                } else if (universe.any_of<components::Organization>(entity)) {
+                    return "Organization";
+                } else if (universe.any_of<components::science::Lab>(entity)) {
+                    return "Science Lab";
+                } else if (universe.any_of<components::Commercial>(entity)) {
+                    return "Commercial";
+                } else if (universe.any_of<components::ships::Ship>(entity)) {
+                    return "Ship";
+                }
+                return "Unknown";
+            }
+        }  // namespace cqsp::common::util

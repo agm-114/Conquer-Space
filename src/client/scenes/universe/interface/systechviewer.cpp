@@ -23,64 +23,80 @@
 #include "common/util/nameutil.h"
 #include "systooltips.h"
 
-namespace cqsp::client::systems {
+<<<<<<< HEAD namespace cqsp::client::systems {
+    namespace components = common::components;
+    using components::science::ScientificResearch;
+    using components::science::TechnologicalProgress;
+    == == == = namespace systems = cqsp::client::systems;
+    namespace components = cqsp::common::components;
+    namespace science = components::science;
+    using cqsp::common::util::GetName;
+    using entt::entity;
+    using science::ScientificResearch;
+    using science::TechnologicalProgress;
+    using systems::SysTechnologyProjectViewer;
+    using systems::SysTechnologyViewer;
+>>>>>>> pr_254
 
-namespace components = common::components;
-using components::science::ScientificResearch;
-using components::science::TechnologicalProgress;
+    void SysTechnologyViewer::Init() {}
 
-void SysTechnologyViewer::Init() {}
-
-void SysTechnologyViewer::DoUI(int delta_time) {
-    // Display UI
-    auto view = GetUniverse().view<components::Player>();
-    entt::entity player = view.front();
-    ImGui::Begin("Technology Information");
-    if (GetUniverse().any_of<TechnologicalProgress>(player)) {
-        auto& progress = GetUniverse().get<TechnologicalProgress>(player);
-        for (entt::entity researched : progress.researched_techs) {
-            ImGui::TextFmt("{}", common::util::GetName(GetUniverse(), researched));
-        }
-    } else {
-        ImGui::Text("Nope, no technology");
-    }
-    ImGui::End();
-}
-
-void SysTechnologyViewer::DoUpdate(int delta_time) {}
-
-void SysTechnologyProjectViewer::Init() {}
-
-void SysTechnologyProjectViewer::DoUI(int delta_time) {
-    auto view = GetUniverse().view<components::Player>();
-    entt::entity player = view.front();
-    ImGui::Begin("Technology Research");
-    if (GetUniverse().any_of<ScientificResearch>(player)) {
-        auto& progress = GetUniverse().get<ScientificResearch>(player);
-        for (auto& researched : progress.current_research) {
-            ImGui::TextFmt("{} {}", common::util::GetName(GetUniverse(), researched.first), researched.second);
-        }
-
-        ImGui::Separator();
-        ImGui::Text("Potential Research");
-
-        std::vector<entt::entity> potential_research;
-        for (const entt::entity& researched : progress.potential_research) {
-            ImGui::TextFmt("{}", common::util::GetName(GetUniverse(), researched));
-            ImGui::SameLine();
-            if (ImGui::Button(fmt::format("Queue Research##{}", researched).c_str())) {
-                potential_research.push_back(researched);  // Add to tech queue
+    void SysTechnologyViewer::DoUI(int delta_time) {
+        // Display UI
+<<<<<<< HEAD
+        auto view = GetUniverse().view<components::Player>();
+        entt::entity player = view.front();
+        == == == = entity player = GetUniverse().view<components::Player>().front();
+>>>>>>> pr_254
+        ImGui::Begin("Technology Information");
+        if (GetUniverse().any_of<TechnologicalProgress>(player)) {
+            auto& progress = GetUniverse().get<TechnologicalProgress>(player);
+            for (entity researched : progress.researched_techs) {
+                ImGui::TextFmt("{}", GetName(GetUniverse(), researched));
             }
+        } else {
+            ImGui::Text("Nope, no technology");
         }
-        for (entt::entity res : potential_research) {
-            progress.potential_research.erase(res);
-            progress.current_research[res] = 0;
-        }
-    } else {
-        ImGui::Text("No Tech Research");
+        ImGui::End();
     }
-    ImGui::End();
-}
 
-void SysTechnologyProjectViewer::DoUpdate(int delta_time) {}
-}  // namespace cqsp::client::systems
+    void SysTechnologyViewer::DoUpdate(int delta_time) {}
+
+    void SysTechnologyProjectViewer::Init() {}
+
+    void SysTechnologyProjectViewer::DoUI(int delta_time) {
+<<<<<<< HEAD
+        auto view = GetUniverse().view<components::Player>();
+        entt::entity player = view.front();
+        == == == =
+                     // Display UI
+            entity player = GetUniverse().view<components::Player>().front();
+>>>>>>> pr_254
+        ImGui::Begin("Technology Research");
+        if (GetUniverse().any_of<ScientificResearch>(player)) {
+            auto& progress = GetUniverse().get<ScientificResearch>(player);
+            for (auto& researched : progress.current_research) {
+                ImGui::TextFmt("{} {}", GetName(GetUniverse(), researched.first), researched.second);
+            }
+
+            ImGui::Separator();
+            ImGui::Text("Potential Research");
+
+            std::vector<entity> potential_research;
+            for (const entity& researched : progress.potential_research) {
+                ImGui::TextFmt("{}", GetName(GetUniverse(), researched));
+                ImGui::SameLine();
+                if (ImGui::Button(fmt::format("Queue Research##{}", researched).c_str())) {
+                    potential_research.push_back(researched);  // Add to tech queue
+                }
+            }
+            for (entity res : potential_research) {
+                progress.potential_research.erase(res);
+                progress.current_research[res] = 0;
+            }
+        } else {
+            ImGui::Text("No Tech Research");
+        }
+        ImGui::End();
+    }
+
+    void SysTechnologyProjectViewer::DoUpdate(int delta_time) {}

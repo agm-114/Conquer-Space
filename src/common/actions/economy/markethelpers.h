@@ -21,25 +21,33 @@
 #include "common/components/resource.h"
 #include "common/universe.h"
 
-namespace cqsp::common::actions {
-/// <summary>
-/// Creates a market two instance.
-/// </summary>
-Node CreateMarket(Universe& universe);
-/// <summary>
-/// Note: This will only buy the maximum resources that are in the market.
-/// If there aren't enough resources on the market, then we buy all the
-/// remaining resources on the market.
-/// You'll have to calculate how much you want later on
-/// </summary>
-/// <param name="universe"></param>
-/// <param name="agent"></param>
-/// <param name="purchase"></param>
-/// <returns></returns>
-bool PurchaseGood(Node& agent, const components::ResourceLedger& purchase);
-bool SellGood(Node& agent, const components::ResourceLedger& selling);
+<<<<<<< HEAD:src/common/actions/economy/markethelpers.h namespace cqsp::common::actions {
+    == == == = namespace cqsp::common::systems::economy {
+>>>>>>> pr_254:src/common/systems/economy/markethelpers.h
+        /// <summary>
+        /// Creates a market two instance.
+        /// </summary>
+        Node CreateMarket(Universe & universe);
+        /// <summary>
+        /// Note: This will only buy the maximum resources that are in the market.
+        /// If there aren't enough resources on the market, then we buy all the
+        /// remaining resources on the market.
+        /// You'll have to calculate how much you want later on
+        /// </summary>
+        /// <param name="universe"></param>
+        /// <param name="agent"></param>
+        /// <param name="purchase"></param>
+        /// <returns></returns>
+        bool PurchaseGood(Node & agent, const components::ResourceLedger& purchase);
+        bool SellGood(Node & agent, const components::ResourceLedger& selling);
 
-void AddParticipant(Node& market, Node& participant);
+<<<<<<< HEAD:src/common/actions/economy/markethelpers.h
+        void AddParticipant(Node & market, Node & participant);
 
-double GetCost(Node& market, const components::ResourceLedger& ledger);
-}  // namespace cqsp::common::actions
+        double GetCost(Node & market, const components::ResourceLedger& ledger);
+    }  // namespace cqsp::common::actions
+    == == == = void AddParticipant(Universe & universe, entt::entity market, entt::entity entity);
+
+    double GetCost(Universe & universe, entt::entity market, const components::ResourceLedger& ledger);
+}  // namespace cqsp::common::systems::economy
+>>>>>>> pr_254:src/common/systems/economy/markethelpers.h

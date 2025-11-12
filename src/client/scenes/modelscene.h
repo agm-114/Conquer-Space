@@ -22,21 +22,28 @@
 #include "engine/graphics/shader.h"
 #include "engine/renderer/framebuffer.h"
 
-namespace cqsp::client::scene {
+<<<<<<< HEAD namespace cqsp::client::scene {
+    class ModelScene : public ClientScene {
+     public:
+        explicit ModelScene(engine::Application& app) : ClientScene(app) {} == == == = namespace cqsp::scene {
+            class ModelScene : public client::Scene {
+             public:
+                explicit ModelScene(engine::Application& app) : client::Scene(app) {}
+>>>>>>> pr_254
+                ~ModelScene() = default;
 
-class ModelScene : public ClientScene {
- public:
-    explicit ModelScene(engine::Application& app) : ClientScene(app) {}
-    ~ModelScene() = default;
+                void Init();
+                void Update(float deltaTime);
+                void Ui(float deltaTime);
+                void Render(float deltaTime);
 
-    void Init();
-    void Update(float deltaTime);
-    void Ui(float deltaTime);
-    void Render(float deltaTime);
-
- private:
-    asset::Model* model;
-    asset::ShaderProgram_t shader;
-    engine::Mesh_t mesh;
-};
-}  // namespace cqsp::client::scene
+             private:
+                asset::Model* model;
+                asset::ShaderProgram_t shader;
+                engine::Mesh_t mesh;
+            };
+<<<<<<< HEAD
+        }  // namespace cqsp::client::scene
+        == == == =
+    }  // namespace cqsp::scene
+>>>>>>> pr_254

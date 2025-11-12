@@ -40,6 +40,7 @@ struct Fleet {
     explicit Fleet(entt::entity _owner) : Fleet(entt::null, _owner, 0) {}
 };
 }  // namespace cqsp::common::components::ships
+<<<<<<< HEAD
 =======
 // Copyright 2021 Conquer Space
 #pragma once
@@ -76,3 +77,5 @@ struct Command {
 }  // namespace common
 }  // namespace conquerspace
 >>>>>>> pr_4
+=======
+>>>>>>> pr_254

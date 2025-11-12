@@ -23,54 +23,76 @@
 #include "common/components/name.h"
 #include "common/loading/loadutil.h"
 
-namespace cqsp::common::loading {
-/**
+<<<<<<< HEAD:src/common/loading/hjsonloader.cpp namespace cqsp::common::loading {
+    /**
  * Loads the hjson struct for an entire asset.
  */
-int HjsonLoader::LoadHjson(const Hjson::Value& values) {
-    int assets = 0;
-    std::vector<Node> node_list;
-    for (int i = 0; i < values.size(); i++) {
-        Hjson::Value value = values[i];
+    int HjsonLoader::LoadHjson(const Hjson::Value& values) {
+        int assets = 0;
+        std::vector<Node> node_list;
+        for (int i = 0; i < values.size(); i++) {
+            Hjson::Value value = values[i];
 
-        Node node(universe);
-        if (NeedIdentifier()) {
-            if (!LoadInitialValues(node, value)) {
-                SPDLOG_WARN("No identifier");
-                universe.destroy(node);
-                continue;
-            }
-        } else {
-            LoadInitialValues(node, value);
-        }
+            Node node(universe);
+            if (NeedIdentifier()) {
+                if (!LoadInitialValues(node, value)) {
+                    SPDLOG_WARN("No identifier");
+                    universe.destroy(node);
+                    continue;
+                }
+            } else {
+                LoadInitialValues(node, value);
+                == == == = using cqsp::common::systems::loading::HjsonLoader;
+                using entt::entity;
 
-        value = Hjson::Merge(GetDefaultValues(), value);
+                int HjsonLoader::LoadHjson(const Hjson::Value& values) {
+                    int assets = 0;
+                    std::vector<entity> entity_list;
+                    for (int i = 0; i < values.size(); i++) {
+                        Hjson::Value value = values[i];
 
-        // Catch errors
-        bool success = false;
-        try {
-            success = LoadValue(value, node);
-        } catch (Hjson::index_out_of_bounds& ioob) {
-            auto& id = node.get<components::Identifier>().identifier;
-            SPDLOG_WARN("Index out of bounds for {}: {}", id, ioob.what());
-        } catch (Hjson::type_mismatch& tm) {
-            auto& id = node.get<components::Identifier>().identifier;
-            SPDLOG_WARN("Type mismatch for {}: {}", id, tm.what());
-        }
+                        entity entity = universe.create();
+                        if (!LoadInitialValues(universe, entity, value)) {
+                            SPDLOG_WARN("No identifier");
+                            universe.destroy(entity);
+                            continue;
+>>>>>>> pr_254:src/common/systems/loading/hjsonloader.cpp
+                        }
 
-        if (!success) {
-            universe.destroy(node);
-            continue;
-        }
-        node_list.push_back(node);
-        assets++;
-    }
+                        value = Hjson::Merge(GetDefaultValues(), value);
 
-    // Load all the assets again to parse?
-    for (Node node : node_list) {
-        PostLoad(node);
-    }
+                        // Catch errors
+                        bool success = false;
+                        try {
+                            success = LoadValue(value, node);
+                        } catch (Hjson::index_out_of_bounds& ioob) {
+                            auto& id = node.get<components::Identifier>().identifier;
+                            SPDLOG_WARN("Index out of bounds for {}: {}", id, ioob.what());
+                        } catch (Hjson::type_mismatch& tm) {
+                            auto& id = node.get<components::Identifier>().identifier;
+                            SPDLOG_WARN("Type mismatch for {}: {}", id, tm.what());
+                        }
 
-    return assets;
-}
-}  // namespace cqsp::common::loading
+                        if (!success) {
+                            universe.destroy(node);
+                            continue;
+                        }
+                        node_list.push_back(node);
+                        assets++;
+                    }
+
+                    // Load all the assets again to parse?
+<<<<<<< HEAD:src/common/loading/hjsonloader.cpp
+                    for (Node node : node_list) {
+                        PostLoad(node);
+                        == == == = for (entity entity : entity_list) {
+                            PostLoad(entity);
+>>>>>>> pr_254:src/common/systems/loading/hjsonloader.cpp
+                        }
+
+                        return assets;
+                    }
+<<<<<<< HEAD:src/common/loading/hjsonloader.cpp
+                }  // namespace cqsp::common::loading
+                == == == =
+>>>>>>> pr_254:src/common/systems/loading/hjsonloader.cpp

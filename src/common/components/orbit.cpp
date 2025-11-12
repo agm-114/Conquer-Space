@@ -26,6 +26,8 @@
 #include <glm/gtx/projection.hpp>
 #include <glm/gtx/vector_angle.hpp>
 
+using entt::entity;
+
 namespace cqsp::common::components::types {
 double GetOrbitingRadius(const double& e, const radian& a, const radian& v) {
     if (e > 1) {

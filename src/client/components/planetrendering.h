@@ -22,6 +22,7 @@ namespace cqsp::client::components {
 struct PlanetTerrainRender {
     entt::entity resource;
 };
+<<<<<<< HEAD
 
 struct Offset {
     glm::vec3 offset;
@@ -50,4 +51,6 @@ struct OrbitMesh {
 
     ~OrbitMesh() = default;
 };
+== == == =
+>>>>>>> pr_254
 }  // namespace cqsp::client::components

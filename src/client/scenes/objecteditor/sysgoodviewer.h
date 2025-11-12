@@ -21,22 +21,29 @@
 #include "client/systems/sysgui.h"
 
 namespace cqsp::client::systems {
+<<<<<<< HEAD:src/client/scenes/objecteditor/sysgoodviewer.h
 class SysGoodViewer : public SysUserInterface {
  public:
     explicit SysGoodViewer(engine::Application& app) : SysUserInterface(app) { search_text.fill(0); }
+    == == == =
 
-    void Init();
-    void DoUI(int delta_time);
-    void DoUpdate(int delta_time);
+                 class SysTurnSaveWindow : public SysUserInterface {
+     public:
+        explicit SysTurnSaveWindow(engine::Application& app) : SysUserInterface(app) {}
+>>>>>>> pr_254:src/client/scenes/universe/interface/systurnsavewindow.h
 
- private:
-    void GoodViewerRight();
-    void RecipeTable();
-    void InputRecipeTable();
-    void OutputRecipeTable();
-    void RecipeTooltip(entt::entity recipe);
+        void Init();
+        void DoUI(int delta_time);
+        void DoUpdate(int delta_time);
 
-    std::array<char, 255> search_text;
-    entt::entity selected_good = entt::null;
-};
+     private:
+        void GoodViewerRight();
+        void RecipeTable();
+        void InputRecipeTable();
+        void OutputRecipeTable();
+        void RecipeTooltip(entt::entity recipe);
+
+        std::array<char, 255> search_text;
+        entt::entity selected_good = entt::null;
+    };
 }  // namespace cqsp::client::systems

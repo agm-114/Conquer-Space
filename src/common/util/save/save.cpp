@@ -23,26 +23,35 @@
 
 #include "common/version.h"
 
-namespace cqsp::common::save {
-Hjson::Value Save::GetMetadata() {
-    // This generates the basic information of the save
-    Hjson::Value value;
-    value["date"] = universe.date.GetDate();
-    value["uuid"] = universe.uuid;
-    value["version"] = CQSP_VERSION;
-    return value;
-}
+<<<<<<< HEAD namespace cqsp::common::save {
+    == == == = using cqsp::common::game::Save;
+    using cqsp::common::game::Load;
 
-Hjson::Value Save::SaveGame() {
-    // Save all the game information
-    return Hjson::Value();
-}
+>>>>>>> pr_254
+    Hjson::Value Save::GetMetadata() {
+        // This generates the basic information of the save
+        Hjson::Value value;
+        value["date"] = universe.date.GetDate();
+        value["uuid"] = universe.uuid;
+        value["version"] = CQSP_VERSION;
+        return value;
+    }
 
-void Load::LoadMetadata(Hjson::Value& data) {
-    universe.date.SetDate((int)data["date"]);
-    // Verify version, but screw that
-    universe.uuid = data["uuid"].to_string();
-}
+    Hjson::Value Save::SaveGame() {
+        // Save all the game information
+        return Hjson::Value();
+    }
 
-std::string GetMetaPath(std::string_view folder) { return (std::filesystem::path(folder) / "meta.hjson").string(); }
+    void Load::LoadMetadata(Hjson::Value & data) {
+        universe.date.SetDate((int)data["date"]);
+        // Verify version, but screw that
+        universe.uuid = data["uuid"].to_string();
+    }
+
+<<<<<<< HEAD
+    std::string GetMetaPath(std::string_view folder) { return (std::filesystem::path(folder) / "meta.hjson").string(); }
 }  // namespace cqsp::common::save
+== == == = std::string cqsp::common::game::GetMetaPath(std::string_view folder) {
+    return (std::filesystem::path(folder) / "meta.hjson").string();
+}
+>>>>>>> pr_254

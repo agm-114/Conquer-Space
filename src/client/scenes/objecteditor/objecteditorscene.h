@@ -24,25 +24,32 @@
 #include "client/scenes/scene.h"
 #include "client/systems/sysgui.h"
 
-namespace cqsp::client::scene {
-class ObjectEditorScene : public ClientScene {
- public:
-    explicit ObjectEditorScene(engine::Application& app);
-    ~ObjectEditorScene();
+<<<<<<< HEAD namespace cqsp::client::scene {
+    class ObjectEditorScene : public ClientScene {
+        == == == = namespace cqsp::scene {
+            class ObjectEditorScene : public client::Scene {
+>>>>>>> pr_254
+             public:
+                explicit ObjectEditorScene(engine::Application& app);
+                ~ObjectEditorScene();
 
-    void Init();
-    void Update(float deltaTime);
-    void Ui(float deltaTime);
-    void Render(float deltaTime);
+                void Init();
+                void Update(float deltaTime);
+                void Ui(float deltaTime);
+                void Render(float deltaTime);
 
-    template <class T>
-    void AddUISystem(const std::string& name) {
-        auto ui = std::make_unique<T>(GetApp());
-        ui->Init();
-        user_interfaces[name] = std::make_pair(false, std::move(ui));
-    }
+                template <class T>
+                void AddUISystem(const std::string& name) {
+                    auto ui = std::make_unique<T>(GetApp());
+                    ui->Init();
+                    user_interfaces[name] = std::make_pair(false, std::move(ui));
+                }
 
- private:
-    std::map<std::string, std::pair<bool, std::unique_ptr<systems::SysUserInterface>>> user_interfaces;
-};
-}  // namespace cqsp::client::scene
+             private:
+<<<<<<< HEAD
+                std::map<std::string, std::pair<bool, std::unique_ptr<systems::SysUserInterface>>> user_interfaces;
+                == == == = std::map<std::string, std::pair<bool, std::unique_ptr<client::systems::SysUserInterface>>>
+                             user_interfaces;
+>>>>>>> pr_254
+            };
+        }  // namespace cqsp::client::scene

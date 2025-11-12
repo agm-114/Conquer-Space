@@ -22,30 +22,43 @@
 
 #include "client/scenes/scene.h"
 #include "engine/renderer/framebuffer.h"
-namespace cqsp::client::scene {
-/// <summary>
-/// Just a playground for various graphics stuff
-/// </summary>
-/// <param name="app"></param>
-class TextTestScene : public ClientScene {
- public:
-    explicit TextTestScene(engine::Application& app) : client::ClientScene(app) {}
-    ~TextTestScene();
+<<<<<<< HEAD namespace cqsp::client::scene {
+    == == == = namespace cqsp::scene {
+>>>>>>> pr_254
+        /// <summary>
+        /// Just a playground for various graphics stuff
+        /// </summary>
+        /// <param name="app"></param>
+<<<<<<< HEAD
+        class TextTestScene : public ClientScene {
+         public:
+            explicit TextTestScene(engine::Application& app)
+                : client::ClientScene(app) {} == == ==
+                = class TextTestScene : public client::Scene {
+             public:
+                explicit TextTestScene(engine::Application& app) : client::Scene(app) {}
+>>>>>>> pr_254
+                ~TextTestScene();
 
-    void Init();
-    void Update(float deltaTime);
-    void Ui(float deltaTime);
-    void Render(float deltaTime);
+                void Init();
+                void Update(float deltaTime);
+                void Ui(float deltaTime);
+                void Render(float deltaTime);
 
- private:
-    engine::LayerRenderer renderer;
-    float font_size = 40.f;
-    std::string text = "The quick brown fox jumps over the lazy dog";
-    int layer;
-    int src = 0;
-    int post = 0;
-    std::map<std::string, int> indices;
-    std::vector<const char*> names;
-    float delta_t = 0;
-};
-}  // namespace cqsp::client::scene
+             private:
+                engine::LayerRenderer renderer;
+                float font_size = 40.f;
+                std::string text = "The quick brown fox jumps over the lazy dog";
+                int layer;
+                int src = 0;
+                int post = 0;
+                std::map<std::string, int> indices;
+                std::vector<const char*> names;
+                float delta_t = 0;
+            };
+<<<<<<< HEAD
+        }  // namespace cqsp::client::scene
+            == == ==
+            =
+    }  // namespace cqsp::scene
+>>>>>>> pr_254

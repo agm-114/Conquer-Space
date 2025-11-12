@@ -26,47 +26,54 @@
 #include "client/systems/sysgui.h"
 #include "client/util/assetwindow.h"
 
+<<<<<<< HEAD
 #define sysdebuggui_parameters                                                                                        \
     cqsp::engine::Application &app, common::Universe &universe, common::scripting::ScriptInterface &script_interface, \
         const std::string_view &args, CommandOutput &input
+    == == ==
+    =
+#define sysdebuggui_parameters                                                                                        \
+    cqsp::engine::Application &app, common::Universe &universe, common::scripting::ScriptInterface &script_interface, \
+        const std::string_view &args, CommandOutput &input
+        >>>>>>> pr_254
 
-namespace cqsp::client::systems {
-class SysDebugMenu : public SysUserInterface {
- public:
-    explicit SysDebugMenu(engine::Application &app);
+    namespace cqsp::client::systems {
+    class SysDebugMenu : public SysUserInterface {
+     public:
+        explicit SysDebugMenu(engine::Application &app);
 
-    void Init();
-    void DoUI(int delta_time);
-    void DoUpdate(int delta_time);
+        void Init();
+        void DoUI(int delta_time);
+        void DoUpdate(int delta_time);
 
- private:
-    void CqspMetricsWindow();
-    void ShowWindows(double delta_time);
-    void CreateMenuBar();
-    void DrawConsole();
-    void ConsoleInput();
+     private:
+        void CqspMetricsWindow();
+        void ShowWindows(double delta_time);
+        void CreateMenuBar();
+        void DrawConsole();
+        void ConsoleInput();
 
-    bool to_show_window = false;
-    bool to_show_metrics_window = false;
-    bool to_show_imgui_about = false;
-    bool to_show_implot_metrics = false;
-    bool reclaim_focus = false;
-    bool scroll_to_bottom = true;
-    bool to_show_cqsp_metrics = false;
-    bool to_show_asset_window = false;
+        bool to_show_window = false;
+        bool to_show_metrics_window = false;
+        bool to_show_imgui_about = false;
+        bool to_show_implot_metrics = false;
+        bool reclaim_focus = false;
+        bool scroll_to_bottom = true;
+        bool to_show_cqsp_metrics = false;
+        bool to_show_asset_window = false;
 
-    std::string command;
-    std::string asset_search;
-    std::vector<std::string> items;
+        std::string command;
+        std::string asset_search;
+        std::vector<std::string> items;
 
-    typedef std::vector<std::string> CommandOutput;
-    typedef std::function<void(sysdebuggui_parameters)> DebugCommand_t;
-    std::map<std::string, std::pair<std::string, DebugCommand_t>, std::less<>> commands;
-    std::vector<ImVec2> fps_history;
-    float fps_history_len = 10;
+        typedef std::vector<std::string> CommandOutput;
+        typedef std::function<void(sysdebuggui_parameters)> DebugCommand_t;
+        std::map<std::string, std::pair<std::string, DebugCommand_t>, std::less<>> commands;
+        std::vector<ImVec2> fps_history;
+        float fps_history_len = 10;
 
-    std::map<std::string, std::vector<ImVec2>> history_maps;
+        std::map<std::string, std::vector<ImVec2>> history_maps;
 
-    AssetWindow asset_window;
-};
+        AssetWindow asset_window;
+    };
 }  // namespace cqsp::client::systems

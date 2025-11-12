@@ -38,122 +38,132 @@
 #include "engine/asset/assetmanager.h"
 #include "engine/gui.h"
 
-#define LOADING_ID "core/gui/screens/loading_screen.rml"
+namespace cqsp::scene {
+const char LOADING_ID[] = "core/gui/screens/loading_screen.rml";
+}
 
+<<<<<<< HEAD
 namespace cqsp::client::scene {
 
 LoadingScene::LoadingScene(engine::Application& app) : ClientScene(app) {
-    m_done_loading = false;
-    percentage = 0;
-}
+    == == == = using cqsp::scene::LoadingScene;
 
-LoadingScene::~LoadingScene() {
-    if (thread != nullptr && thread->joinable()) {
-        thread->join();
+    LoadingScene::LoadingScene(engine::Application & app) : Scene(app) {
+>>>>>>> pr_254
+        m_done_loading = false;
+        percentage = 0;
     }
-}
 
-void LoadingScene::Init() {
-    auto loading = [&]() {
-        SPDLOG_INFO("Loading resources");
-        LoadResources();
-        SPDLOG_INFO("Need halt: {}", need_halt);
-    };
-
-    thread = std::make_unique<std::thread>(loading);
-    thread->detach();
-
-    Rml::DataModelConstructor constructor = GetApp().GetRmlUiContext()->CreateDataModel("loading");
-    constructor.Bind("current", &loading_data.current);
-    constructor.Bind("max", &loading_data.max);
-    model_handle = constructor.GetModelHandle();
-    document = GetApp().LoadDocument(LOADING_ID);
-    if (document != nullptr) {
-        document->Show();
-    } else {
-        SPDLOG_WARN("Couldn't load document");
-    }
-}
-
-void LoadingScene::Update(float deltaTime) {
-    while (assetLoader.QueueHasItems()) {
-        assetLoader.BuildNextAsset();
-    }
-    if (m_done_loading && !assetLoader.QueueHasItems() && !need_halt) {
-        // Load font after all the shaders are done
-        LoadFont();
-
-        // Load audio
-        auto hjson = GetAssetManager().GetAsset<asset::HjsonAsset>("core:ui_sounds");
-        for (const auto& element : hjson->data) {
-            auto audio_asset = GetAssetManager().GetAsset<asset::AudioAsset>(element.second.to_string());
-            if (audio_asset == nullptr) {
-                SPDLOG_WARN("Cannot find audio asset {}", element.second.to_string());
-                continue;
+    LoadingScene::~LoadingScene() {
+<<<<<<< HEAD
+        if (thread != nullptr && thread->joinable()) {
+            == == == = if (thread->joinable()) {
+>>>>>>> pr_254
+                thread->join();
             }
-            GetApp().GetAudioInterface().AddAudioClip(element.first, audio_asset);
         }
 
-        // Remove data model
-        GetApp().GetRmlUiContext()->RemoveDataModel("loading");
-        GetApp().CloseDocument(LOADING_ID);
+        void LoadingScene::Init() {
+            auto loading = [&]() {
+                SPDLOG_INFO("Loading resources");
+                LoadResources();
+                SPDLOG_INFO("Need halt: {}", need_halt);
+            };
 
-        // Set main menu scene
-        if (GetApp().HasCmdLineArgs("-i")) {
-            SPDLOG_INFO("Loading universe scene, skipping the main menu scene");
-            GetApp().SetScene<UniverseLoadingScene>();
-        } else if (GetApp().HasCmdLineArgs("-tt")) {
-            GetApp().SetScene<TextTestScene>();
-        } else if (GetApp().HasCmdLineArgs("-ov")) {
-            GetApp().SetScene<ObjectEditorScene>();
-        } else if (GetApp().HasCmdLineArgs("-mv")) {
-            GetApp().SetScene<ModelScene>();
-        } else {
-            SPDLOG_INFO("Loading main menu");
-            GetApp().SetScene<MainMenuScene>();
+            thread = std::make_unique<std::thread>(loading);
+            thread->detach();
+
+            Rml::DataModelConstructor constructor = GetApp().GetRmlUiContext()->CreateDataModel("loading");
+            constructor.Bind("current", &loading_data.current);
+            constructor.Bind("max", &loading_data.max);
+            model_handle = constructor.GetModelHandle();
+            document = GetApp().LoadDocument(LOADING_ID);
+            if (document != nullptr) {
+                document->Show();
+            } else {
+                SPDLOG_WARN("Couldn't load document");
+            }
         }
-    }
-}
 
-void LoadingScene::Ui(float deltaTime) {
-    // Load rmlui ui
-    if (m_done_loading) {
-        return;
-    }
-    float current = static_cast<float>(assetLoader.getCurrentLoading());
-    float max = static_cast<float>(assetLoader.getMaxLoading());
-    loading_data.max = static_cast<int>(max);
-    loading_data.current = static_cast<int>(current);
-    model_handle.DirtyVariable("max");
-    model_handle.DirtyVariable("current");
-    Rml::ElementProgress* progress = ((Rml::ElementProgress*)document->GetElementById("loading_bar"));
-    progress->SetValue(current);
-    progress->SetMax(max);
-}
+        void LoadingScene::Update(float deltaTime) {
+            while (assetLoader.QueueHasItems()) {
+                assetLoader.BuildNextAsset();
+            }
+            if (m_done_loading && !assetLoader.QueueHasItems() && !need_halt) {
+                // Load font after all the shaders are done
+                LoadFont();
 
-void LoadingScene::Render(float deltaTime) {}
+                // Load audio
+                auto hjson = GetAssetManager().GetAsset<asset::HjsonAsset>("core:ui_sounds");
+                for (const auto& element : hjson->data) {
+                    auto audio_asset = GetAssetManager().GetAsset<asset::AudioAsset>(element.second.to_string());
+                    if (audio_asset == nullptr) {
+                        SPDLOG_WARN("Cannot find audio asset {}", element.second.to_string());
+                        continue;
+                    }
+                    GetApp().GetAudioInterface().AddAudioClip(element.first, audio_asset);
+                }
 
-void LoadingScene::LoadResources() {
-    ZoneScoped;
-    // Loading goes here
-    // Read core mod
-    assetLoader.manager = &GetAssetManager();
-    assetLoader.LoadMods();
+                // Remove data model
+                GetApp().GetRmlUiContext()->RemoveDataModel("loading");
+                GetApp().CloseDocument(LOADING_ID);
 
-    SPDLOG_INFO("Done loading items");
-    need_halt = !assetLoader.GetMissingAssets().empty();
-    m_done_loading = true;
-}
+                // Set main menu scene
+                if (GetApp().HasCmdLineArgs("-i")) {
+                    SPDLOG_INFO("Loading universe scene, skipping the main menu scene");
+                    GetApp().SetScene<UniverseLoadingScene>();
+                } else if (GetApp().HasCmdLineArgs("-tt")) {
+                    GetApp().SetScene<TextTestScene>();
+                } else if (GetApp().HasCmdLineArgs("-ov")) {
+                    GetApp().SetScene<ObjectEditorScene>();
+                } else if (GetApp().HasCmdLineArgs("-mv")) {
+                    GetApp().SetScene<ModelScene>();
+                } else {
+                    SPDLOG_INFO("Loading main menu");
+                    GetApp().SetScene<MainMenuScene>();
+                }
+            }
+        }
 
-void LoadingScene::LoadFont() {
-    asset::ShaderProgram* fontshader =
-        new asset::ShaderProgram(*GetAssetManager().GetAsset<asset::Shader>("core:fontvertexshader"),
-                                 *GetApp().GetAssetManager().GetAsset<asset::Shader>("core:fontfragshader"));
+        void LoadingScene::Ui(float deltaTime) {
+            // Load rmlui ui
+            if (m_done_loading) {
+                return;
+            }
+            float current = static_cast<float>(assetLoader.getCurrentLoading());
+            float max = static_cast<float>(assetLoader.getMaxLoading());
+            loading_data.max = static_cast<int>(max);
+            loading_data.current = static_cast<int>(current);
+            model_handle.DirtyVariable("max");
+            model_handle.DirtyVariable("current");
+            Rml::ElementProgress* progress = ((Rml::ElementProgress*)document->GetElementById("loading_bar"));
+            progress->SetValue(current);
+            progress->SetMax(max);
+        }
 
-    asset::Font* font = GetApp().GetAssetManager().GetAsset<asset::Font>("core:defaultfont");
+        void LoadingScene::Render(float deltaTime) {}
 
-    GetApp().SetFont(font);
-    GetApp().SetFontShader(fontshader);
-}
+        void LoadingScene::LoadResources() {
+            ZoneScoped;
+            // Loading goes here
+            // Read core mod
+            assetLoader.manager = &GetAssetManager();
+            assetLoader.LoadMods();
 
-}  // namespace cqsp::client::scene
+            SPDLOG_INFO("Done loading items");
+            need_halt = !assetLoader.GetMissingAssets().empty();
+            m_done_loading = true;
+        }
+
+        void LoadingScene::LoadFont() {
+            asset::ShaderProgram* fontshader =
+                new asset::ShaderProgram(*GetAssetManager().GetAsset<asset::Shader>("core:fontvertexshader"),
+                                         *GetApp().GetAssetManager().GetAsset<asset::Shader>("core:fontfragshader"));
+
+            asset::Font* font = GetApp().GetAssetManager().GetAsset<asset::Font>("core:defaultfont");
+
+            GetApp().SetFont(font);
+            GetApp().SetFontShader(fontshader);
+        }
+
+    }  // namespace cqsp::client::scene

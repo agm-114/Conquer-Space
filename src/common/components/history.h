@@ -22,10 +22,13 @@
 #include <entt/entt.hpp>
 
 namespace cqsp::common::components {
+<<<<<<< HEAD
 /// <summary>
 /// Records the history of market.
 /// </summary>
-class MarketHistory {
+== == == =
+>>>>>>> pr_254
+             class MarketHistory {
  public:
     std::map<entt::entity, std::vector<double>> price_history;
     std::map<entt::entity, std::vector<double>> sd_ratio;

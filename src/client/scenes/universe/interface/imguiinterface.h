@@ -23,7 +23,11 @@ void MarketInformationTable(common::Universe& universe, const entt::entity& mark
 
 class ImGuiInterface : public SysUserInterface {
  public:
-    explicit ImGuiInterface(engine::Application& app) : SysUserInterface(app) {}
+<<<<<<< HEAD:src/client/scenes/universe/interface/imguiinterface.h
+    explicit ImGuiInterface(engine::Application& app)
+        : SysUserInterface(app) {} == == ==
+        = explicit SysPlanetMarketInformation(engine::Application & app) : SysUserInterface(app) {}
+>>>>>>> pr_254:src/client/scenes/universe/interface/marketwindow.h
     void Init();
     void DoUI(int delta_time);
     void DoUpdate(int delta_time);

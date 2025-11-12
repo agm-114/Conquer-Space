@@ -309,6 +309,9 @@ struct FactoryProducing {};
 struct Owned {
     entt::entity owner;
 };
+<<<<<<< HEAD:src/common/components/market.h
 
 struct TradePartners : std::vector<entt::entity> {};
+== == == =
+>>>>>>> pr_254:src/common/components/economy.h
 }  // namespace cqsp::common::components

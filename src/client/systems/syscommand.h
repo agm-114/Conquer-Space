@@ -5,23 +5,29 @@
 
 #include "client/systems/sysgui.h"
 
-namespace conquerspace {
-namespace client {
-namespace systems {
-class SysCommand : public SysUserInterface {
- public:
-    explicit SysCommand(conquerspace::engine::Application& app) : SysUserInterface(app) {}
+<<<<<<< HEAD namespace conquerspace {
+    namespace client {
+    namespace systems {
+    == == == = namespace cqsp::client::systems {
+>>>>>>> pr_254
+        class SysCommand : public SysUserInterface {
+         public:
+            explicit SysCommand(conquerspace::engine::Application& app) : SysUserInterface(app) {}
 
-    void Init();
-    void DoUI(int delta_time);
-    void DoUpdate(int delta_time);
+            void Init();
+            void DoUI(int delta_time);
+            void DoUpdate(int delta_time);
 
-    bool to_see = false;
+            bool to_see = false;
 
- private:
-    int selected_index = 0;
-    entt::entity selected_planet = entt::null;
-};
-}  // namespace systems
-}  // namespace client
-}  // namespace conquerspace
+         private:
+            int selected_index = 0;
+            entt::entity selected_planet = entt::null;
+        };
+<<<<<<< HEAD
+    }  // namespace systems
+    }  // namespace client
+    }  // namespace conquerspace
+    == == == =
+}  // namespace cqsp::client::systems
+>>>>>>> pr_254

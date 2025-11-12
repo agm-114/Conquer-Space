@@ -20,6 +20,10 @@
 
 #include "common/universe.h"
 
-namespace cqsp::common::loading {
-void LoadNameLists(cqsp::common::Universe&, Hjson::Value&);
+<<<<<<< HEAD:src/common/loading/loadnames.h namespace cqsp::common::loading {
+    void LoadNameLists(cqsp::common::Universe&, Hjson::Value&);
 }  // namespace cqsp::common::loading
+== == == = namespace cqsp::common::systems::loading {
+    void LoadNameLists(Universe&, Hjson::Value&);
+}  // namespace cqsp::common::systems::loading
+>>>>>>> pr_254:src/common/systems/loading/loadnames.h

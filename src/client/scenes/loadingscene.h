@@ -25,44 +25,52 @@
 #include "client/scenes/scene.h"
 #include "engine/asset/assetloader.h"
 
-namespace cqsp::client::scene {
-// First loading scene when the game starts
-class LoadingScene : public ClientScene {
- public:
-    explicit LoadingScene(engine::Application& app);
-    ~LoadingScene();
+<<<<<<< HEAD namespace cqsp::client::scene {
+    // First loading scene when the game starts
+    class LoadingScene : public ClientScene {
+        == == == = namespace cqsp::scene {
+            // First loading scene when the game starts
+            class LoadingScene : public client::Scene {
+>>>>>>> pr_254
+             public:
+                explicit LoadingScene(engine::Application& app);
+                ~LoadingScene();
 
-    void Init();
-    void Update(float deltaTime);
-    void Ui(float deltaTime);
-    void Render(float deltaTime);
+                void Init();
+                void Update(float deltaTime);
+                void Ui(float deltaTime);
+                void Render(float deltaTime);
 
-    /*
+                /*
     * Function to load in a thread.
     */
-    void LoadResources();
+                void LoadResources();
 
- private:
-    float windowWidth, windowHeight;
+             private:
+                float windowWidth, windowHeight;
 
-    std::atomic<bool> m_done_loading;
+                std::atomic<bool> m_done_loading;
 
-    std::unique_ptr<std::thread> thread;
+                std::unique_ptr<std::thread> thread;
 
-    std::atomic<float> percentage;
+                std::atomic<float> percentage;
 
-    asset::AssetLoader assetLoader;
+                asset::AssetLoader assetLoader;
 
-    Rml::ElementDocument* document;
+                Rml::ElementDocument* document;
 
-    void LoadFont();
-    bool need_halt = false;
+                void LoadFont();
+                bool need_halt = false;
 
-    struct LoadingDataModel {
-        int current = 0;
-        int max = 0;
-    } loading_data;
+                struct LoadingDataModel {
+                    int current = 0;
+                    int max = 0;
+                } loading_data;
 
-    Rml::DataModelHandle model_handle;
-};
-}  // namespace cqsp::client::scene
+                Rml::DataModelHandle model_handle;
+            };
+<<<<<<< HEAD
+        }  // namespace cqsp::client::scene
+        == == == =
+    }  // namespace cqsp::scene
+>>>>>>> pr_254

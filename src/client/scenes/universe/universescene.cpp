@@ -53,8 +53,11 @@
 #include "tracy/Tracy.hpp"
 
 // If the game is paused or not, like when escape is pressed
+namespace cqsp::scene {
 bool game_halted = false;
+}  // namespace cqsp::scene
 
+<<<<<<< HEAD
 namespace cqsp::client::scene {
 
 namespace components = common::components;
@@ -63,15 +66,31 @@ namespace systems = client::systems;
 
 using common::systems::simulation::Simulation;
 
-UniverseScene::UniverseScene(engine::Application& app) : ClientScene(app) {}
+UniverseScene::UniverseScene(engine::Application& app) : ClientScene(app) {} == == == = namespace common = cqsp::common;
+namespace components = common::components;
+namespace bodies = components::bodies;
+namespace client = cqsp::client;
+namespace systems = client::systems;
+using common::systems::simulation::Simulation;
+using cqsp::scene::UniverseScene;
+using entt::entity;
+
+UniverseScene::UniverseScene(engine::Application& app) : client::Scene(app) {}
+>>>>>>> pr_254
 
 void UniverseScene::Init() {
     ZoneScoped;
 
+<<<<<<< HEAD
     simulation = std::make_unique<Simulation>(dynamic_cast<ConquerSpace*>(GetApp().GetGame())->GetGame());
     simulation->CreateSystems();
 
     system_renderer = std::make_unique<systems::SysStarSystemRenderer>(GetUniverse(), GetApp());
+    == == == = simulation =
+                 std::make_unique<Simulation>(dynamic_cast<client::ConquerSpace*>(GetApp().GetGame())->GetGame());
+
+    system_renderer = new systems::SysStarSystemRenderer(GetUniverse(), GetApp());
+>>>>>>> pr_254
     system_renderer->Initialize();
 
     GetUniverse().ctx().emplace<client::ctx::PauseOptions>();
@@ -84,19 +103,31 @@ void UniverseScene::Init() {
     AddUISystem<systems::SysStarSystemTree>();
     AddUISystem<systems::SysPauseMenu>();
     AddUISystem<systems::SysDebugMenu>();
+<<<<<<< HEAD
 
+    == == == =
+                 //AddUISystem<cqsps::SysCommand>();
+        AddUISystem<systems::CivilizationInfoPanel>();
+>>>>>>> pr_254
     AddUISystem<systems::SpaceshipWindow>();
     //AddUISystem<cqsps::SysFieldViewer>();
     //AddUISystem<cqsps::SysTechnologyProjectViewer>();
     //AddUISystem<cqsps::SysTechnologyViewer>();
     AddUISystem<systems::SysProvinceInformation>();
     AddUISystem<systems::SysOrbitFilter>();
+<<<<<<< HEAD
     AddUISystem<systems::ImGuiInterface>();
     AddUISystem<systems::SysPlanetMarketInformation>();
 
     AddUISystem<systems::gui::SysEvent>();
     simulation->Init();
     simulation->tick();  // Why do we tick the simulation once here? Idk
+    == == == =
+                 //AddUISystem<cqsps::SysPlanetMarketInformation>();
+
+        AddUISystem<systems::gui::SysEvent>();
+    simulation->tick();
+>>>>>>> pr_254
 
     AddRmlUiSystem<systems::rmlui::TurnSaveWindow>();
 }
@@ -194,17 +225,33 @@ void UniverseScene::ToggleTick() {
     pause_opt.to_tick = !pause_opt.to_tick;
 }
 
+<<<<<<< HEAD
 entt::entity GetCurrentViewingPlanet(common::Universe& universe) {
     return universe.view<systems::FocusedPlanet>().front();
 }
 
 void SeePlanet(common::Universe& universe, entt::entity ent) {
+    == == == = namespace cqsp::scene {entt::entity GetCurrentViewingPlanet(common::Universe & universe) {
+                 return universe.view<client::systems::FocusedPlanet>().front();
+}
+
+void SeePlanet(common::Universe& universe, entity ent) {
+>>>>>>> pr_254
     universe.clear<systems::FocusedPlanet>();
     universe.emplace<systems::FocusedPlanet>(ent);
 }
 
 void SetGameHalted(bool b) { game_halted = b; }
+<<<<<<< HEAD
 
 bool IsGameHalted() { return game_halted; }
 
 }  // namespace cqsp::client::scene
+== == == =
+
+             bool IsGameHalted() {
+    return game_halted;
+}
+}  // namespace cqsp::scene
+
+>>>>>>> pr_254

@@ -19,10 +19,13 @@
 #include "common/systems/isimulationsystem.h"
 
 namespace cqsp::common::systems {
+<<<<<<< HEAD:src/common/systems/economy/sysproduction.h
 class SysProduction : public ISimulationSystem {
- public:
-    explicit SysProduction(Game& game) : ISimulationSystem(game) {}
-    void DoSystem() override;
-    int Interval() override { return components::StarDate::DAY; }
-};
+    == == == = class SysNavyControl : public ISimulationSystem {
+>>>>>>> pr_254:src/common/systems/navy/sysnavy.h
+     public:
+        explicit SysProduction(Game& game) : ISimulationSystem(game) {}
+        void DoSystem() override;
+        int Interval() override { return components::StarDate::DAY; }
+    };
 }  // namespace cqsp::common::systems
