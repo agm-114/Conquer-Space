@@ -21,9 +21,15 @@
 #include "common/components/coordinates.h"
 #include "common/universe.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD:src/common/actions/cityactions.h namespace cqsp::common::actions {
+    Node
+    CreateCity(Node& planet, double lat, double longi);
+Node CreateCity(Node& planet, components::types::SurfaceCoordinate coords);
+== == == = namespace cqsp::common::actions {
     Node CreateCity(Node & planet, double lat, double longi);
     Node CreateCity(Node & planet, components::types::SurfaceCoordinate coords);
+>>>>>>> pr-309
 }  // namespace cqsp::common::actions
 == == == = namespace cqsp::common::systems::actions {
     entt::entity CreateCity(Universe & universe, entt::entity planet, double lat, double longi);

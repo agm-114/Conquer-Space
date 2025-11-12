@@ -199,10 +199,16 @@ void FunctionCivilizationGen(Universe& universe, ScriptInterface& script_engine)
             REGISTER_FUNCTION("add_planet_habitation",
                               [&](entt::entity planet) { universe.emplace<Habitation>(planet); });
 
+<<<<<<< HEAD
             REGISTER_FUNCTION("add_planet_settlement", [&](entt::entity planet, double lat, double longi) {
                 Node planet_node(universe, planet);
                 return actions::CreateCity(planet_node, lat, longi);
             });
+            == == == = REGISTER_FUNCTION("add_planet_settlement", [&](entt::entity planet, double lat, double longi) {
+                Node planet_node(universe, planet);
+                return actions::CreateCity(planet_node, lat, longi);
+            });
+>>>>>>> pr-309
 }
 
 void FunctionEconomy(Universe& universe, ScriptInterface& script_engine) {
@@ -478,8 +484,27 @@ void FunctionEconomy(Universe& universe, ScriptInterface& script_engine) {
                 });
             }
 
+<<<<<<< HEAD
             void FunctionEvent(cqsp::common::Universe & universe, cqsp::scripting::ScriptInterface & script_engine) {
                 CREATE_NAMESPACE(core);
+                == == ==
+                    = REGISTER_FUNCTION("get_city", [&](const std::string& planet) { return universe.cities[planet]; });
+            }
+
+            void FunctionShips(cqsp::common::Universe & universe, ScriptInterface & script_engine) {
+                CREATE_NAMESPACE(core);
+
+                REGISTER_FUNCTION("create_ship", [&](entt::entity civ, entt::entity orbit, entt::entity starsystem) {
+                    Node civ_node(universe, civ);
+                    Node orbit_node(universe, orbit);
+                    Node starsystem_node(universe, orbit);
+                    return actions::CreateShip(civ_node, orbit_node, starsystem_node);
+                });
+            }
+
+            void FunctionEvent(Universe & universe, ScriptInterface & script_engine) {
+                CREATE_NAMESPACE(core);
+>>>>>>> pr-309
 
     REGISTER_FUNCTION("push_event", [&](entt::entity entity, sol::table event_table) {
                     auto& queue = universe.get_or_emplace<cqsp::common::event::EventQueue>(entity);
@@ -861,9 +886,18 @@ void FunctionScience(Universe& universe, ScriptInterface& script_engine) {
                                     REGISTER_FUNCTION("create_lab",
                                                       [&]() { return systems::science::CreateLab(universe); });
 
+<<<<<<< HEAD
                                     REGISTER_FUNCTION("add_science", [&](entity lab, entity research, double progress) {
                                         systems::science::AddScienceResearch(universe, lab, research, progress);
                                     });
+                                    == == == = REGISTER_FUNCTION(
+                                                 "add_science",
+                                                 [&](entt::entity lab, entt::entity research, double progress) {
+                                                     Node lab_node(universe, lab);
+                                                     Node research_node(universe, research);
+                                                     actions::AddScienceResearch(lab_node, research_node, progress);
+                                                 });
+>>>>>>> pr-309
 
                                     REGISTER_FUNCTION("add_tech_progress", [&](entity entity) {
                                         universe.emplace<components::science::TechnologicalProgress>(entity);

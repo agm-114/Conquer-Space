@@ -20,8 +20,14 @@
 
 #include "common/universe.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD:src/common/actions/population/cityinformation.h namespace cqsp::common::actions { uint64_t GetCityPopulation(Node & city); }  // namespace cqsp::common::actions
-== == == = namespace cqsp::common::systems::loading {
+    == == ==
+    = namespace cqsp::common::systems::loading {
     void LoadProvinces(Universe & universe, const std::string& text);
 }
 >>>>>>> pr_254:src/common/systems/loading/loadprovinces.h
+== == == = namespace cqsp::common::actions {
+    uint64_t GetCityPopulation(Node & city);
+}  // namespace cqsp::common::actions
+>>>>>>> pr-309

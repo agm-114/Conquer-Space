@@ -18,28 +18,44 @@
 
 #include "common/components/science.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD:src/common/actions/science/labs.cpp namespace cqsp::common::actions {
-    Node CreateLab(Universe & universe) {
-        Node entity(universe);
-        // Create labs
-        entity.emplace<components::science::Lab>();
-        == == == = using cqsp::common::components::science::Lab;
-        using entt::entity;
+    Node
+    CreateLab(Universe& universe) {
+    Node entity(universe);
+    // Create labs
+    entity.emplace<components::science::Lab>();
+    == == == = using cqsp::common::components::science::Lab;
+    using entt::entity;
 
-        namespace cqsp::common::systems::science {
-        entity CreateLab(Universe& universe) {
-            entity entity = universe.create();
-            // Create labs
-            universe.emplace<Lab>(entity);
+    namespace cqsp::common::systems::science {
+    entity CreateLab(Universe& universe) {
+        entity entity = universe.create();
+        // Create labs
+        universe.emplace<Lab>(entity);
 >>>>>>> pr_254:src/common/systems/science/labs.cpp
+        return entity;
+    }
+
+    void AddScienceResearch(Node& lab, Node& research, double progress) {
+        // Add the things
+<<<<<<< HEAD:src/common/actions/science/labs.cpp
+        lab.get<components::science::Lab>().science_contribution[research] += progress;
+        == == == = universe.get<Lab>(lab).science_contribution[research] += progress;
+>>>>>>> pr_254:src/common/systems/science/labs.cpp
+    }
+    }  // namespace cqsp::common::actions
+    == == == = namespace cqsp::common::actions {
+        Node CreateLab(Universe & universe) {
+            Node entity(universe);
+            // Create labs
+            entity.emplace<components::science::Lab>();
             return entity;
         }
 
-        void AddScienceResearch(Node& lab, Node& research, double progress) {
+        void AddScienceResearch(Node & lab, Node & research, double progress) {
             // Add the things
-<<<<<<< HEAD:src/common/actions/science/labs.cpp
             lab.get<components::science::Lab>().science_contribution[research] += progress;
-            == == == = universe.get<Lab>(lab).science_contribution[research] += progress;
->>>>>>> pr_254:src/common/systems/science/labs.cpp
         }
-        }  // namespace cqsp::common::actions
+    }  // namespace cqsp::common::actions
+>>>>>>> pr-309
