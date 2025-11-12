@@ -22,119 +22,220 @@
 #include "common/util/paths.h"
 #include "common/util/uuid.h"
 
-namespace cqsp::client {
-
-LoadGameWindow::LoadGameWindow(engine::Application& app) : app(app) { InitializeDataModel(); }
+<<<<<<< HEAD
+<<<<<<< HEAD namespace cqsp::client {
+    LoadGameWindow::LoadGameWindow(engine::Application& app)
+    : app(app) {
+    InitializeDataModel();
+}
 
 void LoadGameWindow::ProcessEvent(Rml::Event& event) {
-    if (event.GetId() == Rml::EventId::Keydown) {
-        Rml::Input::KeyIdentifier key_identifier =
-            (Rml::Input::KeyIdentifier)event.GetParameter<int>("key_identifier", 0);
-        if (key_identifier == Rml::Input::KI_ESCAPE) {
-            Hide();
+    == == == = using cqsp::client::LoadGameWindow;
+
+    LoadGameWindow::LoadGameWindow(engine::Application & app) : app(app) { InitializeDataModel(); }
+
+    void LoadGameWindow::ProcessEvent(Rml::Event & event) {
+>>>>>>> pr_254
+        if (event.GetId() == Rml::EventId::Keydown) {
+            Rml::Input::KeyIdentifier key_identifier =
+                (Rml::Input::KeyIdentifier)event.GetParameter<int>("key_identifier", 0);
+            if (key_identifier == Rml::Input::KI_ESCAPE) {
+                Hide();
+            }
         }
-    }
-}
+        == == == = namespace cqsp::client {
+            LoadGameWindow::LoadGameWindow(engine::Application & app) : app(app) { InitializeDataModel(); }
 
-void LoadGameWindow::AddEventListeners() {
-    options_menu->AddEventListener(Rml::EventId::Click, this);
-    options_menu->AddEventListener(Rml::EventId::Keydown, this);
-    options_menu->AddEventListener(Rml::EventId::Submit, this);
-}
+            void LoadGameWindow::ProcessEvent(Rml::Event & event) {
+                if (event.GetId() == Rml::EventId::Keydown) {
+                    Rml::Input::KeyIdentifier key_identifier =
+                        (Rml::Input::KeyIdentifier)event.GetParameter<int>("key_identifier", 0);
+                    if (key_identifier == Rml::Input::KI_ESCAPE) {
+                        Hide();
+>>>>>>> pr-286
+                    }
 
-void LoadGameWindow::RemoveEventListeners() {
-    options_menu->RemoveEventListener(Rml::EventId::Click, this);
-    options_menu->RemoveEventListener(Rml::EventId::Keydown, this);
-    options_menu->RemoveEventListener(Rml::EventId::Submit, this);
-}
+<<<<<<< HEAD
+                    void LoadGameWindow::AddEventListeners() {
+                        options_menu->AddEventListener(Rml::EventId::Click, this);
+                        options_menu->AddEventListener(Rml::EventId::Keydown, this);
+                        options_menu->AddEventListener(Rml::EventId::Submit, this);
+                        == == == = void LoadGameWindow::AddEventListeners() {
+                            options_menu->AddEventListener(Rml::EventId::Click, this);
+                            options_menu->AddEventListener(Rml::EventId::Keydown, this);
+                            options_menu->AddEventListener(Rml::EventId::Submit, this);
+                        }
 
-void LoadGameWindow::InitializeDataModel() {
-    // Load saves
-    // List the files in the save directory
-    std::filesystem::path save_path = common::util::GetCqspSavePath();
-    // If the save path doesn't exist, then generate it
-    if (!std::filesystem::exists(save_path)) {
-        std::filesystem::create_directories(save_path);
-    }
-    std::filesystem::directory_iterator it(save_path);
-    for (const auto& entry : it) {
-        // Check if it has the meta file name
-        if (!entry.is_directory()) {
-            continue;
-        }
-        auto meta_file = entry.path() / "meta.hjson";
-        if (!std::filesystem::exists(meta_file)) {
-            continue;
-        }
-        Hjson::Value value = Hjson::UnmarshalFromFile(meta_file.string());
-        Hjson::Value def;
-        def["date"] = -1;
-        value = Hjson::Merge(def, value);
-        SaveGame save(entry.path().filename().string(), value["date"]);
-        save.path = (entry.path().string());
-        saves.push_back(save);
-    }
-    // Process all other information
-    Rml::DataModelConstructor constructor = GetApp().GetRmlUiContext()->CreateDataModel("load_game");
-    if (auto save_handle = constructor.RegisterStruct<SaveGame>()) {
-        save_handle.RegisterMember("country", &SaveGame::country);
-        save_handle.RegisterMember("date", &SaveGame::date);
-        save_handle.RegisterMember("path", &SaveGame::path);
-    }
-    constructor.RegisterArray<decltype(saves)>();
-    constructor.Bind("save_list", &saves);
-    //&LoadGame
-    constructor.BindEventCallback(
-        "LoadGame", [&](Rml::DataModelHandle handle, Rml::Event& /*ev*/, const Rml::VariantList& parameters) {
-            // Load the save file information and load into game
-            if (parameters.empty()) return;
+                        void LoadGameWindow::RemoveEventListeners() {
+                            options_menu->RemoveEventListener(Rml::EventId::Click, this);
+                            options_menu->RemoveEventListener(Rml::EventId::Keydown, this);
+                            options_menu->RemoveEventListener(Rml::EventId::Submit, this);
+                        }
 
-            auto name = (std::string)parameters[0].Get<std::string>();
-            SPDLOG_INFO("Loading save {}", name);
-            load_path = name;
-            to_load = true;
-            // Load the game and do some math
-            // How exactly to do so is a mystery
-            handle.DirtyAllVariables();
-        });
-}
+                        void LoadGameWindow::InitializeDataModel() {
+                            // Load saves
+                            // List the files in the save directory
+                            std::filesystem::path save_path = common::util::GetCqspSavePath();
+                            // If the save path doesn't exist, then generate it
+                            if (!std::filesystem::exists(save_path)) {
+                                std::filesystem::create_directories(save_path);
+                            }
+                            std::filesystem::directory_iterator it(save_path);
+                            for (const auto& entry : it) {
+                                // Check if it has the meta file name
+                                if (!entry.is_directory()) {
+                                    continue;
+>>>>>>> pr-286
+                                }
 
-void LoadGameWindow::Show() {
-    options_menu->Show();
-    options_menu->PullToFront();
-    options_menu->Focus();
-    options_menu->SetClass("visible", true);
-    options_menu->RemoveProperty("display");
-}
+                                void LoadGameWindow::RemoveEventListeners() {
+                                    options_menu->RemoveEventListener(Rml::EventId::Click, this);
+                                    options_menu->RemoveEventListener(Rml::EventId::Keydown, this);
+                                    options_menu->RemoveEventListener(Rml::EventId::Submit, this);
+                                }
 
-bool LoadGameWindow::Update() { return to_load; }
+                                void LoadGameWindow::InitializeDataModel() {
+                                    // Load saves
+                                    // List the files in the save directory
+                                    std::filesystem::path save_path = common::util::GetCqspSavePath();
+                                    // If the save path doesn't exist, then generate it
+                                    if (!std::filesystem::exists(save_path)) {
+                                        std::filesystem::create_directories(save_path);
+                                    }
+                                    std::filesystem::directory_iterator it(save_path);
+                                    for (const auto& entry : it) {
+                                        // Check if it has the meta file name
+                                        if (!entry.is_directory()) {
+                                            continue;
+                                        }
+                                        auto meta_file = entry.path() / "meta.hjson";
+                                        if (!std::filesystem::exists(meta_file)) {
+                                            continue;
+                                        }
+                                        Hjson::Value value = Hjson::UnmarshalFromFile(meta_file.string());
+                                        Hjson::Value def;
+                                        def["date"] = -1;
+                                        value = Hjson::Merge(def, value);
+                                        SaveGame save(entry.path().filename().string(), value["date"]);
+                                        save.path = (entry.path().string());
+                                        saves.push_back(save);
+                                    }
+                                    // Process all other information
+                                    Rml::DataModelConstructor constructor =
+                                        GetApp().GetRmlUiContext()->CreateDataModel("load_game");
+                                    if (auto save_handle = constructor.RegisterStruct<SaveGame>()) {
+                                        save_handle.RegisterMember("country", &SaveGame::country);
+                                        save_handle.RegisterMember("date", &SaveGame::date);
+                                        save_handle.RegisterMember("path", &SaveGame::path);
+                                    }
+                                    constructor.RegisterArray<decltype(saves)>();
+                                    constructor.Bind("save_list", &saves);
+                                    //&LoadGame
+                                    constructor.BindEventCallback(
+                                        "LoadGame", [&](Rml::DataModelHandle handle, Rml::Event& /*ev*/,
+                                                        const Rml::VariantList& parameters) {
+                                            // Load the save file information and load into game
+                                            if (parameters.empty()) return;
 
-void LoadGameWindow::Hide() { options_menu->SetProperty("display", "none"); }
+<<<<<<< HEAD
+                                            auto name = (std::string)parameters[0].Get<std::string>();
+                                            SPDLOG_INFO("Loading save {}", name);
+                                            load_path = name;
+                                            to_load = true;
+                                            // Load the game and do some math
+                                            // How exactly to do so is a mystery
+                                            handle.DirtyAllVariables();
+                                        });
+                                }
 
-void LoadGameWindow::Close() {
-    options_menu->RemoveEventListener(Rml::EventId::Click, this);
-    options_menu->RemoveEventListener(Rml::EventId::Keydown, this);
-    options_menu->RemoveEventListener(Rml::EventId::Submit, this);
-    options_menu->Close();
-}
+                                void LoadGameWindow::Show() {
+                                    options_menu->Show();
+                                    options_menu->PullToFront();
+                                    options_menu->Focus();
+                                    options_menu->SetClass("visible", true);
+                                    options_menu->RemoveProperty("display");
+                                }
 
-void LoadGameWindow::LoadDocument() {
-    options_menu = GetApp().LoadDocument(document_name);
-    AddEventListeners();
-    options_menu->PushToBack();
-}
+                                bool LoadGameWindow::Update() { return to_load; }
 
-void LoadGameWindow::ReloadDocument() {
-    options_menu = GetApp().ReloadDocument(document_name);
-    AddEventListeners();
-}
+                                void LoadGameWindow::Hide() { options_menu->SetProperty("display", "none"); }
 
-float LoadGameWindow::GetOpacity() { return 0.0f; }
+                                void LoadGameWindow::Close() {
+                                    options_menu->RemoveEventListener(Rml::EventId::Click, this);
+                                    options_menu->RemoveEventListener(Rml::EventId::Keydown, this);
+                                    options_menu->RemoveEventListener(Rml::EventId::Submit, this);
+                                    options_menu->Close();
+                                }
 
-void LoadGameWindow::PushToBack() {}
+                                void LoadGameWindow::LoadDocument() {
+                                    options_menu = GetApp().LoadDocument(document_name);
+                                    AddEventListeners();
+                                    options_menu->PushToBack();
+                                }
 
-void LoadGameWindow::GetAllGames() {}
+                                void LoadGameWindow::ReloadDocument() {
+                                    options_menu = GetApp().ReloadDocument(document_name);
+                                    AddEventListeners();
+                                }
 
-std::string LoadGameWindow::GetSaveDir() { return load_path; }
+                                float LoadGameWindow::GetOpacity() { return 0.0f; }
+<<<<<<< HEAD
 
-}  // namespace cqsp::client
+                                void LoadGameWindow::PushToBack() {}
+
+                                void LoadGameWindow::GetAllGames() {}
+
+                                std::string LoadGameWindow::GetSaveDir() { return load_path; }
+
+                            }  // namespace cqsp::client
+                            == == == =
+
+                                         void LoadGameWindow::PushToBack() {}
+
+                            void LoadGameWindow::GetAllGames() {}
+
+                            std::string LoadGameWindow::GetSaveDir() { return load_path; }
+
+
+
+>>>>>>> pr_254
+                            == == == = void LoadGameWindow::Show() {
+                                options_menu->Show();
+                                options_menu->PullToFront();
+                                options_menu->Focus();
+                                options_menu->SetClass("visible", true);
+                                options_menu->RemoveProperty("display");
+                            }
+
+                            bool LoadGameWindow::Update() { return to_load; }
+
+                            void LoadGameWindow::Hide() { options_menu->SetProperty("display", "none"); }
+
+                            void LoadGameWindow::Close() {
+                                options_menu->RemoveEventListener(Rml::EventId::Click, this);
+                                options_menu->RemoveEventListener(Rml::EventId::Keydown, this);
+                                options_menu->RemoveEventListener(Rml::EventId::Submit, this);
+                                options_menu->Close();
+                            }
+
+                            void LoadGameWindow::LoadDocument() {
+                                options_menu = GetApp().LoadDocument(document_name);
+                                AddEventListeners();
+                                options_menu->PushToBack();
+                            }
+
+                            void LoadGameWindow::ReloadDocument() {
+                                options_menu = GetApp().ReloadDocument(document_name);
+                                AddEventListeners();
+                            }
+
+                            float LoadGameWindow::GetOpacity() { return 0.0f; }
+
+                            void LoadGameWindow::PushToBack() {}
+
+                            void LoadGameWindow::GetAllGames() {}
+
+                            std::string LoadGameWindow::GetSaveDir() { return load_path; }
+
+                        }  // namespace cqsp::client
+>>>>>>> pr-286

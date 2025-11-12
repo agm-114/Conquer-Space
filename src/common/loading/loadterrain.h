@@ -20,6 +20,15 @@
 
 #include "common/universe.h"
 
-namespace cqsp::common::loading {
-void LoadTerrainData(cqsp::common::Universe&, Hjson::Value&);
+<<<<<<< HEAD:src/common/loading/loadterrain.h namespace cqsp::common::loading {
+    < < < < < < < <
+        HEAD : src / common / loading / loadterrain.h void LoadTerrainData(cqsp::common::Universe&, Hjson::Value&);
+    == == == == void LoadNameLists(cqsp::common::Universe&, Hjson::Value&);
+    >>>>>>>> pr - 292 : src / common / loading / loadnames.h
 }  // namespace cqsp::common::loading
+== == == = namespace cqsp::common::systems::loading {
+    void LoadProvinces(Universe & universe, entt::entity planet, const std::string& text);
+    void LoadAdjProvinces(Universe & universe, Hjson::Value & adjacency_map);
+    void LoadAllProvinces(Universe & universe);
+}  // namespace cqsp::common::systems::loading
+>>>>>>> pr-290:src/common/systems/loading/loadprovinces.h

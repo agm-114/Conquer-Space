@@ -18,16 +18,59 @@
 
 #include "common/components/science.h"
 
-namespace cqsp::common::actions {
-Node CreateLab(Universe& universe) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD:src/common/actions/science/labs.cpp namespace cqsp::common::actions {
+    Node
+    CreateLab(Universe& universe) {
     Node entity(universe);
     // Create labs
     entity.emplace<components::science::Lab>();
-    return entity;
-}
+    == == == = using cqsp::common::components::science::Lab;
+    using entt::entity;
 
-void AddScienceResearch(Node& lab, Node& research, double progress) {
-    // Add the things
-    lab.get<components::science::Lab>().science_contribution[research] += progress;
-}
-}  // namespace cqsp::common::actions
+    namespace cqsp::common::systems::science {
+    entity CreateLab(Universe& universe) {
+        entity entity = universe.create();
+        // Create labs
+        universe.emplace<Lab>(entity);
+>>>>>>> pr_254:src/common/systems/science/labs.cpp
+        return entity;
+    }
+
+    void AddScienceResearch(Node& lab, Node& research, double progress) {
+        // Add the things
+<<<<<<< HEAD:src/common/actions/science/labs.cpp
+        lab.get<components::science::Lab>().science_contribution[research] += progress;
+        == == == = universe.get<Lab>(lab).science_contribution[research] += progress;
+>>>>>>> pr_254:src/common/systems/science/labs.cpp
+    }
+    }  // namespace cqsp::common::actions
+    == == == = namespace cqsp::common::actions {
+        Node CreateLab(Universe & universe) {
+            Node entity(universe);
+            // Create labs
+            entity.emplace<components::science::Lab>();
+            return entity;
+        }
+
+        void AddScienceResearch(Node & lab, Node & research, double progress) {
+            // Add the things
+            lab.get<components::science::Lab>().science_contribution[research] += progress;
+        }
+    }  // namespace cqsp::common::actions
+>>>>>>> pr-309
+    == == == = namespace cqsp::common::actions {
+        entt::entity CreateLab(Universe & universe) {
+            entt::entity entity = universe.create();
+            // Create labs
+            universe.emplace<components::science::Lab>(entity);
+            return entity;
+        }
+
+        void AddScienceResearch(Universe & universe, entt::entity lab, entt::entity research, double progress) {
+            // Add the things
+            universe.get<components::science::Lab>(lab).science_contribution[research] += progress;
+        }
+    }  // namespace cqsp::common::actions
+>>>>>>> pr-292

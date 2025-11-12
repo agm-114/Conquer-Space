@@ -30,10 +30,15 @@ enum UnitType {
 enum Distance { LightYear, AstronomicalUnit, Kilometer, Meter, Centimeter, Millimeter };
 
 typedef double astronomical_unit;
+<<<<<<< HEAD
 typedef double light_year;
 typedef double kilometer;
-typedef double solar_mass;
+== == == =
+>>>>>>> pr_4
+             typedef double solar_mass;
 typedef double degree;
+typedef double days;
+typedef double years;
 typedef double radian;
 typedef double meter_cube;
 typedef double kilogram;
@@ -41,6 +46,7 @@ typedef double earth_masses;
 typedef double joule;
 typedef double second;
 
+<<<<<<< HEAD
 // Constants
 constexpr double PI = 3.14159265358979323846;
 constexpr double TWOPI = PI * 2;
@@ -103,3 +109,10 @@ inline constexpr double operator""_au(const long double au) { return toKm(au); }
 #undef floatmod
 #endif  // floatmod
 }  // namespace cqsp::common::components::types
+== == == = const double PI = 3.1415926535;
+const double TWOPI = 6.283185307;
+}  // namespace types
+}  // namespace components
+}  // namespace common
+}  // namespace conquerspace
+>>>>>>> pr_4

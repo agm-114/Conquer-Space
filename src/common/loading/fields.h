@@ -20,7 +20,11 @@
 
 #include "common/universe.h"
 
-namespace cqsp::common::loading {
-void LoadFields(Universe& universe, Hjson::Value& hjson);
-Hjson::Value WriteFields(Universe& universe);
+<<<<<<< HEAD:src/common/loading/fields.h namespace cqsp::common::loading {
+    void LoadFields(Universe & universe, Hjson::Value & hjson);
+    Hjson::Value WriteFields(Universe & universe);
 }  // namespace cqsp::common::loading
+== == == = namespace cqsp::common::systems::actions {
+    entt::entity CreateCity(Universe & universe, entt::entity planet, double lat, double longi);
+}  // namespace cqsp::common::actions
+>>>>>>> pr-290:src/common/systems/actions/cityactions.h

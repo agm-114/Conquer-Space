@@ -19,8 +19,10 @@
 #include "common/components/units.h"
 #include "common/loading/loadsatellites.h"
 
-using namespace cqsp::common::loading;            // NOLINT
-using namespace cqsp::common::components::types;  // NOLINT
+<<<<<<< HEAD:test/common/systems/satelliteloading_test.cpp using namespace cqsp::common::loading;           // NOLINT
+== == == = using namespace cqsp::common::loading;  // NOLINT
+>>>>>>> pr-292:test/common/systems/satelliteloadingtest.cpp
+using namespace cqsp::common::components::types;   // NOLINT
 
 TEST(Common_Loading_Satellites, GetEpochYearTest) {
     EXPECT_EQ(GetEpochYear(24), 2024);

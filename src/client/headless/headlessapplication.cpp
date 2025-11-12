@@ -25,93 +25,127 @@
 #include "client/headless/headlessluafunctions.h"
 #include "client/headless/loadluafile.h"
 #include "common/util/logging.h"
+<<<<<<< HEAD
 #include "common/util/string.h"
+    == == ==
+    =
+#include "common/util/strip.h"
+        >>>>>>> pr - 288
 
-namespace cqsp::client::headless {
+<<<<<<< HEAD
+                    namespace cqsp::client::headless {
 
-using common::systems::simulation::Simulation;
+    using common::systems::simulation::Simulation;
+    == == == =
 
-asset::AssetManager& HeadlessApplication::GetAssetManager() { return asset_manager; }
+                 namespace cqsp::client::headless {
+        using common::systems::simulation::Simulation;
 
-ConquerSpace& HeadlessApplication::GetGame() { return conquer_space; }
+        asset::AssetManager& HeadlessApplication::GetAssetManager() { return asset_manager; }
 
-HeadlessApplication::HeadlessApplication() : asset_loader(asset::AssetOptions(false)) {}
+        ConquerSpace& HeadlessApplication::GetGame() { return conquer_space; }
+>>>>>>> pr-286
 
-int HeadlessApplication::run() {
-    // Load data
-    engine::engine_logger = common::util::make_logger("app", true);
-    auto g_logger = common::util::make_logger("game", true);
-    spdlog::set_default_logger(g_logger);
+        asset::AssetManager& HeadlessApplication::GetAssetManager() { return asset_manager; }
 
-    std::cout << "Loading game data...\n";
-    asset_loader.manager = &asset_manager;
-    asset_loader.LoadMods();
+        ConquerSpace& HeadlessApplication::GetGame() { return conquer_space; }
 
-    // Add lua functions
-    LoadHeadlessFunctions(*this);
+<<<<<<< HEAD
+        HeadlessApplication::HeadlessApplication()
+            : asset_loader(asset::AssetOptions(false)) {} == == ==
+            = int HeadlessApplication::run() {
+            // Load data
+            engine::engine_logger = common::util::make_logger("app", true);
+            auto g_logger = common::util::make_logger("game", true);
+            spdlog::set_default_logger(g_logger);
+>>>>>>> pr-286
 
-    while (true) {
-        std::cout << "> ";
-        std::string line;
-        std::getline(std::cin, line);
-        // Now we parse the command line depending on the mode
-        if (!line.empty() && (line[0] == '@' || (line[0] == '-' && line[1] == '-'))) {
-            // Let's split the arguments
-            // Let's just get the first space
-            std::vector<std::string> arguments;
-            if (line.find(' ') != std::string::npos) {
-                std::string arg_string = line.substr(line.find(' '), std::string::npos);
-                arg_string = util::strip(arg_string);
-                // Now we have to iterate forward and find any quotation marks...
-                arguments = util::split(arg_string, " ");
-                line = line.substr(0, line.find(' '));
+            int HeadlessApplication::run() {
+                // Load data
+                engine::engine_logger = common::util::make_logger("app", true);
+                auto g_logger = common::util::make_logger("game", true);
+                spdlog::set_default_logger(g_logger);
+
+                std::cout << "Loading game data...\n";
+                asset_loader.manager = &asset_manager;
+                asset_loader.LoadMods();
+
+                // Add lua functions
+                LoadHeadlessFunctions(*this);
+
+                while (true) {
+                    std::cout << "> ";
+                    std::string line;
+                    std::getline(std::cin, line);
+                    // Now we parse the command line depending on the mode
+                    if (!line.empty() && (line[0] == '@' || (line[0] == '-' && line[1] == '-'))) {
+                        // Let's split the arguments
+                        // Let's just get the first space
+                        std::vector<std::string> arguments;
+                        if (line.find(' ') != std::string::npos) {
+                            std::string arg_string = line.substr(line.find(' '), std::string::npos);
+                            arg_string = util::strip(arg_string);
+                            // Now we have to iterate forward and find any quotation marks...
+<<<<<<< HEAD
+                            arguments = util::split(arg_string, " ");
+                            == == == = argument = util::split(arg_string, " ");
+>>>>>>> pr-294
+                            line = line.substr(0, line.find(' '));
+                        }
+                        if (IsCommandComment(line, arguments, "generate")) {
+                            generate(*this);
+                            // Now generate the simulation
+                        } else if (IsCommandComment(line, arguments, "loadluafile")) {
+                            loadluafile(*this, arguments);
+                        } else if (IsCommandComment(line, arguments, "exit")) {
+                            break;
+                        } else if (line != "--") {
+                            // Then it doesn't exist
+                            std::cout << "Unknown command \'" << line << "\'!\n";
+                        }
+                    } else {
+                        // Lua scripting
+                        // TODO(#282): Print out variable if it's not assigned to something
+                        try {
+                            conquer_space.GetScriptInterface().RunScript(line);
+                        } catch (sol::error& error) {
+                            // since it's automatically logged we can ignore it
+                            ;
+                        }
+                    }
+                }
+                return 0;
             }
-            if (IsCommandComment(line, arguments, "generate")) {
-                generate(*this);
-                // Now generate the simulation
-            } else if (IsCommandComment(line, arguments, "loadluafile")) {
-                loadluafile(*this, arguments);
-            } else if (IsCommandComment(line, arguments, "exit")) {
-                break;
-            } else if (line != "--") {
-                // Then it doesn't exist
-                std::cout << "Unknown command \'" << line << "\'!\n";
-            }
-        } else {
-            // Lua scripting
-            // TODO(#282): Print out variable if it's not assigned to something
-            try {
-                conquer_space.GetScriptInterface().RunScript(line);
-            } catch (sol::error& error) {
-                // since it's automatically logged we can ignore it
-                ;
-            }
-        }
-    }
-    return 0;
-}
 
-/*
+            /*
 * Initializes the pointer for the simulation
 */
-void HeadlessApplication::InitSimulationPtr() {
-    // I am not happy with this interface
-    simulation = std::make_unique<Simulation>(GetGame().GetGame());
-}
+<<<<<<< HEAD
+            void HeadlessApplication::InitSimulationPtr() {
+                // I am not happy with this interface
+                simulation = std::make_unique<Simulation>(GetGame().GetGame());
+            }
 
-Simulation& HeadlessApplication::GetSimulation() { return *(simulation); }
+            Simulation& HeadlessApplication::GetSimulation() { return *(simulation); }
 
-bool HeadlessApplication::IsCommandComment(const std::string& line, const std::vector<std::string>& arguments,
-                                           const std::string& command) {
-    if (line != "--") {
-        return false;
-    }
-    if (line == ("@" + command)) {
-        return true;
-    }
-    if (arguments.empty()) {
-        return false;
-    }
-    return (arguments[0] == command);
-}
-}  // namespace cqsp::client::headless
+            bool HeadlessApplication::IsCommandComment(
+                const std::string& line, const std::vector<std::string>& arguments, const std::string& command) {
+                if (line != "--") {
+                    return false;
+                }
+                if (line == ("@" + command)) {
+                    return true;
+                }
+                if (arguments.empty()) {
+                    return false;
+                }
+                return (arguments[0] == command);
+            }
+            == == == = void HeadlessApplication::InitSimulationPtr() {
+                // I am not happy with this interface
+                simulation = std::make_unique<Simulation>(GetGame().GetGame());
+            }
+
+            Simulation& HeadlessApplication::GetSimulation() { return *(simulation.get()); }
+>>>>>>> pr-286
+        }  // namespace cqsp::client::headless

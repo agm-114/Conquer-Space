@@ -19,8 +19,8 @@
 #include <gtest/gtest.h>
 
 #include <filesystem>
-#include <numbers>
 #include <memory>
+#include <numbers>
 
 #include <glm/gtx/vector_angle.hpp>
 
@@ -32,11 +32,11 @@
 #include "common/loading/hjsonloader.h"
 #include "common/loading/planetloader.h"
 #include "common/simulation.h"
+#include "common/systems/movement/sysorbit.h"
 #include "common/util/paths.h"
 #include "engine/asset/assetloader.h"
 #include "engine/asset/packageindex.h"
 #include "engine/asset/vfs/nativevfs.h"
-#include "common/systems/movement/sysorbit.h"
 
 class ManeuverTestSimulation : public cqsp::common::systems::simulation::Simulation {
  public:

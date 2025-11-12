@@ -1,5 +1,9 @@
 /* Conquer Space
+<<<<<<< HEAD
  * Copyright (C) 2021-2025 Conquer Space
+=======
+ * Copyright (C) 2021-2023 Conquer Space
+>>>>>>> pr-292
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,20 +18,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+<<<<<<< HEAD
+<<<<<<<<HEAD : src / common / actions / cityactions.cpp
 #include "common/actions/cityactions.h"
+        == == == ==
+#include "common/loading/timezoneloader.h"
+        >>>>>>>> pr -
+        292 : src / common / loading / timezoneloader.cpp ==
+    == ==
+    =
+#include "common/actions/cityactions.h"
+        >>>>>>> pr-292
 
 #include "common/components/coordinates.h"
 #include "common/components/name.h"
 #include "common/components/surface.h"
 
-namespace cqsp::common::actions {
+        <<<<<<< HEAD < < < < < < < <
+        HEAD : src / common / actions /
+               cityactions.cpp namespace cqsp::common::actions {
 
-Node CreateCity(Node& planet, components::types::SurfaceCoordinate coords) {
-    Node city_node(planet.universe());
-    city_node.emplace<components::Settlement>();
-    city_node.emplace<components::types::SurfaceCoordinate>(coords);
-    planet.get_or_emplace<components::Habitation>().settlements.push_back(city_node);
-    return city_node;
+                   Node CreateCity(Node & planet,
+                                   components::types::SurfaceCoordinate coords) {Node city_node(planet.universe());
+city_node.emplace<components::Settlement>();
+city_node.emplace<components::types::SurfaceCoordinate>(coords);
+planet.get_or_emplace<components::Habitation>().settlements.push_back(city_node);
+return city_node;
 }
 
 Node CreateCity(Node& planet, double lat, double longi) {
@@ -35,3 +51,47 @@ Node CreateCity(Node& planet, double lat, double longi) {
 }
 
 }  // namespace cqsp::common::actions
+== == == ==
+    namespace cqsp::common::loading {bool TimezoneLoader::LoadValue(
+        const Hjson::Value& values, entt::entity entity) {// Read timezones
+                                                          double offset = values["offset"].to_double();
+universe.emplace<components::TimeZone>(entity, offset);
+universe.time_zones[universe.get<components::Identifier>(entity).identifier] = entity;
+return true;
+}
+
+void TimezoneLoader::PostLoad(const entt::entity& entity) {}
+}  // namespace cqsp::common::loading
+>>>>>>>> pr - 292 : src / common / loading / timezoneloader.cpp == == ==
+    = < < < < < < < < HEAD : src / common / systems / actions / cityactions.cpp namespace components =
+          cqsp::common::components;
+namespace types = components::types;
+using components::Habitation;
+using components::Settlement;
+using types::SurfaceCoordinate;
+== == == == namespace cqsp::common::actions {
+    >>>>>>>> pr - 292 : src / common / actions /
+                        cityactions.cpp
+
+                        using entt::entity;
+
+    entity cqsp::common::systems::actions::CreateCity(Universe & universe, entity planet, double lat, double longi) {
+        entity settlement = universe.create();
+        universe.emplace<Settlement>(settlement);
+        universe.emplace<SurfaceCoordinate>(settlement, lat, longi);
+
+        // Add to planet list
+
+        if (universe.all_of<Habitation>(planet)) {
+            universe.get<Habitation>(planet).settlements.push_back(settlement);
+        } else {
+            universe.emplace<Habitation>(planet);
+            universe.get<Habitation>(planet).settlements.push_back(settlement);
+        }
+
+        return settlement;
+    }
+    < < < < < < < < HEAD : src / common / systems / actions / cityactions.cpp == == == ==
+}  // namespace cqsp::common::actions
+>>>>>>>> pr - 292 : src / common / actions / cityactions.cpp
+>>>>>>> pr-292

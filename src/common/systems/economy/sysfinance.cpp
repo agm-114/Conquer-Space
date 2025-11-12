@@ -18,10 +18,28 @@
 
 #include "common/components/market.h"
 
-namespace cqsp::common::systems {
+namespace components = cqsp::common::components;
+using components::Wallet;
+using cqsp::common::systems::SysWalletReset;
+
 void SysWalletReset::DoSystem() {
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
     for (Node wallet_node : GetUniverse().nodes<components::Wallet>()) {
         wallet_node.get<components::Wallet>().Reset();
+        == == == = for (entt::entity entity : GetUniverse().view<Wallet>()) {
+            GetUniverse().get<Wallet>(entity).Reset();
+>>>>>>> pr_254
+        }
+        == == == = for (Node wallet_node : GetUniverse().nodes<components::Wallet>()) {
+            wallet_node.get<components::Wallet>().Reset();
+>>>>>>> pr-303
+        }
+        == == == = auto view = GetUniverse().view<components::Wallet>();
+        for (entt::entity entity : view) {
+            GetUniverse().get<components::Wallet>(entity).Reset();
+        }
     }
-}
 }  // namespace cqsp::common::systems
+>>>>>>> pr-290

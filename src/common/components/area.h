@@ -18,32 +18,46 @@
 
 #include <vector>
 
+<<<<<<< HEAD
 #include <entt/entt.hpp>
 
-namespace cqsp::common::components {
-struct IndustrialZone {
-    std::vector<entt::entity> industries;
-};
+    <<<<<<< HEAD namespace cqsp::common::components {
+    == == == = namespace cqsp {
+        namespace common {
+        namespace components {
+>>>>>>> pr_191
+        struct IndustrialZone {
+            std::vector<entt::entity> industries;
+        };
+        == == == = namespace cqsp::common::components {
+            struct IndustrialZone {
+                std::vector<entt::entity> industries;
+            };
+>>>>>>> pr-283
 
-enum ProductionType { factory, mine, service };
+            enum ProductionType { factory, mine, service };
 
-struct Production {
-    //TODO(AGM) This is a hardcoded enum, move to a hjson
-    ProductionType type;
-    entt::entity recipe;
-};
+            struct Production {
+                //TODO(AGM) This is a hardcoded enum, move to a hjson
+                ProductionType type;
+                entt::entity recipe;
+            };
 
-struct Factory {};
+            struct Factory {};
 
-struct Mine {};
+            struct Mine {};
 
-struct Service {};
+            struct Service {};
 
-struct Farm {
-    // Farms have a harvest period?
-    // Farms can fluctuate between how much they generate per tick.
-    // Also add food good
-};
+            struct Farm {
+                // Farms have a harvest period?
+                // Farms can fluctuate between how much they generate per tick.
+                // Also add food good
+            };
 
-struct RawResourceGen {};
-}  // namespace cqsp::common::components
+<<<<<<< HEAD
+            struct RawResourceGen {};
+        }  // namespace cqsp::common::components
+        == == == = struct RawResourceGen {};
+        }  // namespace cqsp::common::components
+>>>>>>> pr-283

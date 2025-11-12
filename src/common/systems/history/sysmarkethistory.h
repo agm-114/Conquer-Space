@@ -26,4 +26,8 @@ class SysMarketHistory : public ISimulationSystem {
 
     int Interval() override { return components::StarDate::HOUR; }
 };
+<<<<<<< HEAD
 }  // namespace cqsp::common::systems::history
+== == == =
+}  // namespace cqsp::common::systems::history
+>>>>>>> pr-283

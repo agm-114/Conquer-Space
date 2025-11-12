@@ -21,7 +21,12 @@
 namespace cqsp::client::systems {
 class AssetWindow : public SysUserInterface {
  public:
-    explicit AssetWindow(engine::Application& app) : SysUserInterface(app), window_open(nullptr) {}
+<<<<<<< HEAD:src/client/util/assetwindow.h
+    explicit AssetWindow(engine::Application& app)
+        : SysUserInterface(app),
+          window_open(nullptr) {} == == == = explicit CivilizationInfoPanel(engine::Application & app)
+        : SysUserInterface(app) {}
+>>>>>>> pr_254:src/client/scenes/universe/interface/civilizationinfopanel.h
 
     void Init();
     void DoUI(int delta_time);

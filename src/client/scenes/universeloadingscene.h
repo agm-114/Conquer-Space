@@ -22,25 +22,93 @@
 
 #include "client/scenes/scene.h"
 
-namespace cqsp::client::scene {
-class UniverseLoadingScene : public ClientScene {
- public:
-    explicit UniverseLoadingScene(engine::Application& app);
-    ~UniverseLoadingScene();
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD namespace cqsp::client::scene {
+    class UniverseLoadingScene : public ClientScene {
+    == == == = namespace cqsp::scene {
+        class UniverseLoadingScene : public client::Scene {
+>>>>>>> pr_254
+         public:
+            explicit UniverseLoadingScene(engine::Application& app);
+            ~UniverseLoadingScene();
+            == == == = namespace cqsp::client::scene {
+                class UniverseLoadingScene : public ClientScene {
+                 public:
+                    explicit UniverseLoadingScene(engine::Application& app);
+                    ~UniverseLoadingScene();
+>>>>>>> pr-286
+                    == == == = namespace cqsp::scene {
+                        class UniverseLoadingScene : public cqsp::client::Scene {
+                         public:
+                            explicit UniverseLoadingScene(cqsp::engine::Application& app);
+                            ~UniverseLoadingScene();
+>>>>>>> pr-283
 
-    void Init();
-    void Update(float deltaTime);
-    void Ui(float deltaTime);
-    void Render(float deltaTime);
+                            void Init();
+                            void Update(float deltaTime);
+                            void Ui(float deltaTime);
+                            void Render(float deltaTime);
 
- private:
-    std::atomic<bool> m_done_loading;
-    std::unique_ptr<std::thread> thread;
+                         private:
+                            std::atomic<bool> m_done_loading;
+                            std::unique_ptr<std::thread> thread;
 
-    void LoadCurrentUniverse();
+<<<<<<< HEAD
+                            void LoadCurrentUniverse();
+                            == == == = void LoadCurrentUniverse();
+>>>>>>> pr-286
 
-    bool m_completed_loading;
+                            bool m_completed_loading;
 
-    Rml::ElementDocument* document;
-};
-}  // namespace cqsp::client::scene
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            Rml::ElementDocument* document;
+                        };
+<<<<<<< HEAD
+                    }  // namespace cqsp::client::scene
+                    == == == =
+                }  // namespace cqsp::scene
+>>>>>>> pr_254
+                    == == ==
+                    = Rml::ElementDocument * document;
+            };
+        }  // namespace cqsp::client::scene
+>>>>>>> pr-286
+            == == ==
+            = Rml::ElementDocument * document;
+    };
+}  // namespace cqsp::scene
+    == == ==
+    =
+<<<<<<< HEAD namespace cqsp::client::scene {
+        class UniverseLoadingScene : public ClientScene {
+    == == == = namespace cqsp::scene {
+        class UniverseLoadingScene : public cqsp::client::Scene {
+>>>>>>> pr-283
+         public:
+            explicit UniverseLoadingScene(engine::Application& app);
+            ~UniverseLoadingScene();
+
+            void Init();
+            void Update(float deltaTime);
+            void Ui(float deltaTime);
+            void Render(float deltaTime);
+
+         private:
+            std::atomic<bool> m_done_loading;
+            std::unique_ptr<std::thread> thread;
+
+            void LoadCurrentUniverse();
+
+            bool m_completed_loading;
+
+            Rml::ElementDocument* document;
+        };
+<<<<<<< HEAD
+    }  // namespace cqsp::client::scene
+    == == == =
+}  // namespace cqsp::scene
+>>>>>>> pr-286
+>>>>>>> pr-283

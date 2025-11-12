@@ -19,5 +19,27 @@
 #include "engine/application.h"
 
 namespace cqsp::client::systems {
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 void ShowOptionsWindow(bool* open, engine::Application& app);
 }  // namespace cqsp::client::systems
+<<<<<<< HEAD
+== == == = void ShowOptionsWindow(bool* open, cqsp::engine::Application& app);
+}  // namespace cqsp::client::systems
+
+>>>>>>> pr_254
+== == == =
+>>>>>>> pr-288
+             == == == = void ShowOptionsWindow(bool* open, engine::Application& app);
+}  // namespace cqsp::client::systems
+>>>>>>> pr-286
+== == == = void ShowOptionsWindow(bool* open, cqsp::engine::Application& app);
+}  // namespace cqsp::client::systems
+>>>>>>> pr-283
+== == == = void ShowOptionsWindow(bool* open, engine::Application& app);
+== == == = void ShowOptionsWindow(bool* open, cqsp::engine::Application& app);
+>>>>>>> pr-283
+}  // namespace cqsp::client::systems
+>>>>>>> pr-286

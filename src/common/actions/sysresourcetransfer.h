@@ -16,19 +16,92 @@
  */
 #pragma once
 
+<<<<<<< HEAD
 #include <entt/entt.hpp>
 
+    <<<<<<< HEAD
+<<<<<<< HEAD:src/common/actions/sysresourcetransfer.h
 #include "common/universe.h"
 
-namespace cqsp::common::actions {
-/// <summary>
-/// Transfers resources from the first entity to the second
-/// </summary>
-/// <param name="registry">Registry to transfer</param>
-/// <param name="from">Needs to be a resource stockpile</param>
-/// <param name="to">Needs to be a resource stockpile</param>
-/// <param name="good">good to transfer</param>
-/// <param name="amount">amount of resources to transfer</param>
-/// <returns>If transfering resources failed.</returns>
-bool TransferResources(Node& from, Node& to, Node& good, double amount);
+    namespace cqsp::common::actions {
+    == == == = namespace cqsp::common::systems::resource {
+>>>>>>> pr_254:src/common/systems/actions/sysresourcetransfer.h
+        /// <summary>
+        /// Transfers resources from the first entity to the second
+        /// </summary>
+        /// <param name="registry">Registry to transfer</param>
+        /// <param name="from">Needs to be a resource stockpile</param>
+        /// <param name="to">Needs to be a resource stockpile</param>
+        /// <param name="good">good to transfer</param>
+        /// <param name="amount">amount of resources to transfer</param>
+        /// <returns>If transfering resources failed.</returns>
+<<<<<<< HEAD:src/common/actions/sysresourcetransfer.h
+        bool TransferResources(Node & from, Node & to, Node & good, double amount);
+    }  // namespace cqsp::common::actions
+    == == == = bool TransferResources(entt::registry & registry, entt::entity from, entt::entity to, entt::entity good,
+                                      double amount);
+}  // namespace cqsp::common::systems::resource
+>>>>>>> pr_254:src/common/systems/actions/sysresourcetransfer.h
+== == == =
+#include "common/universe.h"
+
+             namespace cqsp::common::actions {
+    /// <summary>
+    /// Transfers resources from the first entity to the second
+    /// </summary>
+    /// <param name="registry">Registry to transfer</param>
+    /// <param name="from">Needs to be a resource stockpile</param>
+    /// <param name="to">Needs to be a resource stockpile</param>
+    /// <param name="good">good to transfer</param>
+    /// <param name="amount">amount of resources to transfer</param>
+    /// <returns>If transfering resources failed.</returns>
+    bool TransferResources(Node & from, Node & to, Node & good, double amount);
 }  // namespace cqsp::common::actions
+>>>>>>> pr-309
+== == == =
+#include <map>
+#include <string>
+
+             < < < < < < < < HEAD : src / engine / asset /
+                                    packageindex.h
+#include "engine/asset/asset.h"
+#include "engine/asset/vfs/vfs.h"
+
+                                    namespace cqsp::asset {
+    struct AssetEntry {
+        std::string path;
+        AssetType type;
+        AssetEntry() : path(""), type(AssetType::NONE) {}
+        AssetEntry(const std::string& _path, AssetType _type) : path(_path), type(_type) {}
+    };
+
+    /**
+ * A way for the program to quickly load all the files in the 
+ */
+    class PackageIndex {
+     public:
+        explicit PackageIndex(const IVirtualDirectoryPtr& directory);
+
+        AssetEntry& operator[](const std::string& name) { return assets[name]; }
+
+     private:
+        std::string path;
+        bool valid;
+        std::map<std::string, AssetEntry> assets;
+    };
+}  // namespace cqsp::asset
+== == == == namespace cqsp::common::actions {
+    /// <summary>
+    /// Transfers resources from the first entity to the second
+    /// </summary>
+    /// <param name="registry">Registry to transfer</param>
+    /// <param name="from">Needs to be a resource stockpile</param>
+    /// <param name="to">Needs to be a resource stockpile</param>
+    /// <param name="good">good to transfer</param>
+    /// <param name="amount">amount of resources to transfer</param>
+    /// <returns>If transfering resources failed.</returns>
+    bool TransferResources(entt::registry & registry, entt::entity from, entt::entity to, entt::entity good,
+                           double amount);
+}  // namespace cqsp::common::actions
+>>>>>>>> pr - 292 : src / common / actions / sysresourcetransfer.h
+>>>>>>> pr-292

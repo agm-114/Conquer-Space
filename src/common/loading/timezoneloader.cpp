@@ -14,19 +14,80 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+<<<<<<< HEAD
 #include "common/loading/timezoneloader.h"
 
 #include "common/components/name.h"
 #include "common/components/surface.h"
 
-namespace cqsp::common::loading {
-bool TimezoneLoader::LoadValue(const Hjson::Value& values, Node& node) {
-    // Read timezones
-    double offset = values["offset"].to_double();
-    node.emplace<components::TimeZone>(offset);
-    universe.time_zones[node.get<components::Identifier>().identifier] = node;
-    return true;
+<<<<<<< HEAD
+<<<<<<< HEAD:src/common/loading/timezoneloader.cpp namespace cqsp::common::loading {
+    bool
+    TimezoneLoader::LoadValue(const Hjson::Value& values, Node& node) {
+    == == == = using cqsp::common::systems::loading::TimezoneLoader;
+    bool TimezoneLoader::LoadValue(const Hjson::Value& values, entt::entity entity) {
+>>>>>>> pr_254:src/common/systems/loading/timezoneloader.cpp
+        // Read timezones
+        double offset = values["offset"].to_double();
+        node.emplace<components::TimeZone>(offset);
+        universe.time_zones[node.get<components::Identifier>().identifier] = node;
+        return true;
+    }
+
+<<<<<<< HEAD:src/common/loading/timezoneloader.cpp
+    void TimezoneLoader::PostLoad(const Node& node) {}
+}  // namespace cqsp::common::loading
+== == == = void TimezoneLoader::PostLoad(const entt::entity& entity) {}
+>>>>>>> pr_254:src/common/systems/loading/timezoneloader.cpp
+== == == = namespace cqsp::common::loading {
+    bool TimezoneLoader::LoadValue(const Hjson::Value& values, Node& node) {
+        // Read timezones
+        double offset = values["offset"].to_double();
+        node.emplace<components::TimeZone>(offset);
+        universe.time_zones[node.get<components::Identifier>().identifier] = node;
+        return true;
+    }
+
+    void TimezoneLoader::PostLoad(const Node& node) {}
+}  // namespace cqsp::common::loading
+>>>>>>> pr-303
+== == == = <<<<<<<<HEAD : src / common / actions / cityactions.cpp
+#include "common/actions/cityactions.h"
+                   == == == ==
+#include "common/loading/timezoneloader.h"
+                   >>>>>>>>
+                   pr - 292 : src / common / loading / timezoneloader.cpp
+
+#include "common/components/coordinates.h"
+#include "common/components/name.h"
+#include "common/components/surface.h"
+
+           < < < < < < < < HEAD : src / common / actions /
+                                  cityactions.cpp namespace cqsp::common::actions {
+
+                                      Node CreateCity(Node & planet, components::types::SurfaceCoordinate coords) {
+                                          Node city_node(planet.universe());
+city_node.emplace<components::Settlement>();
+city_node.emplace<components::types::SurfaceCoordinate>(coords);
+planet.get_or_emplace<components::Habitation>().settlements.push_back(city_node);
+return city_node;
 }
 
-void TimezoneLoader::PostLoad(const Node& node) {}
+Node CreateCity(Node& planet, double lat, double longi) {
+    return CreateCity(planet, components::types::SurfaceCoordinate(lat, longi));
+}
+
+}  // namespace cqsp::common::actions
+== == == ==
+    namespace cqsp::common::loading {bool TimezoneLoader::LoadValue(
+        const Hjson::Value& values, entt::entity entity) {// Read timezones
+                                                          double offset = values["offset"].to_double();
+universe.emplace<components::TimeZone>(entity, offset);
+universe.time_zones[universe.get<components::Identifier>(entity).identifier] = entity;
+return true;
+}
+
+void TimezoneLoader::PostLoad(const entt::entity& entity) {}
 }  // namespace cqsp::common::loading
+>>>>>>>> pr - 292 : src / common / loading / timezoneloader.cpp
+>>>>>>> pr-292

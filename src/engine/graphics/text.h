@@ -42,5 +42,9 @@ class Font : public Asset {
 };
 
 void LoadFontData(Font& font, unsigned char* fontBuffer, uint64_t size);
+<<<<<<< HEAD
 void RenderText(ShaderProgram& shader, Font& font, std::string text, float x, float y, float scale, glm::vec3 color);
+== == == = void RenderText(cqsp::asset::ShaderProgram & shader, Font& font, std::string text, float x, float y,
+                           float scale, glm::vec3 color);
+>>>>>>> pr-283
 }  // namespace cqsp::asset

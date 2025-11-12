@@ -22,8 +22,18 @@
 
 #include "common/universe.h"
 
-namespace cqsp::common::loading {
-void LoadProvinces(Node& planet, const std::string& text);
-void LoadAdjProvinces(Universe& universe, Hjson::Value& adjacency_map);
-void LoadAllProvinces(Universe& universe);
+<<<<<<< HEAD:src/common/loading/loadprovinces.h namespace cqsp::common::loading {
+<<<<<<< HEAD
+    void LoadProvinces(Node & planet, const std::string& text);
+    == == == = void LoadProvinces(Universe & universe, entt::entity planet, const std::string& text);
+>>>>>>> pr-292
+    void LoadAdjProvinces(Universe & universe, Hjson::Value & adjacency_map);
+    void LoadAllProvinces(Universe & universe);
 }  // namespace cqsp::common::loading
+== == == = namespace cqsp::common::systems::loading {
+    void LoadTechnologies(Universe & universe, Hjson::Value & value);
+    void ResearchTech(Universe & universe, entt::entity civilization, entt::entity tech);
+    void ProcessAction(Universe & universe, entt::entity civilization, const std::string& action);
+
+}  // namespace cqsp::common::systems::science
+>>>>>>> pr-290:src/common/systems/science/technology.h

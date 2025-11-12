@@ -20,11 +20,17 @@
 
 #include <string>
 
+<<<<<<< HEAD
 #include "common/actions/science/technologyactions.h"
 #include "common/loading/hjsonloader.h"
+    == == ==
+    =
+#include "common/actions/science/technologyactions.h"
+#include "common/loading/hjsonloader.h"
+        >>>>>>> pr-292
 #include "common/universe.h"
 
-namespace cqsp::common::loading {
-void LoadTechnologies(Universe &universe, Hjson::Value &value);
+    namespace cqsp::common::loading {
+    void LoadTechnologies(Universe & universe, Hjson::Value & value);
 
 }  // namespace cqsp::common::loading

@@ -59,7 +59,14 @@ sol::object JsonToLuaObject(const Hjson::Value& j, const sol::this_state& s) {
     }
 }
 
+<<<<<<< HEAD:src/client/scripting/clientscripting.cpp
 void AssetManagerInterfaces(asset::AssetManager& asset_manager, common::Universe& universe,
+<<<<<<< HEAD
+=======
+void AssetManagerInterfaces(engine::Application& app, common::Universe& universe,
+>>>>>>> pr_254:src/client/systems/clientscripting.cpp
+=======
+>>>>>>> pr-290
                             common::scripting::ScriptInterface& script_engine) {
     CREATE_NAMESPACE(client);
 
@@ -87,10 +94,36 @@ void AssetManagerInterfaces(asset::AssetManager& asset_manager, common::Universe
         return JsonToLuaObject(as->data, s).as<sol::table>();
     });
 }
+<<<<<<< HEAD:src/client/scripting/clientscripting.cpp
 }  // namespace
 
 void ClientFunctions(asset::AssetManager& asset_manager, common::Universe& universe,
                      common::scripting::ScriptInterface& script_engine) {
     AssetManagerInterfaces(asset_manager, universe, script_engine);
+    == == == =
+
+                 void UiInterfaces(engine::Application & app, common::Universe & universe,
+                                   common::scripting::ScriptInterface & script_engine) {
+        CREATE_NAMESPACE(ImGui);
+
+        REGISTER_FUNCTION("Begin", [](const char* name) { ImGui::Begin(name); });
+
+        REGISTER_FUNCTION("End", [](const char* name) { ImGui::End(); });
+
+        REGISTER_FUNCTION("Text", [](const char* name) { ImGui::Text("%s", name); });
+
+        REGISTER_FUNCTION("Separator", [](const char* name) { ImGui::Separator(); });
+
+        REGISTER_FUNCTION("SameLine", [](const char* name) { ImGui::SameLine(); });
+
+        REGISTER_FUNCTION("Button", [](const char* label) { return ImGui::Button(label); });
+    }
+}  // namespace
+
+void ClientFunctions(engine::Application& app, common::Universe& universe,
+                     common::scripting::ScriptInterface& script_engine) {
+    AssetManagerInterfaces(app, universe, script_engine);
+    UiInterfaces(app, universe, script_engine);
+>>>>>>> pr_254:src/client/systems/clientscripting.cpp
 }
 };  // namespace cqsp::client::scripting

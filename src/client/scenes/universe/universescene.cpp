@@ -53,153 +53,251 @@
 #include "tracy/Tracy.hpp"
 
 // If the game is paused or not, like when escape is pressed
+namespace cqsp::scene {
 bool game_halted = false;
+}  // namespace cqsp::scene
 
-namespace cqsp::client::scene {
+<<<<<<< HEAD
+<<<<<<< HEAD
+== == == =
+>>>>>>> pr-286
+             namespace cqsp::client::scene {
+    namespace components = common::components;
+    namespace bodies = components::bodies;
+    namespace systems = client::systems;
 
-namespace components = common::components;
-namespace bodies = components::bodies;
-namespace systems = client::systems;
+    using common::systems::simulation::Simulation;
 
-using common::systems::simulation::Simulation;
+<<<<<<< HEAD
+    UniverseScene::UniverseScene(engine::Application & app)
+        : ClientScene(app) {} == == ==
+        = namespace common = cqsp::common;
+    namespace components = common::components;
+    namespace bodies = components::bodies;
+    namespace client = cqsp::client;
+    namespace systems = client::systems;
+    using common::systems::simulation::Simulation;
+    using cqsp::scene::UniverseScene;
+    using entt::entity;
 
-UniverseScene::UniverseScene(engine::Application& app) : ClientScene(app) {}
+    UniverseScene::UniverseScene(engine::Application & app) : client::Scene(app) {}
+>>>>>>> pr_254
+    == == == = UniverseScene::UniverseScene(engine::Application & app) : ClientScene(app) {}
+>>>>>>> pr-286
 
-void UniverseScene::Init() {
-    ZoneScoped;
+    void UniverseScene::Init() {
+        ZoneScoped;
 
-    simulation = std::make_unique<Simulation>(dynamic_cast<ConquerSpace*>(GetApp().GetGame())->GetGame());
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        simulation = std::make_unique<Simulation>(dynamic_cast<ConquerSpace*>(GetApp().GetGame())->GetGame());
+        simulation->CreateSystems();
+        == == == = simulation =
+                     std::make_unique<Simulation>(dynamic_cast<ConquerSpace*>(GetApp().GetGame())->GetGame());
+>>>>>>> main
 
-    system_renderer = std::make_unique<systems::SysStarSystemRenderer>(GetUniverse(), GetApp());
-    system_renderer->Initialize();
+        system_renderer = std::make_unique<systems::SysStarSystemRenderer>(GetUniverse(), GetApp());
+        == == == = simulation =
+                     std::make_unique<Simulation>(dynamic_cast<client::ConquerSpace*>(GetApp().GetGame())->GetGame());
 
-    GetUniverse().ctx().emplace<client::ctx::PauseOptions>();
+        system_renderer = new systems::SysStarSystemRenderer(GetUniverse(), GetApp());
+>>>>>>> pr_254
+        == == == = simulation =
+                     std::make_unique<Simulation>(dynamic_cast<ConquerSpace*>(GetApp().GetGame())->GetGame());
 
-    system_renderer->SeeStarSystem();
+        system_renderer = new systems::SysStarSystemRenderer(GetUniverse(), GetApp());
+>>>>>>> pr-286
+        system_renderer->Initialize();
 
-    SeePlanet(GetUniverse(), GetUniverse().planets["earth"]);
+        GetUniverse().ctx().emplace<client::ctx::PauseOptions>();
 
-    //AddUISystem<cqsps::SysTurnSaveWindow>();
-    AddUISystem<systems::SysStarSystemTree>();
-    AddUISystem<systems::SysPauseMenu>();
-    AddUISystem<systems::SysDebugMenu>();
+        system_renderer->SeeStarSystem();
 
-    AddUISystem<systems::SpaceshipWindow>();
-    //AddUISystem<cqsps::SysFieldViewer>();
-    //AddUISystem<cqsps::SysTechnologyProjectViewer>();
-    //AddUISystem<cqsps::SysTechnologyViewer>();
-    AddUISystem<systems::SysProvinceInformation>();
-    AddUISystem<systems::SysOrbitFilter>();
-    AddUISystem<systems::ImGuiInterface>();
-    //AddUISystem<systems::SysPlanetMarketInformation>();
+<<<<<<< HEAD
+        SeePlanet(GetUniverse(), GetUniverse().planets["earth"]);
+        == == == = AddUISystem<systems::SpaceshipWindow>();
+        //AddUISystem<cqsps::SysFieldViewer>();
+        //AddUISystem<cqsps::SysTechnologyProjectViewer>();
+        //AddUISystem<cqsps::SysTechnologyViewer>();
+        AddUISystem<systems::SysProvinceInformation>();
+        AddUISystem<systems::SysOrbitFilter>();
+        AddUISystem<systems::ImGuiInterface>();
+        //AddUISystem<systems::SysPlanetMarketInformation>();
+>>>>>>> main
 
-    AddUISystem<systems::gui::SysEvent>();
-    simulation->Init();
-    simulation->tick();  // Why do we tick the simulation once here? Idk
+        //AddUISystem<cqsps::SysTurnSaveWindow>();
+        AddUISystem<systems::SysStarSystemTree>();
+        AddUISystem<systems::SysPauseMenu>();
+        AddUISystem<systems::SysDebugMenu>();
+<<<<<<< HEAD
+<<<<<<< HEAD
 
-    AddRmlUiSystem<systems::rmlui::TurnSaveWindow>();
-}
+        == == == =
+                     //AddUISystem<cqsps::SysCommand>();
+            AddUISystem<systems::CivilizationInfoPanel>();
+>>>>>>> pr_254
+        == == == =
+                     //AddUISystem<cqsps::SysCommand>();
+>>>>>>> pr-286
+            AddUISystem<systems::SpaceshipWindow>();
+        //AddUISystem<cqsps::SysFieldViewer>();
+        //AddUISystem<cqsps::SysTechnologyProjectViewer>();
+        //AddUISystem<cqsps::SysTechnologyViewer>();
+        AddUISystem<systems::SysProvinceInformation>();
+        AddUISystem<systems::SysOrbitFilter>();
+<<<<<<< HEAD
+<<<<<<< HEAD
+        == == == =
+>>>>>>> pr-286
+                     AddUISystem<systems::ImGuiInterface>();
+        AddUISystem<systems::SysPlanetMarketInformation>();
 
-void UniverseScene::Update(float deltaTime) {
-    ZoneScoped;
+        AddUISystem<systems::gui::SysEvent>();
+        simulation->Init();
+        simulation->tick();  // Why do we tick the simulation once here? Idk
+        == == == =
+                     //AddUISystem<cqsps::SysPlanetMarketInformation>();
 
-    auto& pause_opt = GetUniverse().ctx().at<client::ctx::PauseOptions>();
-    if (!ImGui::GetIO().WantCaptureKeyboard) {
-        if (GetApp().ButtonIsReleased(engine::KeyInput::KEY_SPACE)) {
-            ToggleTick();
+<<<<<<< HEAD
+            AddUISystem<systems::gui::SysEvent>();
+        simulation->tick();
+>>>>>>> pr_254
+
+        == == == =
+>>>>>>> pr-286
+                     AddRmlUiSystem<systems::rmlui::TurnSaveWindow>();
+    }
+
+    void UniverseScene::Update(float deltaTime) {
+        ZoneScoped;
+
+        auto& pause_opt = GetUniverse().ctx().at<client::ctx::PauseOptions>();
+        if (!ImGui::GetIO().WantCaptureKeyboard) {
+            if (GetApp().ButtonIsReleased(engine::KeyInput::KEY_SPACE)) {
+                ToggleTick();
+            }
         }
-    }
 
-    int tick_speed = ctx::tick_speeds[pause_opt.tick_speed];
-    double tick_length = static_cast<float>(tick_speed) / 1000.f;
-    if (tick_speed < 0) {
-        tick_length = 1 / 1000.f;
-    }
-    if (pause_opt.to_tick && GetApp().GetTime() - last_tick > tick_length) {
-        GetUniverse().EnableTick();
-        last_tick = GetApp().GetTime();
-    }
+        int tick_speed = ctx::tick_speeds[pause_opt.tick_speed];
+        double tick_length = static_cast<float>(tick_speed) / 1000.f;
+        if (tick_speed < 0) {
+            tick_length = 1 / 1000.f;
+        }
+        if (pause_opt.to_tick && GetApp().GetTime() - last_tick > tick_length) {
+            GetUniverse().EnableTick();
+            last_tick = GetApp().GetTime();
+        }
 
-    if (pause_opt.to_tick) {
-        GetUniverse().tick_fraction = (GetApp().GetTime() - last_tick) / tick_length;
-        if (!interp) GetUniverse().tick_fraction = 0;
-    }
+        if (pause_opt.to_tick) {
+            GetUniverse().tick_fraction = (GetApp().GetTime() - last_tick) / tick_length;
+            if (!interp) GetUniverse().tick_fraction = 0;
+        }
 
-    // Check for last tick
-    if (GetUniverse().ToTick() && !game_halted) {
-        // Game tick
-        if (ctx::tick_speeds[pause_opt.tick_speed] < 0) {
-            for (int i = 0; i < -ctx::tick_speeds[pause_opt.tick_speed]; i++) {
+        // Check for last tick
+        if (GetUniverse().ToTick() && !game_halted) {
+            // Game tick
+            if (ctx::tick_speeds[pause_opt.tick_speed] < 0) {
+                for (int i = 0; i < -ctx::tick_speeds[pause_opt.tick_speed]; i++) {
+                    simulation->tick();
+                }
+            } else {
                 simulation->tick();
             }
-        } else {
-            simulation->tick();
+            system_renderer->OnTick();
         }
-        system_renderer->OnTick();
-    }
 
-    if (!game_halted) {
-        if (!ImGui::GetIO().WantCaptureKeyboard && GetApp().ButtonIsReleased(engine::KeyInput::KEY_M)) {
-            view_mode = !view_mode;
+        if (!game_halted) {
+            if (!ImGui::GetIO().WantCaptureKeyboard && GetApp().ButtonIsReleased(engine::KeyInput::KEY_M)) {
+                view_mode = !view_mode;
+            }
+            system_renderer->Update(deltaTime);
+            // Check to see if you have to switch
         }
-        system_renderer->Update(deltaTime);
-        // Check to see if you have to switch
-    }
 
-    DoScreenshot();
+        DoScreenshot();
 
-    if (view_mode) {
-        GetUniverse().clear<systems::MouseOverEntity>();
-        system_renderer->GetMouseOnObject(GetApp().GetMouseX(), GetApp().GetMouseY());
-    }
-
-    for (auto& ui : documents) {
-        ui->Update(deltaTime);
-    }
-
-    for (auto& ui : user_interfaces) {
-        if (game_halted) {
-            ui->window_flags = ImGuiWindowFlags_NoInputs;
-        } else {
-            ui->window_flags = 0;
+        if (view_mode) {
+            GetUniverse().clear<systems::MouseOverEntity>();
+            system_renderer->GetMouseOnObject(GetApp().GetMouseX(), GetApp().GetMouseY());
         }
-        ui->DoUpdate(deltaTime);
+
+        for (auto& ui : documents) {
+            ui->Update(deltaTime);
+        }
+
+        for (auto& ui : user_interfaces) {
+            if (game_halted) {
+                ui->window_flags = ImGuiWindowFlags_NoInputs;
+            } else {
+                ui->window_flags = 0;
+            }
+            ui->DoUpdate(deltaTime);
+        }
     }
-}
 
-void UniverseScene::Ui(float deltaTime) {
-    for (auto& ui : user_interfaces) {
-        ui->DoUI(deltaTime);
+    void UniverseScene::Ui(float deltaTime) {
+        for (auto& ui : user_interfaces) {
+            ui->DoUI(deltaTime);
+        }
+        system_renderer->DoUI(deltaTime);
     }
-    system_renderer->DoUI(deltaTime);
-}
 
-void UniverseScene::Render(float deltaTime) {
-    ZoneScoped;
-    glEnable(GL_MULTISAMPLE);
-    system_renderer->Render(deltaTime);
-}
-
-void UniverseScene::DoScreenshot() {
-    // Take screenshot
-    if ((GetApp().ButtonIsReleased(engine::KeyInput::KEY_F1) && GetApp().ButtonIsHeld(engine::KeyInput::KEY_F10)) ||
-        (GetApp().ButtonIsHeld(engine::KeyInput::KEY_F1) && GetApp().ButtonIsReleased(engine::KeyInput::KEY_F10))) {
-        GetApp().Screenshot();
+    void UniverseScene::Render(float deltaTime) {
+        ZoneScoped;
+        glEnable(GL_MULTISAMPLE);
+        system_renderer->Render(deltaTime);
     }
-}
 
-void UniverseScene::ToggleTick() {
-    auto& pause_opt = GetUniverse().ctx().at<client::ctx::PauseOptions>();
-    pause_opt.to_tick = !pause_opt.to_tick;
-}
+    void UniverseScene::DoScreenshot() {
+        // Take screenshot
+        if ((GetApp().ButtonIsReleased(engine::KeyInput::KEY_F1) && GetApp().ButtonIsHeld(engine::KeyInput::KEY_F10)) ||
+            (GetApp().ButtonIsHeld(engine::KeyInput::KEY_F1) && GetApp().ButtonIsReleased(engine::KeyInput::KEY_F10))) {
+            GetApp().Screenshot();
+        }
+    }
 
-entt::entity GetCurrentViewingPlanet(common::Universe& universe) {
-    return universe.view<systems::FocusedPlanet>().front();
-}
+    void UniverseScene::ToggleTick() {
+        auto& pause_opt = GetUniverse().ctx().at<client::ctx::PauseOptions>();
+        pause_opt.to_tick = !pause_opt.to_tick;
+    }
 
-void SeePlanet(common::Universe& universe, entt::entity ent) {
-    universe.clear<systems::FocusedPlanet>();
-    universe.emplace<systems::FocusedPlanet>(ent);
+<<<<<<< HEAD
+<<<<<<< HEAD
+    == == == =
+>>>>>>> pr-286
+                 entt::entity GetCurrentViewingPlanet(common::Universe & universe) {
+        return universe.view<systems::FocusedPlanet>().front();
+    }
+
+    void SeePlanet(common::Universe & universe, entt::entity ent) {
+<<<<<<< HEAD
+        == == == = namespace cqsp::scene {entt::entity GetCurrentViewingPlanet(common::Universe & universe) {
+                     return universe.view<client::systems::FocusedPlanet>().front();
+    }
+
+    void SeePlanet(common::Universe & universe, entity ent) {
+>>>>>>> pr_254
+        universe.clear<systems::FocusedPlanet>();
+        universe.emplace<systems::FocusedPlanet>(ent);
+    }
+
+    void SetGameHalted(bool b) { game_halted = b; }
+<<<<<<< HEAD
+
+    bool IsGameHalted() { return game_halted; }
+
+}  // namespace cqsp::client::scene
+== == == =
+
+             bool IsGameHalted() {
+    return game_halted;
+}
+}  // namespace cqsp::scene
+
+>>>>>>> pr_254
+== == == = universe.clear<systems::FocusedPlanet>();
+universe.emplace<systems::FocusedPlanet>(ent);
 }
 
 void SetGameHalted(bool b) { game_halted = b; }
@@ -207,3 +305,4 @@ void SetGameHalted(bool b) { game_halted = b; }
 bool IsGameHalted() { return game_halted; }
 
 }  // namespace cqsp::client::scene
+>>>>>>> pr-286

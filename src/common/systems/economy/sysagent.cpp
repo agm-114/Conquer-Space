@@ -16,13 +16,34 @@
  */
 #include "common/systems/economy/sysagent.h"
 
+<<<<<<< HEAD
 #include "common/actions/economy/markethelpers.h"
 #include "common/components/market.h"
+    == == ==
+    =
+#include "common/actions/economy/markethelpers.h"
+#include "common/components/economy.h"
+        >>>>>>> pr - 292
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD namespace cqsp::common::systems {
+                    void
+                    SysAgent::DoSystem() {
+    /*
+=======
 namespace cqsp::common::systems {
 void SysAgent::DoSystem() {
     /*
+>>>>>>> pr-303
     for (Node agent_node : GetUniverse().nodes<components::MarketAgent>()) {
+=======
+namespace cqsp::common::systems {
+void SysAgent::DoSystem() {
+    /*
+    auto view = GetUniverse().view<components::MarketAgent>();
+    for (entt::entity entity : view) {
+>>>>>>> pr-290
         // Sell resources that agents produced
         double production_multiplier = 1;
         if (agent_node.any_of<components::FactoryProductivity>()) {
@@ -34,8 +55,27 @@ void SysAgent::DoSystem() {
         if (agent_node.all_of<components::ResourceGenerator>()) {
             auto& gen = agent_node.get<components::ResourceGenerator>();
             selling.MultiplyAdd(gen, production_multiplier);
+=======
+using entt::entity;
+
+using cqsp::common::systems::SysAgent;
+/*
+void SysAgent::DoSystem() {
+    auto view = GetUniverse().view<components::MarketAgent>();
+    for (entt::entity entity : view) {
+        // Sell resources that agents produced
+        double production_multiplier = 1;
+        if (GetUniverse().any_of<components::IndustrySize>(entity)) {
+            auto& prod = GetUniverse().get<components::IndustrySize>(entity);
+            production_multiplier = prod.size;
         }
-        
+        components::ResourceLedger selling;
+
+        if (GetUniverse().all_of<components::Recipe>(entity)) {
+            auto& gen = GetUniverse().get<components::Recipe>(entity);
+            selling.MultiplyAdd(gen.output, production_multiplier);
+>>>>>>> pr_254
+        }
 
         // Recipe things
         auto resource_converter = agent_node.try_get<components::ResourceConverter>();
@@ -71,6 +111,14 @@ void SysAgent::DoSystem() {
             GetUniverse().emplace_or_replace<components::FactoryProducing>(entity);
         }
     }
-    */
 }
+<<<<<<< HEAD
+<<<<<<< HEAD
 }  // namespace cqsp::common::systems
+=======
+*/
+
+>>>>>>> pr_254
+    == == == =
+}  // namespace cqsp::common::systems
+>>>>>>> pr-290

@@ -19,7 +19,14 @@
 #include <string>
 #include <vector>
 
-namespace cqsp::util {
-std::string strip(const std::string& inpt);
-std::vector<std::string> split(const std::string& s, const std::string& delimiter);
+< < < < < < < < HEAD : src / common / util / string.h namespace cqsp::util {
+    std::string strip(const std::string& inpt);
+    std::vector<std::string> split(const std::string& s, const std::string& delimiter);
 }  // namespace cqsp::util
+== == == ==
+#include "common/universe.h"
+
+    namespace cqsp::common::actions {
+    entt::entity CreateCity(Universe & universe, entt::entity planet, double lat, double longi);
+}  // namespace cqsp::common::actions
+>>>>>>>> pr - 292 : src / common / actions / cityactions.h

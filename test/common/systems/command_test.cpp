@@ -18,9 +18,12 @@
 
 #include "common/actions/maneuver/commands.h"
 #include "common/components/orbit.h"
+<<<<<<< HEAD == == == =
+#include "common/actions/maneuver/commands.h"
+    >>>>>>> pr - 292
 #include "common/universe.h"
 
-TEST(CommandTest, SOIHierachyTest) {
+                TEST(CommandTest, SOIHierachyTest) {
     cqsp::common::Universe universe;
     entt::entity current_body = universe.create();
     entt::entity source_body = current_body;

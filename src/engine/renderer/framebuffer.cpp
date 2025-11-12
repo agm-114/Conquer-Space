@@ -27,13 +27,30 @@
 #include "engine/enginelogger.h"
 #include "engine/graphics/primitives/pane.h"
 
-namespace cqsp::engine {
-void GenerateFrameBuffer(unsigned int& framebuffer) {
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-}
+<<<<<<< HEAD
+<<<<<<< HEAD == == == = using cqsp::engine::FramebufferRenderer;
+    using cqsp::engine::AAFrameBufferRenderer;
+using cqsp::engine::LayerRenderer;
 
-FramebufferRenderer::~FramebufferRenderer() { FreeBuffer(); }
+>>>>>>> pr_254
+== == == =
+>>>>>>> pr-288
+             namespace cqsp::engine {
+    void GenerateFrameBuffer(unsigned int& framebuffer) {
+        glGenFramebuffers(1, &framebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    }
+<<<<<<< HEAD
+<<<<<<< HEAD
+    == == == =
+}  // namespace cqsp::engine
+>>>>>>> pr_254
+== == == =
+>>>>>>> pr-288
+
+             FramebufferRenderer::~FramebufferRenderer() {
+    FreeBuffer();
+}
 
 void FramebufferRenderer::InitTexture(int width, int height) {
     GenerateFrameBuffer(framebuffer);

@@ -18,8 +18,16 @@
 
 #include "engine/graphics/mesh.h"
 
-namespace cqsp::engine::primitive {
-Mesh_t MakeTexturedPaneMesh();
-// In case you need a mirrored pane, like for framebuffers
-Mesh_t MakeTexturedPaneMesh(bool);
+<<<<<<< HEAD namespace cqsp::engine::primitive {
+    Mesh_t MakeTexturedPaneMesh();
+    // In case you need a mirrored pane, like for framebuffers
+    Mesh_t MakeTexturedPaneMesh(bool);
 }  // namespace cqsp::engine::primitive
+== == == =
+
+             namespace cqsp::engine::primitive {
+    cqsp::engine::Mesh_t MakeTexturedPaneMesh();
+    // In case you need a mirrored pane, like for framebuffers
+    cqsp::engine::Mesh_t MakeTexturedPaneMesh(bool);
+}  // namespace cqsp::engine::primitive
+>>>>>>> pr-283

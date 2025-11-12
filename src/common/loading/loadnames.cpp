@@ -18,15 +18,35 @@
 
 #include "common/actions/names/namegenerator.h"
 
-namespace cqsp::common::loading {
-void LoadNameLists(Universe &universe, Hjson::Value &value) {
+<<<<<<< HEAD
+<<<<<<< HEAD:src/common/loading/loadnames.cpp namespace cqsp::common::loading {
+    void
+    LoadNameLists(Universe &universe, Hjson::Value &value) {
     for (int i = 0; i < value.size(); i++) {
         Hjson::Value &name_list = value[i];
         actions::NameGenerator name_gen;
-        name_gen.SetRandom(universe.random.get());
+        == == == = void cqsp::common::systems::loading::LoadNameLists(Universe & universe, Hjson::Value & value) {
+            for (int i = 0; i < value.size(); i++) {
+                Hjson::Value &name_list = value[i];
+                names::NameGenerator name_gen;
+>>>>>>> pr_254:src/common/systems/loading/loadnames.cpp
+                name_gen.SetRandom(universe.random.get());
 
-        name_gen.LoadNameGenerator(name_list);
-        universe.name_generators[name_gen.GetName()] = name_gen;
-    }
-}
-}  // namespace cqsp::common::loading
+                name_gen.LoadNameGenerator(name_list);
+                universe.name_generators[name_gen.GetName()] = name_gen;
+            }
+        }
+    }  // namespace cqsp::common::loading
+    == == == = namespace cqsp::common::loading {
+        void LoadNameLists(Universe & universe, Hjson::Value & value) {
+            for (int i = 0; i < value.size(); i++) {
+                Hjson::Value &name_list = value[i];
+                actions::NameGenerator name_gen;
+                name_gen.SetRandom(universe.random.get());
+
+                name_gen.LoadNameGenerator(name_list);
+                universe.name_generators[name_gen.GetName()] = name_gen;
+            }
+        }
+    }  // namespace cqsp::common::loading
+>>>>>>> pr-292

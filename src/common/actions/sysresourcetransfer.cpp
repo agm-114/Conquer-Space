@@ -18,27 +18,103 @@
 
 #include "common/components/resource.h"
 
-namespace cqsp::common::actions {
-using components::ResourceStockpile;
+<<<<<<< HEAD
+<<<<<<< HEAD:src/common/actions/sysresourcetransfer.cpp namespace cqsp::common::actions { using components::ResourceStockpile;
 
-bool TransferResources(Node& from, Node& to, Node& good, double amount) {
+<<<<<<< HEAD
+    bool
+    TransferResources(Node& from, Node& to, Node& good, double amount) {
     // Get resource stockpile
     if (!(from.all_of<ResourceStockpile>() && to.all_of<ResourceStockpile>() && good.all_of<components::Good>())) {
-        return false;
-    }
+        == == == = namespace components = cqsp::common::components;
+        using components::Good;
+        using components::ResourceStockpile;
+        using entt::entity;
+        namespace cqsp::common::systems::resource {
+        bool TransferResources(entt::registry& registry, entity from, entity to, entity good, double amount) {
+            // Get resource stockpile
+            if (!(registry.all_of<ResourceStockpile>(from) && registry.all_of<ResourceStockpile>(to) &&
+                  registry.all_of<Good>(good))) {
+                return false;
+            }
 
-    // Get resource stockpile
-    auto& from_stockpile = from.get<ResourceStockpile>();
-    auto& to_stockpile = from.get<ResourceStockpile>();
-    // Transfer resources
-    if (from_stockpile.HasGood(good)) {
-        // Then we can transfer
-        if (from_stockpile[good] >= amount) {
-            from_stockpile[good] -= amount;
-            to_stockpile[good] += amount;
-            return true;
+            // Get resource stockpile
+            auto& from_stockpile = registry.get<ResourceStockpile>(from);
+            auto& to_stockpile = registry.get<ResourceStockpile>(from);
+            // Transfer resources
+            if (from_stockpile.HasGood(good)) {
+                // Then we can transfer
+                if (from_stockpile[good] >= amount) {
+                    from_stockpile[good] -= amount;
+                    to_stockpile[good] += amount;
+                    return true;
+                }
+            }
+>>>>>>> pr_254:src/common/systems/actions/sysresourcetransfer.cpp
+            return false;
         }
-    }
-    return false;
-}
-}  // namespace cqsp::common::actions
+        }  // namespace cqsp::common::systems::resource
+
+<<<<<<< HEAD:src/common/actions/sysresourcetransfer.cpp
+        // Get resource stockpile
+        auto& from_stockpile = from.get<ResourceStockpile>();
+        auto& to_stockpile = from.get<ResourceStockpile>();
+        // Transfer resources
+        if (from_stockpile.HasGood(good)) {
+            // Then we can transfer
+            if (from_stockpile[good] >= amount) {
+                from_stockpile[good] -= amount;
+                to_stockpile[good] += amount;
+                return true;
+            }
+        }
+        return false;
+        == == == = bool TransferResources(Node & from, Node & to, Node & good, double amount) {
+            // Get resource stockpile
+            if (!(from.all_of<ResourceStockpile>() && to.all_of<ResourceStockpile>() &&
+                  good.all_of<components::Good>())) {
+                return false;
+            }
+
+            // Get resource stockpile
+            auto& from_stockpile = from.get<ResourceStockpile>();
+            auto& to_stockpile = from.get<ResourceStockpile>();
+            // Transfer resources
+            if (from_stockpile.HasGood(good)) {
+                // Then we can transfer
+                if (from_stockpile[good] >= amount) {
+                    from_stockpile[good] -= amount;
+                    to_stockpile[good] += amount;
+                    return true;
+>>>>>>> pr-309
+                }
+            }  // namespace cqsp::common::actions
+            == == == =
+>>>>>>> pr_254:src/common/systems/actions/sysresourcetransfer.cpp
+                         == == == = namespace cqsp::common::actions {
+                using components::ResourceStockpile;
+
+                bool TransferResources(entt::registry & registry, entt::entity from, entt::entity to, entt::entity good,
+                                       double amount) {
+                    // Get resource stockpile
+                    if (!(registry.all_of<ResourceStockpile>(from) && registry.all_of<ResourceStockpile>(to) &&
+                          registry.all_of<components::Good>(good))) {
+                        return false;
+                    }
+
+                    // Get resource stockpile
+                    auto& from_stockpile = registry.get<ResourceStockpile>(from);
+                    auto& to_stockpile = registry.get<ResourceStockpile>(from);
+                    // Transfer resources
+                    if (from_stockpile.HasGood(good)) {
+                        // Then we can transfer
+                        if (from_stockpile[good] >= amount) {
+                            from_stockpile[good] -= amount;
+                            to_stockpile[good] += amount;
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }  // namespace cqsp::common::actions
+>>>>>>> pr-292

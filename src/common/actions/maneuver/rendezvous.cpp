@@ -18,30 +18,66 @@
 
 #include "common/actions/maneuver/hohmann.h"
 
+<<<<<<< HEAD namespace components = cqsp::common::components;
+namespace types = components::types;
+
 namespace cqsp::common::systems {
+<<<<<<< HEAD:src/common/actions/maneuver/rendezvous.cpp
 using namespace components::types;  // NOLINT
 components::HohmannPair_t CoplanarIntercept(const Orbit& start_orbit, const Orbit& end_orbit, double epoch) {
-    // They need to be the same plane, but let's ignore that
-    // Also needs to be circular
-    double current_phase_angle = CalculatePhaseAngle(start_orbit, end_orbit, epoch);
+    == == == =
 
-    double t_phase_angle = CalculateTransferAngle(start_orbit, end_orbit);
+                 HohmannPair_t CoplanarIntercept(const components::types::Orbit& start_orbit,
+                                                 const components::types::Orbit& end_orbit, double epoch) {
+>>>>>>> pr_254:src/common/systems/maneuver/rendezvous.cpp
+        // They need to be the same plane, but let's ignore that
+        // Also needs to be circular
+        double current_phase_angle = CalculatePhaseAngle(start_orbit, end_orbit, epoch);
 
-    double t_wait = (current_phase_angle - t_phase_angle) / (start_orbit.nu() - end_orbit.nu());
-    if (t_wait < 0) {
-        t_wait = (current_phase_angle - t_phase_angle + 2 * PI) / (start_orbit.nu() - end_orbit.nu());
+        double t_phase_angle = CalculateTransferAngle(start_orbit, end_orbit);
+
+        double t_wait = (current_phase_angle - t_phase_angle) / (start_orbit.nu() - end_orbit.nu());
+        if (t_wait < 0) {
+            t_wait = (current_phase_angle - t_phase_angle + 2 * PI) / (start_orbit.nu() - end_orbit.nu());
+        }
+        // Get the nearest time to that phase angle, maybe next time we can put a time where we can
+        // Get the delta phase angle so that we can match up
+        // Make sure that the phase angle matches up
+
+        auto maneuver = UnsafeHohmannTransfer(start_orbit, end_orbit.semi_major_axis);
+
+        // This is the initial burn
+        maneuver.first.second += t_wait;
+        // This is the subsequent burn
+        maneuver.second.second += t_wait;
+
+        return maneuver;
     }
-    // Get the nearest time to that phase angle, maybe next time we can put a time where we can
-    // Get the delta phase angle so that we can match up
-    // Make sure that the phase angle matches up
+    == == == = namespace cqsp::common::systems {
+        using namespace components::types;  // NOLINT
+        components::HohmannPair_t CoplanarIntercept(const Orbit& start_orbit, const Orbit& end_orbit, double epoch) {
+            // They need to be the same plane, but let's ignore that
+            // Also needs to be circular
+            double current_phase_angle = CalculatePhaseAngle(start_orbit, end_orbit, epoch);
 
-    auto maneuver = UnsafeHohmannTransfer(start_orbit, end_orbit.semi_major_axis);
+            double t_phase_angle = CalculateTransferAngle(start_orbit, end_orbit);
 
-    // This is the initial burn
-    maneuver.first.second += t_wait;
-    // This is the subsequent burn
-    maneuver.second.second += t_wait;
+            double t_wait = (current_phase_angle - t_phase_angle) / (start_orbit.nu() - end_orbit.nu());
+            if (t_wait < 0) {
+                t_wait = (current_phase_angle - t_phase_angle + 2 * PI) / (start_orbit.nu() - end_orbit.nu());
+            }
+            // Get the nearest time to that phase angle, maybe next time we can put a time where we can
+            // Get the delta phase angle so that we can match up
+            // Make sure that the phase angle matches up
 
-    return maneuver;
-}
-}  // namespace cqsp::common::systems
+            auto maneuver = UnsafeHohmannTransfer(start_orbit, end_orbit.semi_major_axis);
+
+            // This is the initial burn
+            maneuver.first.second += t_wait;
+            // This is the subsequent burn
+            maneuver.second.second += t_wait;
+
+            return maneuver;
+        }
+>>>>>>> pr-292
+    }  // namespace cqsp::common::systems

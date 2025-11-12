@@ -1,5 +1,9 @@
 /* Conquer Space
+<<<<<<< HEAD
  * Copyright (C) 2021-2025 Conquer Space
+=======
+ * Copyright (C) 2021-2023 Conquer Space
+>>>>>>> pr-292
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,36 +25,112 @@
 #include "common/components/name.h"
 #include "common/components/science.h"
 
-namespace cqsp::common::actions {
+<<<<<<< HEAD namespace cqsp::common::actions {
 
-void ResearchTech(Node& civilization, Node& tech) {
-    // Ensure it's a tech or something
-    auto& tech_progress = civilization.get_or_emplace<components::science::TechnologicalProgress>();
-    tech_progress.researched_techs.emplace(tech);
+    void ResearchTech(Node & civilization, Node& tech) {
+        // Ensure it's a tech or something
+        auto& tech_progress = civilization.get_or_emplace<components::science::TechnologicalProgress>();
+tech_progress.researched_techs.emplace(tech);
 
-    // Research technology somehow
-    auto& tech_comp = tech.get<components::science::Technology>();
-    for (const std::string& act : tech_comp.actions) {
-        ProcessAction(civilization, act);
-    }
+// Research technology somehow
+auto& tech_comp = tech.get<components::science::Technology>();
+for (const std::string& act : tech_comp.actions) {
+    ProcessAction(civilization, act);
+}
 }
 
 void ProcessAction(Node& civilization, const std::string& action) {
     // Process the tech
     // Split by the colon
     auto& tech_progress = civilization.get_or_emplace<components::science::TechnologicalProgress>();
+    == == == = < < < < < < < < HEAD : src / common / systems / science / technology.cpp namespace science =
+                   cqsp::common::components::science;
+    using entt::entity;
+    using science::TechnologicalProgress;
+    using science::Technology;
 
-    std::string action_name = action.substr(0, action.find(':'));
-    std::string outcome_name = action.substr(action.find(':') + 1, action.size());
-    if (action_name == "recipe") {
-        // Get the text
-        // Now load recipe
-        // Add to civilization
-        tech_progress.researched_recipes.emplace(civilization.universe().recipes[outcome_name]);
-    } else if (action_name == "mine") {
-        // Now load recipe
-        // Add to civilization
-        tech_progress.researched_mining.emplace(civilization.universe().goods[outcome_name]);
+    namespace cqsp::common::systems::science {
+    void LoadTechnologies(Universe& universe, Hjson::Value& value) {
+        // Load the technologies
+        Hjson::Value base;
+        base["actions"] = Hjson::Type::Vector;
+        base["fields"] = Hjson::Type::Vector;
+        base["difficulty"] = 10.;
+
+        for (int i = 0; i < value.size(); i++) {
+            Hjson::Value element = Hjson::Merge(base, value[i]);
+
+            entity techentity = universe.create();
+            if (!loading::LoadInitialValues(universe, techentity, element)) {
+                // Then kill the loading because you need an identifier
+            }
+
+            auto& tech = universe.emplace<Technology>(techentity);
+            // Add tech data
+            Hjson::Value val = element["actions"];
+            for (int i = 0; i < val.size(); i++) {
+                tech.actions.push_back(val[i].to_string());
+            }
+
+            Hjson::Value fieldlist = element["fields"];
+            for (int i = 0; i < fieldlist.size(); i++) {
+                entity field_entity = universe.fields[fieldlist[i].to_string()];
+                tech.fields.insert(field_entity);
+            }
+
+            // Verify if the tags exist
+            tech.difficulty = element["difficulty"];
+
+            universe.technologies[universe.get<components::Identifier>(techentity)] = techentity;
+        }
     }
-}
+    == == == == namespace cqsp::common::actions {
+        >>>>>>>> pr - 292 : src / common / actions / science /
+                          technologyactions.cpp
+
+                          void ResearchTech(Universe& universe, entt::entity civilization, entt::entity tech) {
+                              // Ensure it's a tech or something
+                              auto& tech_progress = universe.get_or_emplace<TechnologicalProgress>(civilization);
+    tech_progress.researched_techs.emplace(tech);
+
+    // Research technology somehow
+    for (const std::string& act : universe.get<Technology>(tech).actions) {
+        ProcessAction(universe, civilization, act);
+    }
+    }
+
+    void ProcessAction(Universe & universe, entity civilization, const std::string& action) {
+        // Process the tech
+        // Split by the colon
+        auto& tech_progress = universe.get_or_emplace<TechnologicalProgress>(civilization);
+>>>>>>> pr-292
+
+        std::string action_name = action.substr(0, action.find(':'));
+        std::string outcome_name = action.substr(action.find(':') + 1, action.size());
+        if (action_name == "recipe") {
+            // Get the text
+            // Now load recipe
+            // Add to civilization
+<<<<<<< HEAD
+            tech_progress.researched_recipes.emplace(civilization.universe().recipes[outcome_name]);
+        } else if (action_name == "mine") {
+            // Now load recipe
+            // Add to civilization
+            tech_progress.researched_mining.emplace(civilization.universe().goods[outcome_name]);
+        }
+    }
 }  // namespace cqsp::common::actions
+== == == = tech_progress.researched_recipes.emplace(universe.recipes[outcome_name]);
+}
+else if (action_name == "mine") {
+    // Now load recipe
+    // Add to civilization
+    tech_progress.researched_mining.emplace(universe.goods[outcome_name]);
+}
+}
+< < < < < < < < HEAD : src / common / systems / science / technology.cpp
+}  // namespace cqsp::common::systems::science
+== == == ==
+}  // namespace cqsp::common::actions
+>>>>>>>> pr - 292 : src / common / actions / science / technologyactions.cpp
+>>>>>>> pr-292

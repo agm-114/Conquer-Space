@@ -19,5 +19,9 @@
 #include "engine/graphics/mesh.h"
 
 namespace cqsp::engine::primitive {
+<<<<<<< HEAD
 Mesh_t MakeCube();
 }  // namespace cqsp::engine::primitive
+== == == = cqsp::engine::Mesh_t MakeCube();
+}  // namespace cqsp::engine::primitive
+>>>>>>> pr-283

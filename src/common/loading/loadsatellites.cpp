@@ -38,6 +38,26 @@ using bodies::Body;
 using types::Orbit;
 using types::toRadian;
 
+<<<<<<< HEAD:src/common/loading/loadsatellites.cpp
+== == == = namespace types = cqsp::common::components::types;
+namespace components = cqsp::common::components;
+namespace bodies = components::bodies;
+namespace types = components::types;
+
+using types::Orbit;
+
+namespace cqsp::common::systems::loading {
+<<<<<<< HEAD:src/common/loading/loadsatellites.cpp
+>>>>>>> pr_254:src/common/systems/loading/loadsatellites.cpp
+== == == =
+
+             namespace types = components::types;
+namespace bodies = components::bodies;
+using bodies::Body;
+using types::Orbit;
+using types::toRadian;
+
+>>>>>>> pr-290:src/common/systems/loading/loadsatellites.cpp
 namespace {
 std::string trim(const std::string& str, const std::string& whitespace = " \t") {
     const auto strBegin = str.find_first_not_of(whitespace);
@@ -77,7 +97,7 @@ Orbit GetOrbit(const std::string& line_one, const std::string& line_two, const d
     double mean_motion = std::stod(vstrings[7]);
 
     double T = (24 * 3600) / mean_motion;
-    double a = pow(T * T * GM / (4.0 * components::types::PI * components::types::PI),
+    double a = pow(T * T * GM / (4.0 * types::PI * types::PI),
                    1. / 3.0);  // semi_major_axis
 
     orbit.eccentricity = e;
@@ -111,8 +131,12 @@ void LoadSatellites(Universe& universe, std::string& string) {
     std::istringstream f(string);
     std::string line;
     int count = 0;
+<<<<<<< HEAD:src/common/loading/loadsatellites.cpp
     Node earth(universe, universe.planets["earth"]);
     const double GM = earth.get<Body>().GM;
+    == == == = entt::entity earth = universe.planets["earth"];
+    const double GM = universe.get<Body>(earth).GM;
+>>>>>>> pr-290:src/common/systems/loading/loadsatellites.cpp
 
     // Get the next three lines or something like that
     while (std::getline(f, line)) {
@@ -130,35 +154,61 @@ void LoadSatellites(Universe& universe, std::string& string) {
 
         // Add to earth
         auto orbit = GetOrbit(line_one, line_two, GM);
-        orbit.inclination += universe.get<Body>(earth).axial * cos(orbit.inclination);
+<<<<<<< HEAD:src/common/loading/loadsatellites.cpp
+<<<<<<< HEAD:src/common/loading/loadsatellites.cpp
+        == == == =
+>>>>>>> pr-290:src/common/systems/loading/loadsatellites.cpp
+                     orbit.inclination += universe.get<Body>(earth).axial * cos(orbit.inclination);
         // orbit.M0 += universe.get<components::bodies::Body>(earth).axial;
         orbit.reference_body = earth;
         // The math works
+<<<<<<< HEAD:src/common/loading/loadsatellites.cpp
         earth.get<bodies::OrbitalSystem>().push_back(satellite);
         satellite.emplace<Orbit>(orbit);
         satellite.emplace<components::ships::Ship>();
+<<<<<<< HEAD
+        == == == = orbit.inclination += universe.get<bodies::Body>(earth).axial * cos(orbit.inclination);
+        // orbit.M0 += universe.get<components::bodies::Body>(earth).axial;
+        orbit.reference_body = earth;
+        // The math works
+        == == == =
+>>>>>>> pr-290:src/common/systems/loading/loadsatellites.cpp
+                     universe.get<bodies::OrbitalSystem>(earth).push_back(satellite);
+        universe.emplace<Orbit>(satellite, orbit);
+        universe.emplace<components::ships::Ship>(satellite);
+>>>>>>> pr_254:src/common/systems/loading/loadsatellites.cpp
+        == == == =
+>>>>>>> pr-303
     }
 }
 
+<<<<<<< HEAD:src/common/loading/loadsatellites.cpp
 bool SatelliteLoader::LoadValue(const Hjson::Value& values, Node& node) {
-    std::optional<Orbit> orbit = LoadOrbit(values["orbit"]);
-    if (!orbit.has_value()) {
-        return false;
+    == == == = bool SatelliteLoader::LoadValue(const Hjson::Value& values, entt::entity entity) {
+>>>>>>> pr-290:src/common/systems/loading/loadsatellites.cpp
+        std::optional<Orbit> orbit = LoadOrbit(values["orbit"]);
+        if (!orbit.has_value()) {
+            return false;
+        }
+        orbit->reference_body = universe.planets[values["orbit"]["reference"].to_string()];
+        orbit->GM = universe.get<Body>(orbit->reference_body).GM;
+        if (values["model"].defined()) {
+            // Then we can add a model
+            node.emplace<components::WorldModel>(values["model"].to_string());
+        } else {
+            // TODO(EhWhoAmI): We add a generic model instead
+        }
+        // Get name but no identifier
+<<<<<<< HEAD:src/common/loading/loadsatellites.cpp
+        node.emplace<Orbit>(*orbit);
+        Node reference_node(universe, orbit->reference_body);
+        reference_node.get<bodies::OrbitalSystem>().push_back(node);
+        node.emplace<components::ships::Ship>();
+        == == == = universe.emplace<Orbit>(entity, *orbit);
+        universe.get<bodies::OrbitalSystem>(orbit->reference_body).push_back(entity);
+        universe.emplace<components::ships::Ship>(entity);
+>>>>>>> pr-290:src/common/systems/loading/loadsatellites.cpp
+        SPDLOG_INFO("Loaded orbit!");
+        return true;
     }
-    orbit->reference_body = universe.planets[values["orbit"]["reference"].to_string()];
-    orbit->GM = universe.get<Body>(orbit->reference_body).GM;
-    if (values["model"].defined()) {
-        // Then we can add a model
-        node.emplace<components::WorldModel>(values["model"].to_string());
-    } else {
-        // TODO(EhWhoAmI): We add a generic model instead
-    }
-    // Get name but no identifier
-    node.emplace<Orbit>(*orbit);
-    Node reference_node(universe, orbit->reference_body);
-    reference_node.get<bodies::OrbitalSystem>().push_back(node);
-    node.emplace<components::ships::Ship>();
-    SPDLOG_INFO("Loaded orbit!");
-    return true;
-}
 }  // namespace cqsp::common::loading

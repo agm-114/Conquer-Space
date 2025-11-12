@@ -19,28 +19,90 @@
 #include <entt/entt.hpp>
 
 #include "common/components/auction.h"
+<<<<<<< HEAD
 #include "common/universe.h"
 
-namespace cqsp::common::actions {
-/// <summary>
-/// Buys a good from the market
-/// </summary>
-/// <param name="auction_house">Auction house to buy from</param>
-/// <param name="good">Good to buy</param>
-/// <param name="price">Price</param>
-/// <param name="quantity">Quantity</param>
-/// <returns>True if the order is fufilled immediately, false if a buy order is
-/// placed.</returns>
-bool BuyGood(components::AuctionHouse& auction_house, Node& agent, Node& good, double price, double quantity);
+    <<<<<<< HEAD
+<<<<<<< HEAD:src/common/actions/economy/auctionhandler.h namespace cqsp::common::actions {
+    == == ==
+    = namespace cqsp::common::systems {
+>>>>>>> pr_254:src/common/systems/economy/auctionhandler.h
+    /// <summary>
+    /// Buys a good from the market
+    /// </summary>
+    /// <param name="auction_house">Auction house to buy from</param>
+    /// <param name="good">Good to buy</param>
+    /// <param name="price">Price</param>
+    /// <param name="quantity">Quantity</param>
+    /// <returns>True if the order is fufilled immediately, false if a buy order is
+    /// placed.</returns>
+    bool BuyGood(components::AuctionHouse & auction_house, Node & agent, Node & good, double price, double quantity);
 
-/// <summary>
-/// Sells a good to the market
-/// </summary>
-/// <param name="auction_house">Auction house to buy from</param>
-/// <param name="good">Good to buy</param>
-/// <param name="price">Price</param>
-/// <param name="quantity">Quantity</param>
-/// <returns>True if the order is fufilled immediately, false if a sell order is
-/// placed.</returns>
-bool SellGood(components::AuctionHouse& auction_house, Node& agent, Node&, double price, double quantity);
+    /// <summary>
+    /// Sells a good to the market
+    /// </summary>
+    /// <param name="auction_house">Auction house to buy from</param>
+    /// <param name="good">Good to buy</param>
+    /// <param name="price">Price</param>
+    /// <param name="quantity">Quantity</param>
+    /// <returns>True if the order is fufilled immediately, false if a sell order is
+    /// placed.</returns>
+<<<<<<< HEAD:src/common/actions/economy/auctionhandler.h
+    bool SellGood(components::AuctionHouse & auction_house, Node & agent, Node&, double price, double quantity);
 }  // namespace cqsp::common::actions
+== == == = bool SellGood(components::AuctionHouse & auction_house, entt::entity agent, entt::entity good, double price,
+                         double quantity);
+}  // namespace cqsp::common::systems
+>>>>>>> pr_254:src/common/systems/economy/auctionhandler.h
+== == == = namespace cqsp::common::actions {
+    /// <summary>
+    /// Buys a good from the market
+    /// </summary>
+    /// <param name="auction_house">Auction house to buy from</param>
+    /// <param name="good">Good to buy</param>
+    /// <param name="price">Price</param>
+    /// <param name="quantity">Quantity</param>
+    /// <returns>True if the order is fufilled immediately, false if a buy order is
+    /// placed.</returns>
+    bool BuyGood(components::AuctionHouse & auction_house, Node & agent, Node & good, double price, double quantity);
+
+    /// <summary>
+    /// Sells a good to the market
+    /// </summary>
+    /// <param name="auction_house">Auction house to buy from</param>
+    /// <param name="good">Good to buy</param>
+    /// <param name="price">Price</param>
+    /// <param name="quantity">Quantity</param>
+    /// <returns>True if the order is fufilled immediately, false if a sell order is
+    /// placed.</returns>
+    bool SellGood(components::AuctionHouse & auction_house, Node & agent, Node&, double price, double quantity);
+}  // namespace cqsp::common::actions
+>>>>>>> pr-309
+== == == =
+
+             namespace cqsp::common::actions {
+    /// <summary>
+    /// Buys a good from the market
+    /// </summary>
+    /// <param name="auction_house">Auction house to buy from</param>
+    /// <param name="good">Good to buy</param>
+    /// <param name="price">Price</param>
+    /// <param name="quantity">Quantity</param>
+    /// <returns>True if the order is fufilled immediately, false if a buy order is
+    /// placed.</returns>
+    bool BuyGood(components::AuctionHouse & auction_house, entt::entity agent, entt::entity good, double price,
+                 double quantity);
+
+    /// <summary>
+    /// Sells a good to the market
+    /// </summary>
+    /// <param name="auction_house">Auction house to buy from</param>
+    /// <param name="good">Good to buy</param>
+    /// <param name="price">Price</param>
+    /// <param name="quantity">Quantity</param>
+    /// <returns>True if the order is fufilled immediately, false if a sell order is
+    /// placed.</returns>
+    bool SellGood(components::AuctionHouse & auction_house, entt::entity agent, entt::entity good, double price,
+                  double quantity);
+}  // namespace cqsp::common::actions
+>>>>>>> pr-292

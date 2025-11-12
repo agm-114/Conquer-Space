@@ -24,4 +24,8 @@
 
 namespace cqsp::engine::primitive {
 //engine::Mesh* MakeLine(const std::vector<glm::vec3>&);
+<<<<<<< HEAD
 }  // namespace cqsp::engine::primitive
+== == == =
+}  // namespace cqsp::engine::primitive
+>>>>>>> pr-283

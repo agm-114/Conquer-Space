@@ -25,15 +25,54 @@
 #include "common/components/orbit.h"
 #include "common/universe.h"
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD:src/common/actions/shiplaunchaction.h namespace cqsp::common::actions {
+    == == ==
+    = namespace cqsp::common::systems::actions {
+    // deprecated
+    entt::entity CreateShip(Universe & universe, entt::entity civ, const glm::vec3& orbit, entt::entity starsystem);
+    // deprecated
+    entt::entity CreateShip(Universe & universe, entt::entity civ, entt::entity orbit, entt::entity starsystem);
+>>>>>>> pr_254:src/common/systems/actions/shiplaunchaction.h
+    /**
+=======
 namespace cqsp::common::actions {
 /**
+>>>>>>> pr-309
+=======
+namespace cqsp::common::actions {
+// deprecated
+entt::entity CreateShip(Universe &universe, entt::entity civ, const glm::vec3 &orbit, entt::entity starsystem);
+// deprecated
+entt::entity CreateShip(Universe &universe, entt::entity civ, entt::entity orbit, entt::entity starsystem);
+/**
+>>>>>>> pr-292
  *@brief creates a ship with a name and assigns it to a fleet and solar system
  *@param universe The registry for the entities
  *@param fleetEnt The fleet to be used
  *@param starsystemEnt The star system where the ship is created in
  *@return The ship that is created
  */
-Node CreateShip(Node& starsystem, Node& fleet, const glm::vec3& orbit, const std::string& shipName = "");
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD:src/common/actions/shiplaunchaction.h
+    Node CreateShip(Node & starsystem, Node & fleet, const glm::vec3& orbit, const std::string& shipName = "");
+    //@brief just like createShip with fleets but uses an orbit entity instead
+    Node CreateShip(Node & starsystem, Node & fleet, Node & orbit, const std::string& shipName = "");
+    == == == = entt::entity CreateShip(Universe & universe, entt::entity fleetEnt, entt::entity starsystemEnt,
+                                       const glm::vec3& orbit, const std::string& shipName);
+    //@brief just like createShip with fleets but uses an orbit entity instead
+    entt::entity CreateShip(Universe & universe, entt::entity fleetEnt, entt::entity starsystemEnt,
+                            entt::entity orbitEnt, const std::string& shipName);
+>>>>>>> pr_254:src/common/systems/actions/shiplaunchaction.h
+
+    Node CreateShip(Node & starsystem, Node & fleet, const components::types::Orbit& orbit,
+                    const std::string& shipName = "");
+
+    entt::entity LaunchShip(Universe & universe, const components::types::Orbit& orbit);
+}  // namespace cqsp::common::actions
+== == == = Node CreateShip(Node & starsystem, Node& fleet, const glm::vec3& orbit, const std::string& shipName = "");
 //@brief just like createShip with fleets but uses an orbit entity instead
 Node CreateShip(Node& starsystem, Node& fleet, Node& orbit, const std::string& shipName = "");
 
@@ -41,3 +80,13 @@ Node CreateShip(Node& starsystem, Node& fleet, Node& orbit, const std::string& s
 
 Node CreateShip(Node& starsystem, Node& fleet, const components::types::Orbit& orbit, const std::string& shipName = "");
 }  // namespace cqsp::common::actions
+>>>>>>> pr-309
+== == == = entt::entity CreateShip(Universe & universe, entt::entity fleetEnt, entt::entity starsystemEnt,
+                                   const glm::vec3& orbit, const std::string& shipName);
+//@brief just like createShip with fleets but uses an orbit entity instead
+entt::entity CreateShip(Universe& universe, entt::entity fleetEnt, entt::entity starsystemEnt, entt::entity orbitEnt,
+                        const std::string& shipName);
+
+entt::entity LaunchShip(Universe& universe, components::types::Orbit& orbit);
+}  // namespace cqsp::common::systems::actions
+>>>>>>> pr-292

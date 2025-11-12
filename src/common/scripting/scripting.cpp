@@ -24,21 +24,27 @@
 
 #include "common/util/logging.h"
 
-namespace cqsp::common::scripting {
+<<<<<<< HEAD
+<<<<<<< HEAD namespace cqsp::common::scripting {
+    == == ==
+    = using cqsp::common::scripting::ScriptInterface;
+>>>>>>> pr_254
+== == == = namespace cqsp::common::scripting {
+>>>>>>> pr-290
 
-ScriptInterface::ScriptInterface() {
-    open_libraries(sol::lib::base, sol::lib::table, sol::lib::math, sol::lib::package, sol::lib::string);
-    // Initialize loggers
-    logger = cqsp::common::util::make_logger("lua");
-    // Add a sink to get the scripting log
-    ringbuffer_sink = std::make_shared<spdlog::sinks::ringbuffer_sink_mt>(128);
-    ringbuffer_sink->set_pattern("%v");
-    logger->sinks().push_back(ringbuffer_sink);
+             ScriptInterface::ScriptInterface() {
+                 open_libraries(sol::lib::base, sol::lib::table, sol::lib::math, sol::lib::package, sol::lib::string);
+// Initialize loggers
+logger = util::make_logger("lua");
+// Add a sink to get the scripting log
+ringbuffer_sink = std::make_shared<spdlog::sinks::ringbuffer_sink_mt>(128);
+ringbuffer_sink->set_pattern("%v");
+logger->sinks().push_back(ringbuffer_sink);
 
-    // Log information
-    std::string version = (*this)["_VERSION"];
-    SPDLOG_LOGGER_INFO(logger, "Lua version: {}", version);
-    SPDLOG_LOGGER_INFO(logger, "Sol version: {}.{}.{}", SOL_VERSION_MAJOR, SOL_VERSION_MINOR, SOL_VERSION_PATCH);
+// Log information
+std::string version = (*this)["_VERSION"];
+SPDLOG_LOGGER_INFO(logger, "Lua version: {}", version);
+SPDLOG_LOGGER_INFO(logger, "Sol version: {}.{}.{}", SOL_VERSION_MAJOR, SOL_VERSION_MINOR, SOL_VERSION_PATCH);
 }
 
 void ScriptInterface::ParseResult(const sol::protected_function_result& result) {
@@ -74,6 +80,16 @@ void ScriptInterface::Init() {
 
 int ScriptInterface::GetLength(std::string_view a) { return static_cast<int>((*this)[a]["len"]); }
 
+<<<<<<< HEAD
 std::vector<std::string> ScriptInterface::GetLogs() { return ringbuffer_sink->last_formatted(); }
+<<<<<<< HEAD
 
 }  // namespace cqsp::common::scripting
+== == == =
+>>>>>>> pr_254
+             == == == = std::vector<std::string> ScriptInterface::GetLogs() {
+    return ringbuffer_sink->last_formatted();
+}
+
+}  // namespace cqsp::common::scripting
+>>>>>>> pr-290

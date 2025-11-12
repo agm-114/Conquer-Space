@@ -21,6 +21,7 @@
 #include "common/components/orbit.h"
 
 namespace cqsp::common::components {
+<<<<<<< HEAD
 enum class Command {
     CircularizeAtApoapsis,
     CircularizeAtPeriapsis,
@@ -57,4 +58,41 @@ struct OrbitScalar {
 struct OrbitEntityTarget {
     entt::entity target;
 };
+<<<<<<< HEAD
+== == == = enum class Command {
+    CircularizeAtApoapsis,
+    CircularizeAtPeriapsis,
+    SetApoapsis,
+    SetPeriapsis,
+    SetInclination,
+    MatchPlanes,
+    CoplanarIntercept,             // Just intercepts
+    CoplanarInterceptAndTransfer,  // Intercepts and matches orbit
+    Impulse,
+    LandOnBody,
+};
+
+enum class Trigger {
+    // When to trigger the command
+    OnEnterSOI,
+    OnExitSOI,
+    OnManeuver,  // When the previous manuever is executed
+    OnCrash,
+};
+
+struct OrbitTarget {
+    types::Orbit orbit;
+};
+
+struct OrbitScalar {
+    double value;  // Modifies the orbit by some sort of scalar
+};
+
+struct OrbitEntityTarget {
+    entt::entity target;
+};
+>>>>>>> pr-292
 }  // namespace cqsp::common::components
+== == == =
+}  // namespace cqsp::common::components
+>>>>>>> main

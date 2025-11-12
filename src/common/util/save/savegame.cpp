@@ -26,30 +26,69 @@
 #include "common/util/save/save.h"
 namespace cqsp::common::save {
 
-void save_game(Universe& universe) {
+<<<<<<< HEAD
+<<<<<<< HEAD:src/common/util/save/savegame.cpp
+== == == =
+
+>>>>>>> pr-294
+             void save_game(Universe & universe) {
     std::string save_dir_path = util::GetCqspSavePath();
     if (!std::filesystem::exists(save_dir_path)) std::filesystem::create_directories(save_dir_path);
 
     // Generate basic information
     Save save(universe);
-    Hjson::Value metadata = save.GetMetadata();
-    // Write to a file
-    entt::entity player = universe.view<components::Player>().front();
-    auto& name = universe.get<components::Identifier>(player);
-    // Generate the folder
-    std::filesystem::path path = std::filesystem::path(save_dir_path) / (name.identifier + "_" + universe.uuid);
-    std::filesystem::create_directories(path);
+<<<<<<< HEAD
+    == == == =
 
-    // Generate the file
-    Hjson::MarshalToFile(save.GetMetadata(), GetMetaPath(path.string()));
+                 namespace cqsp::client::save {
+        void save_game(common::Universe & universe) {
+            std::string save_dir_path = common::util::GetCqspSavePath();
+            if (!std::filesystem::exists(save_dir_path)) std::filesystem::create_directories(save_dir_path);
 
-    // Then write other game information, however we do that.
-}
+            // Generate basic information
+            common::game::Save save(universe);
+>>>>>>> pr_254:src/client/systems/savegame.cpp
+            == == == =
+>>>>>>> pr-294
+                         Hjson::Value metadata = save.GetMetadata();
+            // Write to a file
+            entt::entity player = universe.view<components::Player>().front();
+            auto& name = universe.get<components::Identifier>(player);
+            // Generate the folder
+            std::filesystem::path path = std::filesystem::path(save_dir_path) / (name.identifier + "_" + universe.uuid);
+            std::filesystem::create_directories(path);
 
-void load_game(Universe& universe, std::string_view directory) {
-    Load load(universe);
-    // Load meta file
-    Hjson::Value metadata = Hjson::UnmarshalFromFile(GetMetaPath(directory));
-    load.LoadMetadata(metadata);
-}
-}  // namespace cqsp::common::save
+            // Generate the file
+<<<<<<< HEAD
+<<<<<<< HEAD:src/common/util/save/savegame.cpp
+            Hjson::MarshalToFile(save.GetMetadata(), GetMetaPath(path.string()));
+            == == == = Hjson::MarshalToFile(save.GetMetadata(), common::game::GetMetaPath(path.string()));
+>>>>>>> pr_254:src/client/systems/savegame.cpp
+            == == == = Hjson::MarshalToFile(save.GetMetadata(), GetMetaPath(path.string()));
+>>>>>>> pr-294
+
+            // Then write other game information, however we do that.
+        }
+
+<<<<<<< HEAD
+<<<<<<< HEAD:src/common/util/save/savegame.cpp
+        == == == =
+>>>>>>> pr-294
+                     void load_game(Universe & universe, std::string_view directory) {
+            Load load(universe);
+            // Load meta file
+            Hjson::Value metadata = Hjson::UnmarshalFromFile(GetMetaPath(directory));
+            load.LoadMetadata(metadata);
+        }
+    }  // namespace cqsp::common::save
+<<<<<<< HEAD
+    == == == = void load_game(common::Universe & universe, std::string_view directory) {
+        common::game::Load load(universe);
+        // Load meta file
+        Hjson::Value metadata = Hjson::UnmarshalFromFile(common::game::GetMetaPath(directory));
+        load.LoadMetadata(metadata);
+    }
+}  // namespace cqsp::client::save
+>>>>>>> pr_254:src/client/systems/savegame.cpp
+== == == =
+>>>>>>> pr-294

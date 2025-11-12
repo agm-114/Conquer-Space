@@ -20,12 +20,33 @@
 #include "engine/scene.h"
 
 namespace cqsp::client {
+<<<<<<< HEAD
+<<<<<<< HEAD
 class ClientScene : public engine::Scene {
  public:
-    explicit ClientScene(engine::Application &app) : engine::Scene(app) {}
+<<<<<<< HEAD
+    explicit ClientScene(engine::Application &app)
+        : engine::Scene(app) {} == == ==
+        = class Scene : public engine::Scene {
+     public:
+        explicit Scene(engine::Application &app) : engine::Scene(app) {}
+>>>>>>> pr_254
+        common::Universe &GetUniverse() { return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->m_universe; }
+        common::scripting::ScriptInterface &GetScriptInterface() {
+            return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->script_interface;
+        }
+    };
+    == == == = explicit ClientScene(engine::Application & app) : engine::Scene(app) {}
     common::Universe &GetUniverse() { return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->m_universe; }
     common::scripting::ScriptInterface &GetScriptInterface() {
-        return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->script_interface;
-    }
-};
-}  // namespace cqsp::client
+        == == == = class ClientScene : public engine::Scene {
+         public:
+            explicit ClientScene(engine::Application &app) : engine::Scene(app) {}
+            common::Universe &GetUniverse() { return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->m_universe; }
+            scripting::ScriptInterface &GetScriptInterface() {
+>>>>>>> pr-286
+                return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->script_interface;
+            }
+        };
+>>>>>>> pr-290
+    }  // namespace cqsp::client

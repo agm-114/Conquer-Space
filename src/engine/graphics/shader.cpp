@@ -267,7 +267,7 @@ Shader::~Shader() {
         glDeleteShader(id);
     }
 }
-namespace {
+namespace cqsp::asset {
 GLenum GetUniformType(GLuint program, const char* name) {
     GLuint in[1];
     glGetUniformIndices(program, 1, &name, in);
@@ -429,9 +429,13 @@ std::map<Hjson::Type, std::string> hjson_type_set {
     {Hjson::Type::Undefined, "Undefined"}, {Hjson::Type::Null, "Null"},   {Hjson::Type::Bool, "Bool"},
     {Hjson::Type::Double, "Double"},       {Hjson::Type::Int64, "Int64"}, {Hjson::Type::String, "String"},
     {Hjson::Type::Vector, "Vector"},       {Hjson::Type::Map, "Map"}};
-}  // namespace
 
-void ShaderDefinition::SetShaderUniform(ShaderProgram_t& shader, std::pair<const std::string, Hjson::Value>& value) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+== == == =
+>>>>>>> pr-288
+             void ShaderDefinition::SetShaderUniform(ShaderProgram_t & shader,
+                                                     std::pair<const std::string, Hjson::Value>& value) {
     GLenum type = GetUniformType(shader->program, value.first.c_str());
     switch (type) {
         case GL_SAMPLER_1D:
@@ -497,31 +501,48 @@ void ShaderDefinition::SetShaderUniform(ShaderProgram_t& shader, std::pair<const
     }
 }
 
-ShaderProgram_t ShaderDefinition::MakeShader() {
-    Shader vert_shader(vert, ShaderType::VERT);
-    Shader frag_shader(frag, ShaderType::FRAG);
+<<<<<<< HEAD
+== == ==
+    =
+>>>>>>> pr_254
+        ShaderProgram_t ShaderDefinition::MakeShader() { == == == = ShaderProgram_t ShaderDefinition::MakeShader() {
+>>>>>>> pr-288
+                                                                      Shader vert_shader(vert, ShaderType::VERT);
+Shader frag_shader(frag, ShaderType::FRAG);
 
-    // Create the shader
-    ShaderProgram_t shader = nullptr;
-    if (!geometry.empty()) {
-        Shader geom_shader(geometry, ShaderType::GEOM);
-        // Add to the shader
-        shader = MakeShaderProgram(vert_shader, frag_shader, geom_shader);
-    } else {
-        shader = MakeShaderProgram(vert_shader, frag_shader);
-    }
-    // Initial values
-    shader->UseProgram();
-    debug_uniforms(shader->program);
-
-    for (auto value : uniforms) {
-        SetShaderUniform(shader, value);
-    }
-    return shader;
+// Create the shader
+ShaderProgram_t shader = nullptr;
+if (!geometry.empty()) {
+    Shader geom_shader(geometry, ShaderType::GEOM);
+    // Add to the shader
+    shader = MakeShaderProgram(vert_shader, frag_shader, geom_shader);
+} else {
+    shader = MakeShaderProgram(vert_shader, frag_shader);
 }
+// Initial values
+shader->UseProgram();
+debug_uniforms(shader->program);
 
-void ShaderProgram::bindTexture(int texture, unsigned int texture_id) {
+for (auto value : uniforms) {
+    SetShaderUniform(shader, value);
+}
+return shader;
+}  // namespace cqsp::asset
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+== == == =
+>>>>>>> pr-288
+             void ShaderProgram::bindTexture(int texture, unsigned int texture_id) {
     glActiveTexture(GL_TEXTURE0 + texture);
     glBindTexture(GL_TEXTURE_2D, texture_id);
 }
+<<<<<<< HEAD
 }  // namespace cqsp::asset
+== == == =
+}  // namespace cqsp::asset
+
+>>>>>>> pr_254
+== == == =
+}  // namespace cqsp::asset
+>>>>>>> pr-288

@@ -17,8 +17,13 @@
 #include "common/components/market.h"
 
 namespace cqsp::common::components {
+<<<<<<< HEAD:src/common/components/market.cpp
 
-void Market::AddSupply(const ResourceLedger& stockpile) {
+using entt::entity;
+== == == =
+>>>>>>> pr-290:src/common/components/economy.cpp
+
+             void Market::AddSupply(const ResourceLedger& stockpile) {
     for (const auto& stockpile_element : stockpile) {
         market_information[stockpile_element.first].supply += stockpile_element.second;
     }
@@ -50,11 +55,18 @@ double Market::GetPrice(const ResourceLedger& stockpile) {
     return price;
 }
 
-double Market::GetSDRatio(const entt::entity& good) { return market_information[good].sd_ratio; }
+double Market::GetSDRatio(const entity& good) { return market_information[good].sd_ratio; }
 
-double Market::GetSupply(const entt::entity& good) { return market_information[good].supply; }
+double Market::GetSupply(const entity& good) { return market_information[good].supply; }
 
-double Market::GetDemand(const entt::entity& good) { return market_information[good].demand; }
+double Market::GetDemand(const entity& good) { return market_information[good].demand; }
 
+<<<<<<< HEAD:src/common/components/market.cpp
 double Market::GetPrice(const entt::entity& good) { return market_information[good].price; }
+<<<<<<< HEAD:src/common/components/market.cpp
 }  // namespace cqsp::common::components
+== == == = double Market::GetPrice(const entity& good) { return market_information[good].price; }
+>>>>>>> pr_254:src/common/components/economy.cpp
+== == == =
+}  // namespace cqsp::common::components
+>>>>>>> pr-290:src/common/components/economy.cpp

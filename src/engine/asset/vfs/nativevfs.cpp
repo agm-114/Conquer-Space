@@ -27,125 +27,134 @@
 namespace cqsp::asset {
 NativeFileSystem::NativeFileSystem(std::string _root) : root(std::move(_root)) {}
 
+<<<<<<< HEAD
 IVirtualFilePtr NativeFileSystem::Open(const std::string& file_path, FileModes modes) {
-    std::string file_pos = file_path;
-    // Remove initial '/' if it has it, or std::filesystem goes crazy and thinks that it's
-    // at the root directory of the drive, not the root directory of the filesystem
-    if (!file_pos.empty() && file_pos.at(0) == '/') {
-        file_pos = file_pos.erase(0, 1);
-    }
-
-    std::string path = (std::filesystem::path(root) / file_pos).string();
-
-    // Erase slash in front, just in case.
-    std::string file_name = file_path;
-    if (!file_name.empty() && file_name.at(0) == '/') {
-        file_name = file_name.erase(0, 1);
-    }
-    std::shared_ptr<NativeFile> nfile = std::make_shared<NativeFile>(this, file_name);
-    // Always open binary for carrige return purposes.
-    // TODO(EhWhoAmI): Make this able to read text without carrige return.
-    nfile->file.open(path, std::ios::binary);
-    // Get the size
-    nfile->file.seekg(0, std::ios::end);
-    nfile->size = nfile->file.tellg();
-    nfile->file.seekg(0);
-
-    // Check if file is good, and return pointer to file
-    if (nfile->file.good()) {
-        return nfile;
-    } else {
-        return nullptr;
-    }
-}
-
-void NativeFileSystem::Close(IVirtualFilePtr& vf) {
-    // Cast the pointer
-    NativeFile* f = dynamic_cast<NativeFile*>(vf.get());
-    f->file.close();
-}
-
-IVirtualDirectoryPtr NativeFileSystem::OpenDirectory(const std::string& dir) {
-    // get the directory
-    std::string path = std::filesystem::absolute(std::filesystem::path(root) / dir).string();
-    if (!std::filesystem::is_directory(path)) {
-        return nullptr;
-    }
-
-    std::shared_ptr<NativeDirectory> native_dir = std::make_shared<NativeDirectory>(this, dir);
-    for (const auto& dir_entry : std::filesystem::recursive_directory_iterator(path)) {
-        // Add to the virtual directory
-        if (!dir_entry.is_regular_file()) {
-            continue;
-        }
-        // Replace the backslashes with forward slashes so that we keep paths consistent across platforms
-        std::string vfile_path =
-            std::filesystem::relative(dir_entry.path(), std::filesystem::path(root) / path).string();
-        std::replace(vfile_path.begin(), vfile_path.end(), '\\', '/');
+    == == == = std::shared_ptr<IVirtualFile> NativeFileSystem::Open(const std::string& file_path, FileModes modes) {
+>>>>>>> pr-288
+        std::string file_pos = file_path;
         // Remove initial '/' if it has it, or std::filesystem goes crazy and thinks that it's
         // at the root directory of the drive, not the root directory of the filesystem
-        if (!vfile_path.empty() && vfile_path.at(0) == '/') {
-            vfile_path = vfile_path.erase(0, 1);
+        if (!file_pos.empty() && file_pos.at(0) == '/') {
+            file_pos = file_pos.erase(0, 1);
         }
 
-        native_dir->paths.push_back(vfile_path);
+        std::string path = (std::filesystem::path(root) / file_pos).string();
+
+        // Erase slash in front, just in case.
+        std::string file_name = file_path;
+        if (!file_name.empty() && file_name.at(0) == '/') {
+            file_name = file_name.erase(0, 1);
+        }
+        std::shared_ptr<NativeFile> nfile = std::make_shared<NativeFile>(this, file_name);
+        // Always open binary for carrige return purposes.
+        // TODO(EhWhoAmI): Make this able to read text without carrige return.
+        nfile->file.open(path, std::ios::binary);
+        // Get the size
+        nfile->file.seekg(0, std::ios::end);
+        nfile->size = nfile->file.tellg();
+        nfile->file.seekg(0);
+
+        // Check if file is good, and return pointer to file
+        if (nfile->file.good()) {
+            return nfile;
+        } else {
+            return nullptr;
+        }
     }
-    // Return the directory
-    return native_dir;
-}
 
-bool NativeFileSystem::IsFile(const std::string& path) {
-    return std::filesystem::is_regular_file(std::filesystem::path(root) / path);
-}
+<<<<<<< HEAD
+    void NativeFileSystem::Close(IVirtualFilePtr & vf) {
+        == == == = void NativeFileSystem::Close(std::shared_ptr<IVirtualFile> & vf) {
+>>>>>>> pr-288
+            // Cast the pointer
+            NativeFile* f = dynamic_cast<NativeFile*>(vf.get());
+            f->file.close();
+        }
 
-bool NativeFileSystem::IsDirectory(const std::string& path) {
-    return std::filesystem::is_directory(std::filesystem::path(root) / path);
-}
+<<<<<<< HEAD
+        IVirtualDirectoryPtr NativeFileSystem::OpenDirectory(const std::string& dir) {
+            == == == = std::shared_ptr<IVirtualDirectory> NativeFileSystem::OpenDirectory(const std::string& dir) {
+>>>>>>> pr-288
+                // get the directory
+                std::string path = std::filesystem::absolute(std::filesystem::path(root) / dir).string();
+                if (!std::filesystem::is_directory(path)) {
+                    return nullptr;
+                }
 
-bool NativeFileSystem::Exists(const std::string& path) {
-    return std::filesystem::exists(std::filesystem::path(root) / path);
-}
+                std::shared_ptr<NativeDirectory> native_dir = std::make_shared<NativeDirectory>(this, dir);
+                for (const auto& dir_entry : std::filesystem::recursive_directory_iterator(path)) {
+                    // Add to the virtual directory
+                    if (!dir_entry.is_regular_file()) {
+                        continue;
+                    }
+                    // Replace the backslashes with forward slashes so that we keep paths consistent across platforms
+                    std::string vfile_path =
+                        std::filesystem::relative(dir_entry.path(), std::filesystem::path(root) / path).string();
+                    std::replace(vfile_path.begin(), vfile_path.end(), '\\', '/');
+                    // Remove initial '/' if it has it, or std::filesystem goes crazy and thinks that it's
+                    // at the root directory of the drive, not the root directory of the filesystem
+                    if (!vfile_path.empty() && vfile_path.at(0) == '/') {
+                        vfile_path = vfile_path.erase(0, 1);
+                    }
 
-const std::string& NativeFile::Path() { return path; }
+                    native_dir->paths.push_back(vfile_path);
+                }
+                // Return the directory
+                return native_dir;
+            }
 
-uint64_t NativeFile::Size() { return size; }
+            bool NativeFileSystem::IsFile(const std::string& path) {
+                return std::filesystem::is_regular_file(std::filesystem::path(root) / path);
+            }
 
-void NativeFile::Read(uint8_t* buffer, int num_bytes) {
-    // Text mode is mildly screwed up, because of carrige return on windows.
-    // Flawfinder: ignore
-    file.read(reinterpret_cast<char*>(buffer), static_cast<std::streamsize>(num_bytes));
-}
+            bool NativeFileSystem::IsDirectory(const std::string& path) {
+                return std::filesystem::is_directory(std::filesystem::path(root) / path);
+            }
 
-bool NativeFile::Seek(long offset, Offset origin) {
-    std::ios_base::seekdir seek;
-    switch (origin) {
-        case Offset::Beg:
-            seek = std::ios_base::beg;
-            break;
-        case Offset::Cur:
-            seek = std::ios_base::cur;
-            break;
-        case Offset::End:
-            seek = std::ios_base::end;
-            break;
-    }
-    file.seekg(offset, seek);
-    return true;
-}
+            bool NativeFileSystem::Exists(const std::string& path) {
+                return std::filesystem::exists(std::filesystem::path(root) / path);
+            }
 
-uint64_t NativeFile::Tell() { return file.tellg(); }
+            const std::string& NativeFile::Path() { return path; }
 
-uint64_t NativeDirectory::GetSize() { return paths.size(); }
+            uint64_t NativeFile::Size() { return size; }
 
-const std::string& NativeDirectory::GetRoot() { return root; }
+            void NativeFile::Read(uint8_t* buffer, int num_bytes) {
+                // Text mode is mildly screwed up, because of carrige return on windows.
+                // Flawfinder: ignore
+                file.read(reinterpret_cast<char*>(buffer), static_cast<std::streamsize>(num_bytes));
+            }
 
-std::shared_ptr<IVirtualFile> NativeDirectory::GetFile(int index, FileModes modes) {
-    // Get the file
-    std::string path = (std::string(root) + "/" + paths[index]);
-    return nfs->Open(path, modes);
-}
+            bool NativeFile::Seek(long offset, Offset origin) {
+                std::ios_base::seekdir seek;
+                switch (origin) {
+                    case Offset::Beg:
+                        seek = std::ios_base::beg;
+                        break;
+                    case Offset::Cur:
+                        seek = std::ios_base::cur;
+                        break;
+                    case Offset::End:
+                        seek = std::ios_base::end;
+                        break;
+                }
+                file.seekg(offset, seek);
+                return true;
+            }
 
-const std::string& NativeDirectory::GetFilename(int index) { return paths[index]; }
+            uint64_t NativeFile::Tell() { return file.tellg(); }
 
-IVirtualFileSystem* NativeDirectory::GetFileSystem() { return nfs; }
-}  // namespace cqsp::asset
+            uint64_t NativeDirectory::GetSize() { return paths.size(); }
+
+            const std::string& NativeDirectory::GetRoot() { return root; }
+
+            std::shared_ptr<IVirtualFile> NativeDirectory::GetFile(int index, FileModes modes) {
+                // Get the file
+                std::string path = (std::string(root) + "/" + paths[index]);
+                return nfs->Open(path, modes);
+            }
+
+            const std::string& NativeDirectory::GetFilename(int index) { return paths[index]; }
+
+            IVirtualFileSystem* NativeDirectory::GetFileSystem() { return nfs; }
+        }  // namespace cqsp::asset

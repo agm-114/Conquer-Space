@@ -16,22 +16,69 @@
  */
 #include "common/loading/loadcountries.h"
 
+<<<<<<< HEAD
 #include "common/components/market.h"
 #include "common/components/name.h"
 #include "common/components/organizations.h"
 
-namespace cqsp::common::loading {
-bool CountryLoader::LoadValue(const Hjson::Value& values, Node& node) {
-    // Just make the country
-    node.emplace<components::Country>();
-    universe.countries[node.get<components::Identifier>().identifier] = node;
+    <<<<<<< HEAD
+<<<<<<< HEAD:src/common/loading/loadcountries.cpp namespace cqsp::common::loading {
+    bool
+    CountryLoader::LoadValue(const Hjson::Value& values, Node& node) {
+    == == == = using cqsp::common::systems::loading::CountryLoader;
+    using entt::entity;
+    == == == = namespace cqsp::common::loading {
+        bool CountryLoader::LoadValue(const Hjson::Value& values, Node& node) {
+            // Just make the country
+            node.emplace<components::Country>();
+            universe.countries[node.get<components::Identifier>().identifier] = node;
+>>>>>>> pr-303
 
-    // Add the list of liabilities the country has?
+            bool CountryLoader::LoadValue(const Hjson::Value& values, entity entity) {
+>>>>>>> pr_254:src/common/systems/loading/loadcountries.cpp
+                // Just make the country
+                node.emplace<components::Country>();
+                universe.countries[node.get<components::Identifier>().identifier] = node;
 
-    if (!values["wallet"].empty()) {
-        auto& wallet = node.emplace<components::Wallet>();
-        wallet = values["wallet"];
+<<<<<<< HEAD
+                // Add the list of liabilities the country has?
+
+                if (!values["wallet"].empty()) {
+                    auto& wallet = node.emplace<components::Wallet>();
+                    wallet = values["wallet"];
+                }
+                return true;
+            }
+<<<<<<< HEAD:src/common/loading/loadcountries.cpp
+        }  // namespace cqsp::common::loading
+        == == == =
+>>>>>>> pr_254:src/common/systems/loading/loadcountries.cpp
+                     == == == = if (!values["wallet"].empty()) {
+            auto& wallet = node.emplace<components::Wallet>();
+            wallet = values["wallet"];
+        }
+        return true;
     }
-    return true;
-}
 }  // namespace cqsp::common::loading
+>>>>>>> pr-303
+== == == =
+#include "common/components/economy.h"
+#include "common/components/name.h"
+#include "common/components/organizations.h"
+
+             namespace cqsp::common::loading {
+    bool CountryLoader::LoadValue(const Hjson::Value& values, entt::entity entity) {
+        // Just make the country
+        universe.emplace<components::Country>(entity);
+        universe.countries[universe.get<components::Identifier>(entity).identifier] = entity;
+
+        // Add the list of liabilities the country has?
+
+        if (!values["wallet"].empty()) {
+            auto& wallet = universe.emplace<components::Wallet>(entity);
+            wallet = values["wallet"];
+        }
+        return true;
+    }
+}  // namespace cqsp::common::loading
+>>>>>>> pr-292

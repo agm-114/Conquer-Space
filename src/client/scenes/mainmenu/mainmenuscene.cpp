@@ -41,67 +41,128 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-namespace cqsp::client::scene {
+<<<<<<< HEAD
+<<<<<<< HEAD namespace cqsp::client::scene {
+    MainMenuScene::MainMenuScene(engine::Application& app)
+    : ClientScene(app),
+      settings_window(app),
+      credits_window(app),
+      load_game_window(app) {}
 
-MainMenuScene::MainMenuScene(engine::Application& app)
-    : ClientScene(app), settings_window(app), credits_window(app), load_game_window(app) {}
+          == == ==
+      = using cqsp::scene::MainMenuScene;
+== == == = namespace cqsp::client::scene {
+    MainMenuScene::MainMenuScene(engine::Application & app)
+        : ClientScene(app), settings_window(app), credits_window(app), load_game_window(app) {}
 
-MainMenuScene::~MainMenuScene() {
-    GetApp().GetRmlUiContext()->RemoveDataModel("settings");
+    MainMenuScene::~MainMenuScene() {
+        GetApp().GetRmlUiContext()->RemoveDataModel("settings");
+>>>>>>> pr-286
 
-    main_menu->RemoveEventListener(Rml::EventId::Click, &listener);
-    main_menu->Close();
+        cqsp::scene::MainMenuScene::MainMenuScene(engine::Application & app)
+            : cqsp::client::Scene(app), settings_window(app), credits_window(app), load_game_window(app) {}
 
-    settings_window.Close();
-    load_game_window.Close();
-}
+>>>>>>> pr_254
+        MainMenuScene::~MainMenuScene() {
+            GetApp().GetRmlUiContext()->RemoveDataModel("settings");
 
-void MainMenuScene::Init() {
-    listener.app = &GetApp();
-    listener.m_scene = this;
+<<<<<<< HEAD
+            main_menu->RemoveEventListener(Rml::EventId::Click, &listener);
+            main_menu->Close();
 
-    main_menu = GetApp().LoadDocument("../data/core/gui/mainmenu.rml");
-    main_menu->Show();
-    main_menu->AddEventListener(Rml::EventId::Click, &listener);
+            settings_window.Close();
+            load_game_window.Close();
+            == == == = void MainMenuScene::Init() {
+                listener.app = &GetApp();
+                listener.m_scene = this;
 
-    settings_window.LoadDocument();
+                main_menu = GetApp().LoadDocument("../data/core/gui/mainmenu.rml");
+                main_menu->Show();
+                main_menu->AddEventListener(Rml::EventId::Click, &listener);
 
-    credits_window.OpenDocument();
+                settings_window.LoadDocument();
 
-    load_game_window.LoadDocument();
+                credits_window.OpenDocument();
 
-    ShuffleFileList();
-    NextImage();
-}
+                load_game_window.LoadDocument();
 
-void MainMenuScene::Update(float deltaTime) {
-    if (GetApp().ButtonIsPressed(engine::KeyInput::KEY_F5)) {
-        Rml::Factory::ClearStyleSheetCache();
-        main_menu = GetApp().ReloadDocument("../data/core/gui/mainmenu.rml");
-        main_menu->AddEventListener(Rml::EventId::Click, &listener);
-        settings_window.ReloadDocument();
-    }
+                ShuffleFileList();
+                NextImage();
+            }
 
-    // List all images in the folder
-    if (GetApp().GetTime() - last_switch > switch_time) {
-        NextImage();
-    }
-    if (is_options_visible && !last_options_visible) {
-        auto opacity = settings_window.GetOpacity();
-        if (opacity <= 0) {
-            is_options_visible = false;
-            settings_window.PushToBack();
-        }
-    }
-    last_options_visible = false;
-    credits_window.Update(deltaTime);
-    if (load_game_window.Update()) {
-        // Load game
-        GetUniverse().ctx().emplace<ctx::GameLoad>(load_game_window.GetSaveDir());
-        GetApp().SetScene<UniverseLoadingScene>();
-    }
-}
+            void MainMenuScene::Update(float deltaTime) {
+                if (GetApp().ButtonIsPressed(engine::KeyInput::KEY_F5)) {
+                    Rml::Factory::ClearStyleSheetCache();
+                    main_menu = GetApp().ReloadDocument("../data/core/gui/mainmenu.rml");
+                    main_menu->AddEventListener(Rml::EventId::Click, &listener);
+                    settings_window.ReloadDocument();
+>>>>>>> pr-286
+                }
 
+                void MainMenuScene::Init() {
+                    listener.app = &GetApp();
+                    listener.m_scene = this;
+
+                    main_menu = GetApp().LoadDocument("../data/core/gui/mainmenu.rml");
+                    main_menu->Show();
+                    main_menu->AddEventListener(Rml::EventId::Click, &listener);
+
+                    settings_window.LoadDocument();
+
+                    credits_window.OpenDocument();
+
+                    load_game_window.LoadDocument();
+
+                    ShuffleFileList();
+                    NextImage();
+                }
+
+                void MainMenuScene::Update(float deltaTime) {
+                    if (GetApp().ButtonIsPressed(engine::KeyInput::KEY_F5)) {
+                        Rml::Factory::ClearStyleSheetCache();
+                        main_menu = GetApp().ReloadDocument("../data/core/gui/mainmenu.rml");
+                        main_menu->AddEventListener(Rml::EventId::Click, &listener);
+                        settings_window.ReloadDocument();
+                    }
+
+                    // List all images in the folder
+                    if (GetApp().GetTime() - last_switch > switch_time) {
+                        NextImage();
+                    }
+                    if (is_options_visible && !last_options_visible) {
+                        auto opacity = settings_window.GetOpacity();
+                        if (opacity <= 0) {
+                            is_options_visible = false;
+                            settings_window.PushToBack();
+                        }
+                    }
+                    last_options_visible = false;
+                    credits_window.Update(deltaTime);
+                    if (load_game_window.Update()) {
+                        // Load game
+                        GetUniverse().ctx().emplace<ctx::GameLoad>(load_game_window.GetSaveDir());
+                        GetApp().SetScene<UniverseLoadingScene>();
+                    }
+                }
+<<<<<<< HEAD
+
+                void MainMenuScene::Ui(float deltaTime) {}
+
+                void MainMenuScene::Render(float deltaTime) {
+                    GetApp().DrawText(fmt::format("Version: {}", CQSP_VERSION_STRING), 8, 8);
+                    == == == = last_options_visible = false;
+                    credits_window.Update(deltaTime);
+                    if (load_game_window.Update()) {
+                        // Load game
+                        GetUniverse().ctx().emplace<ctx::GameLoad>(load_game_window.GetSaveDir());
+                        GetApp().SetScene<UniverseLoadingScene>();
+>>>>>>> pr-286
+                    }
+
+<<<<<<< HEAD
+                    void MainMenuScene::ModWindow() {
+                        /*
+=======
 void MainMenuScene::Ui(float deltaTime) {}
 
 void MainMenuScene::Render(float deltaTime) {
@@ -110,6 +171,7 @@ void MainMenuScene::Render(float deltaTime) {
 
 void MainMenuScene::ModWindow() {
     /*
+>>>>>>> pr-286
     ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x * 0.8f, ImGui::GetIO().DisplaySize.y * 0.8f),
         ImGuiCond_Always);
     ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f),
@@ -195,63 +257,106 @@ void MainMenuScene::ModWindow() {
     }
     ImGui::SameLine();
     ImGui::End();*/
-}
+                    }
 
-void MainMenuScene::ShuffleFileList() {
-    std::string splash_dir = common::util::GetCqspDataPath() + "/core/gui/splashscreens";
+<<<<<<< HEAD
+                    void MainMenuScene::ShuffleFileList() {
+                        std::string splash_dir = common::util::GetCqspDataPath() + "/core/gui/splashscreens";
+<<<<<<< HEAD
+                        == == == = auto s = std::filesystem::canonical(splash_dir).string();
+>>>>>>> pr_254
+                        == == == = void MainMenuScene::ShuffleFileList() {
+                            std::string splash_dir = common::util::GetCqspDataPath() + "/core/gui/splashscreens";
+>>>>>>> pr-286
 
-    for (const auto& entry : std::filesystem::directory_iterator(splash_dir)) {
-        std::string extension = entry.path().extension().string();
-        std::transform(extension.begin(), extension.end(), extension.begin(),
-                       [](unsigned char c) { return std::tolower(c); });
-        if (!(extension == ".png" || extension == ".jpg")) {
-            continue;
-        }
-        // Or else load the image
-        file_list.push_back(std::filesystem::canonical(entry.path()).string());
-    }
-    std::random_device device;
-    std::mt19937 generator(device());
-    std::uniform_int_distribution<int> dist(0, file_list.size() - 1);
-    for (int i = 0; i < file_list.size(); i++) {
-        int index = dist(generator);
-        std::swap(file_list[index], file_list[i]);
-    }
-    index = 0;
-}
+                            for (const auto& entry : std::filesystem::directory_iterator(splash_dir)) {
+                                std::string extension = entry.path().extension().string();
+                                std::transform(extension.begin(), extension.end(), extension.begin(),
+                                               [](unsigned char c) { return std::tolower(c); });
+                                if (!(extension == ".png" || extension == ".jpg")) {
+                                    continue;
+                                }
+                                // Or else load the image
+                                file_list.push_back(std::filesystem::canonical(entry.path()).string());
+                            }
+                            std::random_device device;
+                            std::mt19937 generator(device());
+                            std::uniform_int_distribution<int> dist(0, file_list.size() - 1);
+                            for (int i = 0; i < file_list.size(); i++) {
+                                int index = dist(generator);
+                                std::swap(file_list[index], file_list[i]);
+                            }
+                            index = 0;
+                        }
 
-void MainMenuScene::SetMainMenuImage(const std::string& file) {
-    main_menu->GetElementById("main_window")
-        ->SetProperty("decorator", fmt::format("image(\"{}\" flip-vertical cover center bottom)", file));
-}
+                        void MainMenuScene::SetMainMenuImage(const std::string& file) {
+                            main_menu->GetElementById("main_window")
+                                ->SetProperty("decorator",
+                                              fmt::format("image(\"{}\" flip-vertical cover center bottom)", file));
+                        }
 
-void MainMenuScene::NextImage() {
-    SetMainMenuImage(file_list[index]);
-    index++;
-    index %= file_list.size();
-    last_switch = GetApp().GetTime();
-}
+<<<<<<< HEAD
+                        void MainMenuScene::NextImage() {
+                            SetMainMenuImage(file_list[index]);
+                            index++;
+                            index %= file_list.size();
+                            last_switch = GetApp().GetTime();
+                        }
 
-void MainMenuScene::EventListener::ProcessEvent(Rml::Event& event) {
-    std::string id_pressed = event.GetTargetElement()->GetId();
-    if (id_pressed == "new_game") {
-        // New game!
-        // Confirm window, then new game
-        m_scene->GetApp().SetScene<UniverseLoadingScene>();
-    } else if (id_pressed == "save_game") {
-        m_scene->load_game_window.Show();
-    } else if (id_pressed == "options") {
-        m_scene->settings_window.Show();
-        m_scene->is_options_visible = true;
-        m_scene->last_options_visible = true;
-        // Activate animation
-    } else if (id_pressed == "credits") {
-        // Show credits window
-        m_scene->credits_window.Show();
-    } else if (id_pressed == "mods") {
-    } else if (id_pressed == "quit") {
-        app->ExitApplication();
-    }
-}
+                        void MainMenuScene::EventListener::ProcessEvent(Rml::Event & event) {
+                            std::string id_pressed = event.GetTargetElement()->GetId();
+                            if (id_pressed == "new_game") {
+                                // New game!
+                                // Confirm window, then new game
+                                m_scene->GetApp().SetScene<UniverseLoadingScene>();
+                            } else if (id_pressed == "save_game") {
+                                m_scene->load_game_window.Show();
+                            } else if (id_pressed == "options") {
+                                m_scene->settings_window.Show();
+                                m_scene->is_options_visible = true;
+                                m_scene->last_options_visible = true;
+                                // Activate animation
+                            } else if (id_pressed == "credits") {
+                                // Show credits window
+                                m_scene->credits_window.Show();
+                            } else if (id_pressed == "mods") {
+                            } else if (id_pressed == "quit") {
+                                app->ExitApplication();
+                            }
+                        }
+                        == == == = void MainMenuScene::SetMainMenuImage(const std::string& file) {
+                            main_menu->GetElementById("main_window")
+                                ->SetProperty("decorator", fmt::format("image(\"{}\" none cover center bottom)", file));
+                        }
 
-}  // namespace cqsp::client::scene
+                        void MainMenuScene::NextImage() {
+                            SetMainMenuImage(file_list[index]);
+                            index++;
+                            index %= file_list.size();
+                            last_switch = GetApp().GetTime();
+                        }
+
+                        void MainMenuScene::EventListener::ProcessEvent(Rml::Event & event) {
+                            std::string id_pressed = event.GetTargetElement()->GetId();
+                            if (id_pressed == "new_game") {
+                                // New game!
+                                // Confirm window, then new game
+                                m_scene->GetApp().SetScene<UniverseLoadingScene>();
+                            } else if (id_pressed == "save_game") {
+                                m_scene->load_game_window.Show();
+                            } else if (id_pressed == "options") {
+                                m_scene->settings_window.Show();
+                                m_scene->is_options_visible = true;
+                                m_scene->last_options_visible = true;
+                                // Activate animation
+                            } else if (id_pressed == "credits") {
+                                // Show credits window
+                                m_scene->credits_window.Show();
+                            } else if (id_pressed == "mods") {
+                            } else if (id_pressed == "quit") {
+                                app->ExitApplication();
+                            }
+                        }
+>>>>>>> pr-286
+
+                    }  // namespace cqsp::client::scene

@@ -21,4 +21,8 @@
 
 namespace cqsp::common::scripting {
 void LoadFunctions(Universe& universe, ScriptInterface& script_engine);
+<<<<<<< HEAD
 }  // namespace cqsp::common::scripting
+== == == =
+}  // namespace cqsp::scripting
+>>>>>>> pr-290

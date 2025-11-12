@@ -18,16 +18,35 @@
 
 #include <utility>
 
+<<<<<<< HEAD:src/common/actions/maneuver/rendezvous.h
 #include <glm/vec3.hpp>
 
 #include "common/actions/maneuver/hohmann.h"
 #include "common/components/maneuver.h"
 #include "common/components/orbit.h"
+    <<<<<<<HEAD == == == =
+#include "common/actions/maneuver/hohmann.h"
+               >>>>>>>
+        pr - 292
 
-namespace cqsp::common::systems {
-// Tools for rendezvous
-// Coplanar rendezvous
-// Basically a Hohmann transfer at the right time
-components::HohmannPair_t CoplanarIntercept(const components::types::Orbit& start_orbit,
-                                            const components::types::Orbit& end_orbit, double epoch);
+    namespace cqsp::common::systems {
+    // Tools for rendezvous
+    // Coplanar rendezvous
+    // Basically a Hohmann transfer at the right time
+    components::HohmannPair_t CoplanarIntercept(const components::types::Orbit& start_orbit,
+                                                const components::types::Orbit& end_orbit, double epoch);
 }  // namespace cqsp::common::systems
+== == == = namespace cqsp::common::systems::resource {
+    /// <summary>
+    /// Transfers resources from the first entity to the second
+    /// </summary>
+    /// <param name="registry">Registry to transfer</param>
+    /// <param name="from">Needs to be a resource stockpile</param>
+    /// <param name="to">Needs to be a resource stockpile</param>
+    /// <param name="good">good to transfer</param>
+    /// <param name="amount">amount of resources to transfer</param>
+    /// <returns>If transfering resources failed.</returns>
+    bool TransferResources(entt::registry & registry, entt::entity from, entt::entity to, entt::entity good,
+                           double amount);
+}  // namespace cqsp::common::systems::resource
+>>>>>>> pr-290:src/common/systems/actions/sysresourcetransfer.h

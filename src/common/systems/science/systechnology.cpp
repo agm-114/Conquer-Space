@@ -23,32 +23,114 @@
 #include "common/components/science.h"
 #include "common/loading/technology.h"
 
-namespace cqsp::common::systems {
+<<<<<<< HEAD
+<<<<<<< HEAD namespace cqsp::common::systems { namespace science = components::science;
 
-namespace science = components::science;
-
-void SysTechProgress::DoSystem() {
+    void
+    SysTechProgress::DoSystem() {
     ZoneScoped;
     auto fields = GetUniverse().nodes<science::ScientificResearch>();
 
+<<<<<<< HEAD
     for (Node field_node : fields) {
         auto& research = field_node.get<science::ScientificResearch>();
         std::vector<Node> completed_techs;
-        for (auto& res : research.current_research) {
-            res.second += Interval();
-            Node tech_node(field_node, res.first);
-            // Get the research amount
+        == == == = using cqsp::common::components::science::Technology;
+        using cqsp::common::components::science::ScientificResearch;
+        using cqsp::common::systems::SysTechProgress;
+        using entt::entity;
 
-            auto& tech = tech_node.get<science::Technology>();
-            if (res.second > tech.difficulty) {
-                // Add the researched
-                completed_techs.push_back(tech_node);
+        void SysTechProgress::DoSystem() {
+            ZoneScoped;
+            for (entity presearch : GetUniverse().view<ScientificResearch>()) {
+                auto& research = GetUniverse().get<ScientificResearch>(presearch);
+                std::vector<entity> completed_techs;
+>>>>>>> pr_254
+                for (auto& res : research.current_research) {
+                    res.second += Interval();
+                    Node tech_node(field_node, res.first);
+                    // Get the research amount
+<<<<<<< HEAD
+
+                    auto& tech = tech_node.get<science::Technology>();
+                    == == == = auto& tech = GetUniverse().get<Technology>(res.first);
+>>>>>>> pr_254
+                    if (res.second > tech.difficulty) {
+                        // Add the researched
+                        completed_techs.push_back(tech_node);
+                    }
+                }
+<<<<<<< HEAD
+                for (Node tech : completed_techs) {
+                    actions::ResearchTech(field_node, tech);
+                    research.current_research.erase(tech);
+                    == == == = for (entity r : completed_techs) {
+                        science::ResearchTech(GetUniverse(), presearch, r);
+                        research.current_research.erase(r);
+>>>>>>> pr_254
+                    }
+                }
+            }
+        }  // namespace cqsp::common::systems
+        == == == = void SysTechProgress::DoSystem() {
+            ZoneScoped;
+            auto fields = GetUniverse().nodes<science::ScientificResearch>();
+
+            for (Node field_node : fields) {
+                auto& research = field_node.get<science::ScientificResearch>();
+                std::vector<Node> completed_techs;
+                for (auto& res : research.current_research) {
+                    res.second += Interval();
+                    Node tech_node(field_node, res.first);
+                    // Get the research amount
+
+                    auto& tech = tech_node.get<science::Technology>();
+                    if (res.second > tech.difficulty) {
+                        // Add the researched
+                        completed_techs.push_back(tech_node);
+                    }
+                }
+                for (Node tech : completed_techs) {
+                    actions::ResearchTech(field_node, tech);
+                    research.current_research.erase(tech);
+                }
             }
         }
-        for (Node tech : completed_techs) {
-            actions::ResearchTech(field_node, tech);
-            research.current_research.erase(tech);
-        }
+<<<<<<< HEAD
+    }  // namespace cqsp::common::systems
+>>>>>>> pr-303
+    == == == = for (entt::entity r : completed_techs) {
+        actions::ResearchTech(GetUniverse(), entity, r);
+        research.current_research.erase(r);
     }
 }
+}
 }  // namespace cqsp::common::systems
+>>>>>>> pr-292
+== == == = namespace cqsp::common::systems {
+    namespace science = components::science;
+
+    void SysTechProgress::DoSystem() {
+        ZoneScoped;
+        auto field = GetUniverse().view<science::ScientificResearch>();
+
+        for (entt::entity entity : field) {
+            auto& research = GetUniverse().get<science::ScientificResearch>(entity);
+            std::vector<entt::entity> completed_techs;
+            for (auto& res : research.current_research) {
+                res.second += Interval();
+                // Get the research amount
+                auto& tech = GetUniverse().get<science::Technology>(res.first);
+                if (res.second > tech.difficulty) {
+                    // Add the researched
+                    completed_techs.push_back(res.first);
+                }
+            }
+            for (entt::entity r : completed_techs) {
+                loading::ResearchTech(GetUniverse(), entity, r);
+                research.current_research.erase(r);
+            }
+        }
+    }
+}  // namespace cqsp::common::systems
+>>>>>>> pr-290

@@ -31,9 +31,18 @@
 #include "glm/glm.hpp"
 
 namespace cqsp::client::systems {
+<<<<<<< HEAD
+<<<<<<< HEAD
 
-// TODO(EhWhoAmI): Would be helpful to move the following structs to a header file.
-struct MouseOverEntity {};
+== == == =
+>>>>>>> pr_254
+             // TODO(EhWhoAmI): Would be helpful to move the following structs to a header file.
+    struct MouseOverEntity {};
+== == == =
+
+             // TODO(EhWhoAmI): Would be helpful to move the following structs to a header file.
+    struct MouseOverEntity {};
+>>>>>>> pr-287
 
 // Planet that the camera center is at
 struct FocusedPlanet {};
@@ -54,7 +63,7 @@ class SysStarSystemRenderer {
     void SeeStarSystem();
     void SeeEntity();
     void Update(float deltaTime);
-    void SeePlanet(entt::entity);
+    void SeePlanet(entt::entity);  //Error
     void DoUI(float deltaTime);
 
     glm::vec3 GetMouseIntersectionOnObject(int mouse_x, int mouse_y);
@@ -101,20 +110,35 @@ class SysStarSystemRenderer {
     engine::Renderable ship_overlay;
     engine::Renderable city;
     engine::Renderable sun;
+<<<<<<< HEAD
+<<<<<<< HEAD
+    == == == = asset::Model * iss_model;
+>>>>>>> pr_254
+    == == == =
+>>>>>>> pr-287
 
-    asset::ShaderProgram_t model_shader;
+                 asset::ShaderProgram_t model_shader;
     asset::ShaderProgram_t orbit_shader;
     asset::ShaderProgram_t near_shader;
     asset::ShaderProgram_t vis_shader;
-    asset::ShaderProgram_t circle_shader;
+<<<<<<< HEAD
+<<<<<<< HEAD
+    == == == =
+>>>>>>> pr-287
+                 asset::ShaderProgram_t circle_shader;
     asset::ShaderProgram_t planet_shader;
     asset::ShaderProgram_t textured_planet_shader;
     asset::ShaderProgram_t sun_shader;
     asset::ShaderProgram_t skybox_shader;
     asset::ShaderProgram_t buffer_shader;
+<<<<<<< HEAD
+    == == == =
+>>>>>>> pr_254
+                 == == == =
+>>>>>>> pr-287
 #if FALSE
-    // Disabled for now
-    asset::ShaderProgram_t no_light_shader;
+                              // Disabled for now
+        asset::ShaderProgram_t no_light_shader;
 #endif
 
     glm::vec3 cam_pos;
@@ -261,4 +285,13 @@ class SysStarSystemRenderer {
 
     bool have_province = false;
 };
+<<<<<<< HEAD
+<<<<<<< HEAD
 }  // namespace cqsp::client::systems
+== == == =
+}  // namespace cqsp::client::systems
+
+>>>>>>> pr_254
+== == == =
+}  // namespace cqsp::client::systems
+>>>>>>> pr-287

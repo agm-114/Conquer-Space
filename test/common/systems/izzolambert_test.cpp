@@ -23,9 +23,17 @@
 #include "common/actions/maneuver/rendezvous.h"
 #include "common/components/orbit.h"
 #include "common/components/units.h"
+<<<<<<< HEAD:test/common/systems/izzolambert_test.cpp
 #include "common/util/orbit/randomorbit.h"
+    == == ==
+    =
+#include "common/actions/maneuver/lambert/izzo.h"
+#include "common/actions/maneuver/maneuver.h"
+#include "common/actions/maneuver/rendezvous.h"
+        >>>>>>> pr - 292 : test / common / systems /
+                           izzolamberttest.cpp
 
-namespace cqsps = cqsp::common::systems;
+                           namespace cqsps = cqsp::common::systems;
 namespace cqspt = cqsp::common::components::types;
 
 TEST(IzzoTest, DISABLED_Lambert) {

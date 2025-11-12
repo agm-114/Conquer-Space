@@ -105,6 +105,7 @@ struct MarketElementInformation {
     double price_ratio;
     double sd_ratio;
     double inputratio;
+<<<<<<< HEAD:src/common/components/market.h
 };
 
 struct MarketOrder {
@@ -126,6 +127,8 @@ struct PlanetaryMarket {
     // Resources supplied by the interplanetary market
     ResourceLedger supplied_resources;
     ResourceLedger supply_difference;
+    == == == =
+>>>>>>> pr_191:src/common/components/economy.h
 };
 
 struct Market : MarketInformation {
@@ -309,6 +312,12 @@ struct FactoryProducing {};
 struct Owned {
     entt::entity owner;
 };
+<<<<<<< HEAD:src/common/components/market.h
 
 struct TradePartners : std::vector<entt::entity> {};
+<<<<<<< HEAD:src/common/components/market.h
+== == == =
+>>>>>>> pr_254:src/common/components/economy.h
+             == == == =
+>>>>>>> pr-283:src/common/components/economy.h
 }  // namespace cqsp::common::components
