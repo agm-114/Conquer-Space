@@ -22,7 +22,10 @@ namespace cqsp::client::systems {
 <<<<<<< HEAD
 void ShowOptionsWindow(bool* open, engine::Application& app);
 }  // namespace cqsp::client::systems
+<<<<<<< HEAD
 == == == = void ShowOptionsWindow(bool* open, cqsp::engine::Application& app);
 }  // namespace cqsp::client::systems
 
 >>>>>>> pr_254
+== == == =
+>>>>>>> pr-288

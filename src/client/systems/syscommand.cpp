@@ -17,17 +17,20 @@
 
 <<<<<<< HEAD void conquerspace::client::systems::SysCommand::Init() {}
 
-void conquerspace::client::systems::SysCommand::DoUI(int delta_time) {
+    void
+    conquerspace::client::systems::SysCommand::DoUI(int delta_time) {
     == == == = namespace components = cqsp::common::components;
     namespace bodies = components::bodies;
     namespace ships = components::ships;
     namespace types = components::types;
     namespace systems = cqsp::client::systems;
 
+<<<<<<< HEAD
     using components::Name;
 
     namespace cqsp::client::systems {
-    void SysCommand::Init() {}
+    void SysCommand::Init() {} == == == = void SysCommand::Init() {}
+>>>>>>> pr-288
 
     void SysCommand::DoUI(int delta_time) {
         ShipList();
@@ -114,8 +117,13 @@ void conquerspace::client::systems::SysCommand::DoUI(int delta_time) {
     }*/
             }
 
+<<<<<<< HEAD
             void SysCommand::ShipList() {
                 /*
+=======
+void cqsp::client::systems::SysCommand::ShipList() {
+    /*
+>>>>>>> pr-288
     static entt::entity selectedFleetEnt = GetUniverse()
                            .get<cqspc::Civilization>(GetUniverse()
                            .view<cqspc::Player>()

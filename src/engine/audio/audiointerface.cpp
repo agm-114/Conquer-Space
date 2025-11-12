@@ -81,9 +81,12 @@ void AudioInterface::SetMusicVolume(float volume) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void AudioInterface::AddAudioClip(const std::string& key, AudioAsset* asset) { assets[key] = asset; }
 == == == = void AudioInterface::AddAudioClip(const std::string& key, AudioAsset* asset) { assets[key] = asset; }
 >>>>>>> pr_254
+== == == = void AudioInterface::AddAudioClip(const std::string& key, AudioAsset* asset) { assets[key] = asset; }
+>>>>>>> pr-288
 
 void AudioInterface::PlayAudioClip(const std::string& key) {
     if (assets.find(key) == assets.end()) {
@@ -97,10 +100,15 @@ void AudioInterface::PlayAudioClip(const std::string& key) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void AudioInterface::PlayAudioClip(AudioAsset* asset, int channel) {}
 
 void AudioInterface::SetChannelVolume(int channel, float gain) { channels[channel]->SetGain(gain); }
-== == == = void AudioInterface::PlayAudioClip(cqsp::asset::AudioAsset * asset, int channel) {}
+== == == = void AudioInterface::PlayAudioClip(cqsp::asset::AudioAsset * asset, int channel) {} == == ==
+    = void AudioInterface::PlayAudioClip(AudioAsset * asset, int channel) {}
+
+void AudioInterface::SetChannelVolume(int channel, float gain) { channels[channel]->SetGain(gain); }
+>>>>>>> pr-288
 
 void AudioInterface::SetChannelVolume(int channel, float gain) { channels[channel]->SetGain(gain); }
 >>>>>>> pr_254

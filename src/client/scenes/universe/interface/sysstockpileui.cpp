@@ -23,47 +23,70 @@
 #include "fmt/format.h"
 #include "systooltips.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::systems {
     using common::Universe;
-    using common::components::Identifier;
-    using common::components::ResourceLedger;
-    using util::NumberToHumanString;
+using common::components::Identifier;
+using common::components::ResourceLedger;
+using util::NumberToHumanString;
 
-    == == == = using cqsp::common::Universe;
-    using cqsp::common::components::Identifier;
-    using cqsp::common::components::ResourceLedger;
-    using cqsp::common::util::GetName;
-    using cqsp::common::util::LongToHumanString;
+== == == = using cqsp::common::Universe;
+using cqsp::common::components::Identifier;
+using cqsp::common::components::ResourceLedger;
+using cqsp::common::util::GetName;
+using cqsp::common::util::LongToHumanString;
 
-    namespace cqsp::client::systems {
+namespace cqsp::client::systems {
 >>>>>>> pr_254
-    bool DrawLedgerTable(const std::string &name, const Universe &universe, const ResourceLedger &ledger) {
-        if (ledger.empty()) {
-            ImGui::Text("Empty ledger");
-            return false;
-        }
-        if (ImGui::BeginTable(name.c_str(), 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
-            ImGui::TableSetupColumn("Good");
-            ImGui::TableSetupColumn("Amount");
-            ImGui::TableHeadersRow();
-            for (auto iterator = ledger.begin(); iterator != ledger.end(); iterator++) {
-                if (iterator->second == 0) {
-                    continue;
+bool DrawLedgerTable(const std::string &name, const Universe &universe, const ResourceLedger &ledger) {
+    if (ledger.empty()) {
+        ImGui::Text("Empty ledger");
+        return false;
+        == == == = namespace cqsp::client::systems {
+            using common::Universe;
+            using common::components::Identifier;
+            using common::components::ResourceLedger;
+            using util::LongToHumanString;
+
+            bool DrawLedgerTable(const std::string &name, const Universe &universe, const ResourceLedger &ledger) {
+                if (ledger.empty()) {
+                    ImGui::Text("Empty ledger");
+                    return false;
                 }
-                ImGui::TableNextRow();
-                ImGui::TableSetColumnIndex(0);
-                ImGui::TextFmt("{}", GetName(universe, iterator->first));
-                ImGui::TableSetColumnIndex(1);
-                ImGui::TextFmt("{}", NumberToHumanString(static_cast<int64_t>(iterator->second)));
-            }
-            ImGui::EndTable();
-        }
-        return true;
-    }
+                if (ImGui::BeginTable(name.c_str(), 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
+                    ImGui::TableSetupColumn("Good");
+                    ImGui::TableSetupColumn("Amount");
+                    ImGui::TableHeadersRow();
+                    for (auto iterator = ledger.begin(); iterator != ledger.end(); iterator++) {
+                        ImGui::TableNextRow();
+                        ImGui::TableSetColumnIndex(0);
+                        ImGui::TextFmt("{}", common::util::GetName(universe, iterator->first));
+                        ImGui::TableSetColumnIndex(1);
+                        ImGui::TextFmt("{}", LongToHumanString(static_cast<int64_t>(iterator->second)));
+>>>>>>> pr-288
+                    }
+                    if (ImGui::BeginTable(name.c_str(), 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
+                        ImGui::TableSetupColumn("Good");
+                        ImGui::TableSetupColumn("Amount");
+                        ImGui::TableHeadersRow();
+                        for (auto iterator = ledger.begin(); iterator != ledger.end(); iterator++) {
+                            if (iterator->second == 0) {
+                                continue;
+                            }
+                            ImGui::TableNextRow();
+                            ImGui::TableSetColumnIndex(0);
+                            ImGui::TextFmt("{}", GetName(universe, iterator->first));
+                            ImGui::TableSetColumnIndex(1);
+                            ImGui::TextFmt("{}", NumberToHumanString(static_cast<int64_t>(iterator->second)));
+                        }
+                        ImGui::EndTable();
+                    }
+                    return true;
+                }
 <<<<<<< HEAD
 
-    }  // namespace cqsp::client::systems
-    == == == =
-}  // namespace cqsp::client::systems
+            }  // namespace cqsp::client::systems
+            == == == =
+        }  // namespace cqsp::client::systems
 
 >>>>>>> pr_254

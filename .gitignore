@@ -29,6 +29,10 @@ tools/run-clang-tidy.py
 
 *.pdb
 
+<<<<<<< HEAD
 *.editorconfig
 
 NodeEditor.json
+=======
+*.editorconfig
+>>>>>>> pr-288

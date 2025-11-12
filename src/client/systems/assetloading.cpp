@@ -61,6 +61,7 @@
 
                  namespace cqsp::client::systems {
 
+<<<<<<< HEAD
         namespace loading = common::loading;
 >>>>>>> pr-292
         namespace components = common::components;
@@ -81,13 +82,10 @@
                 using cqsp::common::systems::loading::HjsonLoader;
                 using cqsp::engine::Application;
                 using loading::LoadProvinces;
-
-<<<<<<< HEAD
-                namespace cqsp::client::systems {
-                void LoadResource(Application& app, Universe& universe, const std::string& asset_name,
-                                  void (*func)(common::Universe& universe, Hjson::Value& recipes)) {
-                    for (const auto& it : app.GetAssetManager()) {
->>>>>>> pr_254
+                == == == = void LoadResource(AssetManager & asset_manager, Universe & universe,
+                                             const std::string& asset_name,
+                                             void (*func)(Universe& universe, Hjson::Value& recipes)) {
+                    for (const auto& it : asset_manager) {
                         if (!it.second->HasAsset(asset_name)) {
                             continue;
                         }
@@ -102,137 +100,80 @@
                         }
                     }
                 }
-                == == ==
-                    = template <class T>
-                    void LoadResource(AssetManager & asset_manager, Universe& universe, const std::string& asset_name) {
+
+                template <class T>
+                void LoadResource(AssetManager & asset_manager, Universe & universe, const std::string& asset_name) {
                     auto start = std::chrono::system_clock::now();
                     static_assert(std::is_base_of_v<HjsonLoader, T>, "Class is not child of");
                     std::unique_ptr<HjsonLoader> ptr = std::make_unique<T>(universe);
-                    //SPDLOG_INFO("Starting load {}", asset_name);
-
-                    for (const auto& it : asset_manager) {
-                        if (!it.second->HasAsset(asset_name)) {
-                            continue;
-                        }
-                        HjsonAsset* good_assets = it.second->GetAsset<HjsonAsset>(asset_name);
-                        try {
-                            ptr->LoadHjson(good_assets->data);
-                        } catch (std::runtime_error& error) {
-                            SPDLOG_INFO("Failed to load hjson asset {}: {}", asset_name, error.what());
-                        } catch (Hjson::index_out_of_bounds& error) {
-                            SPDLOG_INFO("Failed to load hjson asset {}: Index out of bounds: {}", asset_name,
-                                        error.what());
-                        }
-                    }
-                    auto end = std::chrono::system_clock::now();
-                    SPDLOG_INFO("{} load took {} ms", asset_name,
-                                std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
-                }
-
-                void LoadPlanetProvinces(AssetManager& asset_manager, ConquerSpace& conquer_space) {
-                    auto& universe = conquer_space.GetUniverse();
-                    auto view = universe.nodes<components::ProvincedPlanet>();
-                    SPDLOG_INFO("Loading Provinces");
-                    for (common::Node node : view) {
-                        // Check if it's empty or not
-                        //SPDLOG_INFO("Loading Provinces for planet");
+>>>>>>> pr-288
 
 <<<<<<< HEAD
-<<<<<<< HEAD
-                        auto& province_map = node.get<components::ProvincedPlanet>();
-                        if (!province_map.province_definitions.empty()) {
-                            asset::TextAsset* asset =
-                                asset_manager.GetAsset<asset::TextAsset>(province_map.province_definitions);
-                            if (asset != nullptr) {
-                                loading::LoadProvinces(node, asset->data);
+                    namespace cqsp::client::systems {
+                    void LoadResource(Application& app, Universe& universe, const std::string& asset_name,
+                                      void (*func)(common::Universe& universe, Hjson::Value& recipes)) {
+                        for (const auto& it : app.GetAssetManager()) {
+>>>>>>> pr_254
+                            if (!it.second->HasAsset(asset_name)) {
+                                continue;
+                            }
+                            HjsonAsset* good_assets = it.second->GetAsset<HjsonAsset>(asset_name);
+                            try {
+                                func(universe, good_assets->data);
+                            } catch (std::runtime_error& error) {
+                                SPDLOG_INFO("Failed to load hjson asset {}: {}", asset_name, error.what());
+                            } catch (Hjson::index_out_of_bounds& error) {
+                                SPDLOG_INFO("Failed to load hjson asset {}: Index out of bounds: {}", asset_name,
+                                            error.what());
                             }
                         }
-                        //SPDLOG_INFO("Done Loading Provinces for planet");
                     }
-                    SPDLOG_INFO("Proviences Loaded");
-                }
->>>>>>> pr-303
-                == == == = LoadResource(asset_manager, conquer_space.m_universe, "names", loading::LoadNameLists);
-                LoadResource(asset_manager, conquer_space.m_universe, "tech_fields",
-                             common::systems::science::LoadFields);
-                LoadResource(asset_manager, conquer_space.m_universe, "tech_list",
-                             common::systems::loading::LoadTechnologies);
->>>>>>> pr-290
-
-                template <class T>
-<<<<<<< HEAD
-                void LoadResource(AssetManager& asset_manager, Universe& universe, const std::string& asset_name) {
-                    auto start = std::chrono::system_clock::now();
-                    static_assert(std::is_base_of_v<HjsonLoader, T>, "Class is not child of");
-                    == == ==
-                        = void LoadResource(Application & app, Universe & universe, const std::string& asset_name) {
-                        static_assert(std::is_base_of<HjsonLoader, T>::value, "Class is not child of");
->>>>>>> pr_254
+                    == == == = template <class T>
+                             void LoadResource(AssetManager & asset_manager, Universe& universe,
+                                               const std::string& asset_name) {
+                        auto start = std::chrono::system_clock::now();
+                        static_assert(std::is_base_of_v<HjsonLoader, T>, "Class is not child of");
                         std::unique_ptr<HjsonLoader> ptr = std::make_unique<T>(universe);
                         //SPDLOG_INFO("Starting load {}", asset_name);
-                        == == ==
-                            = LoadResource(asset_manager, conquer_space.m_universe, "names", loading::LoadNameLists);
-                        LoadResource(asset_manager, conquer_space.m_universe, "tech_fields", loading::LoadFields);
-                        LoadResource(asset_manager, conquer_space.m_universe, "tech_list", loading::LoadTechnologies);
 
-<<<<<<< HEAD
-                        // Initialize planet terrains
-                        HjsonAsset* asset = asset_manager.GetAsset<HjsonAsset>("core:terrain_colors");
-                        loading::LoadTerrainData(conquer_space.GetUniverse(), asset->data);
->>>>>>> pr-292
-                        == == == =
-                                     // Load scripts
-                            // Load lua functions
-                            common::scripting::LoadFunctions(conquer_space.GetUniverse(),
-                                                             conquer_space.GetScriptInterface());
-                        scripting::LoadImGuiFunctions(conquer_space.GetUniverse(), conquer_space.GetScriptInterface());
-                        scripting::ClientFunctions(asset_manager, conquer_space.GetUniverse(),
-                                                   conquer_space.GetScriptInterface());
-                        scripting::InitClientElements(conquer_space.GetUniverse(), conquer_space.GetScriptInterface());
->>>>>>> pr-290
-
-<<<<<<< HEAD
                         for (const auto& it : asset_manager) {
-                            == == == = for (const auto& it : app.GetAssetManager()) {
->>>>>>> pr_254
-                                if (!it.second->HasAsset(asset_name)) {
-                                    continue;
-                                }
-                                HjsonAsset* good_assets = it.second->GetAsset<HjsonAsset>(asset_name);
-                                try {
-                                    ptr->LoadHjson(good_assets->data);
-                                } catch (std::runtime_error& error) {
-                                    SPDLOG_INFO("Failed to load hjson asset {}: {}", asset_name, error.what());
-                                } catch (Hjson::index_out_of_bounds& error) {
-                                    SPDLOG_INFO("Failed to load hjson asset {}: Index out of bounds: {}", asset_name,
-                                                error.what());
-                                }
+                            if (!it.second->HasAsset(asset_name)) {
+                                continue;
                             }
-                            auto end = std::chrono::system_clock::now();
-                            SPDLOG_INFO("{} load took {} ms", asset_name,
-                                        std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
+                            HjsonAsset* good_assets = it.second->GetAsset<HjsonAsset>(asset_name);
+                            try {
+                                ptr->LoadHjson(good_assets->data);
+                            } catch (std::runtime_error& error) {
+                                SPDLOG_INFO("Failed to load hjson asset {}: {}", asset_name, error.what());
+                            } catch (Hjson::index_out_of_bounds& error) {
+                                SPDLOG_INFO("Failed to load hjson asset {}: Index out of bounds: {}", asset_name,
+                                            error.what());
+                            }
                         }
+                        auto end = std::chrono::system_clock::now();
+                        SPDLOG_INFO("{} load took {} ms", asset_name,
+                                    std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
+                    }
 
 <<<<<<< HEAD
-                        void LoadPlanetProvinces(AssetManager & asset_manager, ConquerSpace & conquer_space) {
-                            auto& universe = conquer_space.GetUniverse();
-                            auto view = universe.nodes<components::ProvincedPlanet>();
-                            SPDLOG_INFO("Loading Provinces");
-                            for (common::Node node : view) {
+                    void LoadPlanetProvinces(AssetManager& asset_manager, ConquerSpace& conquer_space) {
+                        auto& universe = conquer_space.GetUniverse();
+                        auto view = universe.nodes<components::ProvincedPlanet>();
+                        SPDLOG_INFO("Loading Provinces");
+                        for (common::Node node : view) {
+                            // Check if it's empty or not
+                            //SPDLOG_INFO("Loading Provinces for planet");
+                            == == == = for (entt::entity entity : view) {
                                 // Check if it's empty or not
-                                //SPDLOG_INFO("Loading Provinces for planet");
-
-                                auto& province_map = node.get<components::ProvincedPlanet>();
+                                auto& province_map = universe.get<components::ProvincedPlanet>(entity);
                                 if (!province_map.province_definitions.empty()) {
                                     asset::TextAsset* asset =
                                         asset_manager.GetAsset<asset::TextAsset>(province_map.province_definitions);
                                     if (asset != nullptr) {
-                                        loading::LoadProvinces(node, asset->data);
+                                        loading::LoadProvinces(universe, entity, asset->data);
                                     }
                                 }
-                                //SPDLOG_INFO("Done Loading Provinces for planet");
                             }
-                            SPDLOG_INFO("Proviences Loaded");
                         }
 
                         void LoadAllResources(AssetManager & asset_manager, ConquerSpace & conquer_space) {
@@ -250,56 +191,184 @@
                                                                    "satellites");
 
                             LoadResource(asset_manager, conquer_space.m_universe, "names", loading::LoadNameLists);
+                            LoadResource(asset_manager, conquer_space.m_universe, "tech_fields",
+                                         common::systems::science::LoadFields);
+                            LoadResource(asset_manager, conquer_space.m_universe, "tech_list",
+                                         common::systems::science::LoadTechnologies);
+>>>>>>> pr-288
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            auto& province_map = node.get<components::ProvincedPlanet>();
+                            if (!province_map.province_definitions.empty()) {
+                                asset::TextAsset* asset =
+                                    asset_manager.GetAsset<asset::TextAsset>(province_map.province_definitions);
+                                if (asset != nullptr) {
+                                    loading::LoadProvinces(node, asset->data);
+                                }
+                            }
+                            //SPDLOG_INFO("Done Loading Provinces for planet");
+                        }
+                        SPDLOG_INFO("Proviences Loaded");
+                    }
+>>>>>>> pr-303
+                    == == == = LoadResource(asset_manager, conquer_space.m_universe, "names", loading::LoadNameLists);
+                    LoadResource(asset_manager, conquer_space.m_universe, "tech_fields",
+                                 common::systems::science::LoadFields);
+                    LoadResource(asset_manager, conquer_space.m_universe, "tech_list",
+                                 common::systems::loading::LoadTechnologies);
+>>>>>>> pr-290
+
+                    template <class T>
+<<<<<<< HEAD
+                    void LoadResource(AssetManager& asset_manager, Universe& universe, const std::string& asset_name) {
+                        auto start = std::chrono::system_clock::now();
+                        static_assert(std::is_base_of_v<HjsonLoader, T>, "Class is not child of");
+                        == == ==
+                            = void LoadResource(Application & app, Universe & universe, const std::string& asset_name) {
+                            static_assert(std::is_base_of<HjsonLoader, T>::value, "Class is not child of");
+>>>>>>> pr_254
+                            std::unique_ptr<HjsonLoader> ptr = std::make_unique<T>(universe);
+                            //SPDLOG_INFO("Starting load {}", asset_name);
+                            == == == = LoadResource(asset_manager, conquer_space.m_universe, "names",
+                                                    loading::LoadNameLists);
                             LoadResource(asset_manager, conquer_space.m_universe, "tech_fields", loading::LoadFields);
                             LoadResource(asset_manager, conquer_space.m_universe, "tech_list",
                                          loading::LoadTechnologies);
 
+<<<<<<< HEAD
                             // Initialize planet terrains
                             HjsonAsset* asset = asset_manager.GetAsset<HjsonAsset>("core:terrain_colors");
                             loading::LoadTerrainData(conquer_space.GetUniverse(), asset->data);
-                            == == == = void LoadAllResources(Application & app, ConquerSpace & conquer_space) {
-                                LoadResource<loading::GoodLoader>(app, conquer_space.GetUniverse(), "goods");
-                                LoadResource<loading::RecipeLoader>(app, conquer_space.GetUniverse(), "recipes");
-                                LoadResource<loading::PlanetLoader>(app, conquer_space.GetUniverse(), "planets");
-                                LoadResource<loading::TimezoneLoader>(app, conquer_space.GetUniverse(), "timezones");
-                                LoadResource<loading::CountryLoader>(app, conquer_space.GetUniverse(), "countries");
-                                LoadProvinces(conquer_space.GetUniverse(),
-                                              app.GetAssetManager().GetAsset<asset::TextAsset>("province_defs")->data);
-                                LoadResource<loading::CityLoader>(app, conquer_space.GetUniverse(), "cities");
-                                LoadResource(app, conquer_space.m_universe, "names", loading::LoadNameLists);
-                                LoadResource(app, conquer_space.m_universe, "tech_fields",
-                                             common::systems::science::LoadFields);
-                                LoadResource(app, conquer_space.m_universe, "tech_list",
-                                             common::systems::science::LoadTechnologies);
-                                common::systems::loading::LoadSatellites(
-                                    conquer_space.GetUniverse(),
-                                    app.GetAssetManager().GetAsset<asset::TextAsset>("satellites")->data);
-
-                                // Initialize planet terrains
-                                HjsonAsset* asset = app.GetAssetManager().GetAsset<HjsonAsset>("core:terrain_colors");
-                                common::systems::loading::LoadTerrainData(conquer_space.GetUniverse(), asset->data);
->>>>>>> pr_254
-
-                                // Load scripts
+>>>>>>> pr-292
+                            == == == =
+                                         // Load scripts
                                 // Load lua functions
                                 common::scripting::LoadFunctions(conquer_space.GetUniverse(),
                                                                  conquer_space.GetScriptInterface());
+                            scripting::LoadImGuiFunctions(conquer_space.GetUniverse(),
+                                                          conquer_space.GetScriptInterface());
+                            scripting::ClientFunctions(asset_manager, conquer_space.GetUniverse(),
+                                                       conquer_space.GetScriptInterface());
+                            scripting::InitClientElements(conquer_space.GetUniverse(),
+                                                          conquer_space.GetScriptInterface());
+>>>>>>> pr-290
+
 <<<<<<< HEAD
-                                scripting::LoadImGuiFunctions(conquer_space.GetUniverse(),
-                                                              conquer_space.GetScriptInterface());
-                                scripting::ClientFunctions(asset_manager, conquer_space.GetUniverse(),
-                                                           conquer_space.GetScriptInterface());
-                                scripting::InitClientElements(conquer_space.GetUniverse(),
-                                                              conquer_space.GetScriptInterface());
-                                == == == = scripting::ClientFunctions(app, conquer_space.GetUniverse(),
-                                                                      conquer_space.GetScriptInterface());
+                            for (const auto& it : asset_manager) {
+                                == == == = for (const auto& it : app.GetAssetManager()) {
+>>>>>>> pr_254
+                                    if (!it.second->HasAsset(asset_name)) {
+                                        continue;
+                                    }
+                                    HjsonAsset* good_assets = it.second->GetAsset<HjsonAsset>(asset_name);
+                                    try {
+                                        ptr->LoadHjson(good_assets->data);
+                                    } catch (std::runtime_error& error) {
+                                        SPDLOG_INFO("Failed to load hjson asset {}: {}", asset_name, error.what());
+                                    } catch (Hjson::index_out_of_bounds& error) {
+                                        SPDLOG_INFO("Failed to load hjson asset {}: Index out of bounds: {}",
+                                                    asset_name, error.what());
+                                    }
+                                }
+                                auto end = std::chrono::system_clock::now();
+                                SPDLOG_INFO("{} load took {} ms", asset_name,
+                                            std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
+                            }
+
+<<<<<<< HEAD
+                            void LoadPlanetProvinces(AssetManager & asset_manager, ConquerSpace & conquer_space) {
+                                auto& universe = conquer_space.GetUniverse();
+                                auto view = universe.nodes<components::ProvincedPlanet>();
+                                SPDLOG_INFO("Loading Provinces");
+                                for (common::Node node : view) {
+                                    // Check if it's empty or not
+                                    //SPDLOG_INFO("Loading Provinces for planet");
+
+                                    auto& province_map = node.get<components::ProvincedPlanet>();
+                                    if (!province_map.province_definitions.empty()) {
+                                        asset::TextAsset* asset =
+                                            asset_manager.GetAsset<asset::TextAsset>(province_map.province_definitions);
+                                        if (asset != nullptr) {
+                                            loading::LoadProvinces(node, asset->data);
+                                        }
+                                    }
+                                    //SPDLOG_INFO("Done Loading Provinces for planet");
+                                }
+                                SPDLOG_INFO("Proviences Loaded");
+                            }
+
+                            void LoadAllResources(AssetManager & asset_manager, ConquerSpace & conquer_space) {
+                                LoadResource<loading::GoodLoader>(asset_manager, conquer_space.GetUniverse(), "goods");
+                                LoadResource<loading::RecipeLoader>(asset_manager, conquer_space.GetUniverse(),
+                                                                    "recipes");
+                                LoadResource<loading::PlanetLoader>(asset_manager, conquer_space.GetUniverse(),
+                                                                    "planets");
+                                LoadResource<loading::TimezoneLoader>(asset_manager, conquer_space.GetUniverse(),
+                                                                      "timezones");
+                                LoadResource<loading::CountryLoader>(asset_manager, conquer_space.GetUniverse(),
+                                                                     "countries");
+
+                                LoadPlanetProvinces(asset_manager, conquer_space);
+                                LoadResource<loading::CityLoader>(asset_manager, conquer_space.GetUniverse(), "cities");
+                                LoadResource<loading::SatelliteLoader>(asset_manager, conquer_space.GetUniverse(),
+                                                                       "satellites");
+
+                                LoadResource(asset_manager, conquer_space.m_universe, "names", loading::LoadNameLists);
+                                LoadResource(asset_manager, conquer_space.m_universe, "tech_fields",
+                                             loading::LoadFields);
+                                LoadResource(asset_manager, conquer_space.m_universe, "tech_list",
+                                             loading::LoadTechnologies);
+
+                                // Initialize planet terrains
+                                HjsonAsset* asset = asset_manager.GetAsset<HjsonAsset>("core:terrain_colors");
+                                loading::LoadTerrainData(conquer_space.GetUniverse(), asset->data);
+                                == == == = void LoadAllResources(Application & app, ConquerSpace & conquer_space) {
+                                    LoadResource<loading::GoodLoader>(app, conquer_space.GetUniverse(), "goods");
+                                    LoadResource<loading::RecipeLoader>(app, conquer_space.GetUniverse(), "recipes");
+                                    LoadResource<loading::PlanetLoader>(app, conquer_space.GetUniverse(), "planets");
+                                    LoadResource<loading::TimezoneLoader>(app, conquer_space.GetUniverse(),
+                                                                          "timezones");
+                                    LoadResource<loading::CountryLoader>(app, conquer_space.GetUniverse(), "countries");
+                                    LoadProvinces(
+                                        conquer_space.GetUniverse(),
+                                        app.GetAssetManager().GetAsset<asset::TextAsset>("province_defs")->data);
+                                    LoadResource<loading::CityLoader>(app, conquer_space.GetUniverse(), "cities");
+                                    LoadResource(app, conquer_space.m_universe, "names", loading::LoadNameLists);
+                                    LoadResource(app, conquer_space.m_universe, "tech_fields",
+                                                 common::systems::science::LoadFields);
+                                    LoadResource(app, conquer_space.m_universe, "tech_list",
+                                                 common::systems::science::LoadTechnologies);
+                                    common::systems::loading::LoadSatellites(
+                                        conquer_space.GetUniverse(),
+                                        app.GetAssetManager().GetAsset<asset::TextAsset>("satellites")->data);
+
+                                    // Initialize planet terrains
+                                    HjsonAsset* asset =
+                                        app.GetAssetManager().GetAsset<HjsonAsset>("core:terrain_colors");
+                                    common::systems::loading::LoadTerrainData(conquer_space.GetUniverse(), asset->data);
 >>>>>>> pr_254
 
-                                // Load universe
-                                // Register data groups
-                                auto& script_interface = conquer_space.GetScriptInterface();
-                                script_interface.RegisterDataGroup("generators");
-                                script_interface.RegisterDataGroup("events");
-                                script_interface.RegisterDataGroup("interfaces");
-                            }
-                        }  // namespace cqsp::client::systems
+                                    // Load scripts
+                                    // Load lua functions
+                                    common::scripting::LoadFunctions(conquer_space.GetUniverse(),
+                                                                     conquer_space.GetScriptInterface());
+<<<<<<< HEAD
+                                    scripting::LoadImGuiFunctions(conquer_space.GetUniverse(),
+                                                                  conquer_space.GetScriptInterface());
+                                    scripting::ClientFunctions(asset_manager, conquer_space.GetUniverse(),
+                                                               conquer_space.GetScriptInterface());
+                                    scripting::InitClientElements(conquer_space.GetUniverse(),
+                                                                  conquer_space.GetScriptInterface());
+                                    == == == = scripting::ClientFunctions(app, conquer_space.GetUniverse(),
+                                                                          conquer_space.GetScriptInterface());
+>>>>>>> pr_254
+
+                                    // Load universe
+                                    // Register data groups
+                                    auto& script_interface = conquer_space.GetScriptInterface();
+                                    script_interface.RegisterDataGroup("generators");
+                                    script_interface.RegisterDataGroup("events");
+                                    script_interface.RegisterDataGroup("interfaces");
+                                }
+                            }  // namespace cqsp::client::systems

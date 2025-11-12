@@ -149,12 +149,17 @@
 <<<<<<< HEAD
     float SettingsWindow::GetOpacity() { return options_menu->GetProperty(Rml::PropertyId::Opacity)->Get<float>(); }
 
+<<<<<<< HEAD
     void SettingsWindow::PushToBack() { options_menu->PushToBack(); }
 
 }  // namespace cqsp::client
 == == == = float SettingsWindow::GetOpacity() {
     return options_menu->GetProperty(Rml::PropertyId::Opacity)->Get<float>();
 }
+== == == = float SettingsWindow::GetOpacity() {
+    return options_menu->GetProperty(Rml::PropertyId::Opacity)->Get<float>();
+}
+>>>>>>> pr-288
 
 void SettingsWindow::PushToBack() { options_menu->PushToBack(); }
 >>>>>>> pr_254

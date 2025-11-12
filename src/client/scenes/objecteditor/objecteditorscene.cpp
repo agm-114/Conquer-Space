@@ -23,59 +23,94 @@
 #include "client/systems/assetloading.h"
 #include "client/util/assetwindow.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::scene {
-    ObjectEditorScene::ObjectEditorScene(engine::Application & app) : ClientScene(app) {
-        AddUISystem<systems::SysFieldNodeViewer>("Node Viewer");
-        AddUISystem<systems::SysGoodViewer>("Good Viewer");
-        AddUISystem<systems::SysRecipeViewer>("Recipe Viewer");
-        AddUISystem<systems::AssetWindow>("Asset Window");
-        AddUISystem<systems::ImGuiDebugger>("ImGui Debugger Window");
-        == == == = using cqsp::scene::ObjectEditorScene;
-        using entt::entity;
+    ObjectEditorScene::ObjectEditorScene(engine::Application& app)
+    : ClientScene(app) {
+    AddUISystem<systems::SysFieldNodeViewer>("Node Viewer");
+    AddUISystem<systems::SysGoodViewer>("Good Viewer");
+    AddUISystem<systems::SysRecipeViewer>("Recipe Viewer");
+    AddUISystem<systems::AssetWindow>("Asset Window");
+    AddUISystem<systems::ImGuiDebugger>("ImGui Debugger Window");
+    == == == = using cqsp::scene::ObjectEditorScene;
+    using entt::entity;
 
-        ObjectEditorScene::ObjectEditorScene(engine::Application & app) : client::Scene(app) {
-            AddUISystem<client::systems::SysFieldNodeViewer>("Node Viewer");
-            AddUISystem<client::systems::SysGoodViewer>("Good Viewer");
-            AddUISystem<client::systems::SysRecipeViewer>("Recipe Viewer");
+    ObjectEditorScene::ObjectEditorScene(engine::Application & app) : client::Scene(app) {
+        AddUISystem<client::systems::SysFieldNodeViewer>("Node Viewer");
+        AddUISystem<client::systems::SysGoodViewer>("Good Viewer");
+        AddUISystem<client::systems::SysRecipeViewer>("Recipe Viewer");
 >>>>>>> pr_254
-        }
-
-        ObjectEditorScene::~ObjectEditorScene() = default;
-
-        void ObjectEditorScene::Init() {
-            // Sorta need to initialize everything
-<<<<<<< HEAD
-            systems::LoadAllResources(GetApp().GetAssetManager(),
-                                      *dynamic_cast<client::ConquerSpace*>(GetApp().GetGame()));
-            == == ==
-                = client::systems::LoadAllResources(GetApp(), *dynamic_cast<client::ConquerSpace*>(GetApp().GetGame()));
->>>>>>> pr_254
-        }
-
-        void ObjectEditorScene::Update(float deltaTime) {}
-
-        void ObjectEditorScene::Ui(float deltaTime) {
-            // Do information UI
-            ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-            ImGui::Begin("UI to Show");
-            if (ImGui::Button("Exit")) {
-                // Exit app
-                GetApp().ExitApplication();
+        == == == = namespace cqsp::client::scene {
+            ObjectEditorScene::ObjectEditorScene(engine::Application & app) : ClientScene(app) {
+                AddUISystem<systems::SysFieldNodeViewer>("Node Viewer");
+                AddUISystem<systems::SysGoodViewer>("Good Viewer");
+                AddUISystem<systems::SysRecipeViewer>("Recipe Viewer");
             }
-            for (auto& ui : user_interfaces) {
-                ImGui::Checkbox(fmt::format("{}", ui.first).c_str(), &ui.second.first);
+
+            ObjectEditorScene::~ObjectEditorScene() = default;
+
+            void ObjectEditorScene::Init() {
+                // Sorta need to initialize everything
+                systems::LoadAllResources(GetApp().GetAssetManager(),
+                                          *dynamic_cast<client::ConquerSpace*>(GetApp().GetGame()));
             }
-            ImGui::End();
-            for (auto& ui : user_interfaces) {
-                if (ui.second.first) {
-                    ui.second.second->DoUI(deltaTime);
+
+            void ObjectEditorScene::Update(float deltaTime) {}
+
+            void ObjectEditorScene::Ui(float deltaTime) {
+                // Do information UI
+                ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+                ImGui::Begin("UI to Show");
+                if (ImGui::Button("Exit")) {
+                    // Exit app
+                    GetApp().ExitApplication();
                 }
-            }
-        }
+                for (auto& ui : user_interfaces) {
+                    ImGui::Checkbox(fmt::format("{}", ui.first).c_str(), &ui.second.first);
+                }
+                ImGui::End();
+                for (auto& ui : user_interfaces) {
+                    if (ui.second.first) {
+                        ui.second.second->DoUI(deltaTime);
+>>>>>>> pr-288
+                    }
 
-        void ObjectEditorScene::Render(float deltaTime) {}
+                    ObjectEditorScene::~ObjectEditorScene() = default;
+
+                    void ObjectEditorScene::Init() {
+                        // Sorta need to initialize everything
+<<<<<<< HEAD
+                        systems::LoadAllResources(GetApp().GetAssetManager(),
+                                                  *dynamic_cast<client::ConquerSpace*>(GetApp().GetGame()));
+                        == == == = client::systems::LoadAllResources(
+                                     GetApp(), *dynamic_cast<client::ConquerSpace*>(GetApp().GetGame()));
+>>>>>>> pr_254
+                    }
+
+                    void ObjectEditorScene::Update(float deltaTime) {}
+
+                    void ObjectEditorScene::Ui(float deltaTime) {
+                        // Do information UI
+                        ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+                        ImGui::Begin("UI to Show");
+                        if (ImGui::Button("Exit")) {
+                            // Exit app
+                            GetApp().ExitApplication();
+                        }
+                        for (auto& ui : user_interfaces) {
+                            ImGui::Checkbox(fmt::format("{}", ui.first).c_str(), &ui.second.first);
+                        }
+                        ImGui::End();
+                        for (auto& ui : user_interfaces) {
+                            if (ui.second.first) {
+                                ui.second.second->DoUI(deltaTime);
+                            }
+                        }
+                    }
+
+                    void ObjectEditorScene::Render(float deltaTime) {}
 <<<<<<< HEAD
 
-    }  // namespace cqsp::client::scene
-    == == == =
+                }  // namespace cqsp::client::scene
+                == == == =
 >>>>>>> pr_254
