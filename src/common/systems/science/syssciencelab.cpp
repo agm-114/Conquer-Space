@@ -28,7 +28,10 @@ using entt::entity;
 void SysScienceLab::DoSystem() {
     ZoneScoped;
 <<<<<<< HEAD
-    auto labs = GetUniverse().nodes<components::science::Lab>();
+<<<<<<< HEAD
+    == == == =
+>>>>>>> pr-303
+                 auto labs = GetUniverse().nodes<components::science::Lab>();
     // Add to the science
     for (Node lab_node : labs) {
         // Add to the scientific progress of the area, I guess
@@ -36,6 +39,7 @@ void SysScienceLab::DoSystem() {
         // Progress the science, I guess
         // Get the science progress, and add to it, somehow
         auto& science_progress = lab_node.get_or_emplace<components::science::ScientificProgress>();
+<<<<<<< HEAD
         == == == =
                      // Add to the science
             for (entity entity : GetUniverse().view<Lab>()) {
@@ -47,6 +51,10 @@ void SysScienceLab::DoSystem() {
 >>>>>>> pr_254
             // Progress science
             science_progress.science_progress.MultiplyAdd(lab.science_contribution, Interval());
+            == == == =
+                         // Progress science
+                science_progress.science_progress.MultiplyAdd(lab.science_contribution, Interval());
+>>>>>>> pr-303
 
             // If the research is done, then research tech
         }

@@ -221,6 +221,7 @@ void FunctionEconomy(Universe& universe, ScriptInterface& script_engine) {
             });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             REGISTER_FUNCTION("create_factory", [&](entt::entity city, entt::entity recipe, int productivity) {
                 Node city_node(universe, city);
                 Node recipe_node(universe, recipe);
@@ -237,6 +238,14 @@ void FunctionEconomy(Universe& universe, ScriptInterface& script_engine) {
                           return settlement;
 >>>>>>> pr_28
                       });
+                == == == = REGISTER_FUNCTION(
+                             "create_factory", [&](entt::entity city, entt::entity recipe, int productivity) {
+                                 Node city_node(universe, city);
+                                 Node recipe_node(universe, recipe);
+                                 Node factory = actions::CreateFactory(city_node, recipe_node, productivity);
+                                 return factory;
+                             });
+>>>>>>> pr-303
 
                 REGISTER_FUNCTION("add_production", [&](entt::entity factory) {
                     // Factory will produce in the first tick
@@ -255,10 +264,16 @@ void FunctionEconomy(Universe& universe, ScriptInterface& script_engine) {
                     return entity;
                 });
 
+<<<<<<< HEAD
                 REGISTER_FUNCTION("create_commercial_area", [&](entt::entity city) {
                     Node city_node(universe, city);
                     return actions::CreateCommercialArea(city_node);
                 });
+                == == == = REGISTER_FUNCTION("create_commercial_area", [&](entt::entity city) {
+                    Node city_node(universe, city);
+                    return actions::CreateCommercialArea(city_node);
+                });
+>>>>>>> pr-303
 
                 REGISTER_FUNCTION("set_resource_consume", [&](entt::entity entity, entt::entity good, double amount) {
                     auto& consumption = universe.get_or_emplace<components::ResourceConsumption>(entity);
@@ -414,9 +429,17 @@ void FunctionEconomy(Universe& universe, ScriptInterface& script_engine) {
                         universe.emplace<components::MarketCenter>(planet, market);
                     });
 
+<<<<<<< HEAD
                     REGISTER_FUNCTION("attach_market", [&](entity market_entity, entity participant) {
                         systems::economy::AddParticipant(universe, market_entity, participant);
                     });
+                    == == ==
+                        = REGISTER_FUNCTION("attach_market", [&](entt::entity market_entity, entt::entity participant) {
+                              Node market_node(universe, market_entity);
+                              Node participant_node(universe, participant);
+                              actions::AddParticipant(market_node, participant_node);
+                          });
+>>>>>>> pr-303
 
 <<<<<<< HEAD
                     REGISTER_FUNCTION("add_cash", [&](entity participant, double balance) {
@@ -904,9 +927,17 @@ void FunctionScience(Universe& universe, ScriptInterface& script_engine) {
                                         universe.emplace<components::science::ScientificResearch>(entity);
                                     });
 
+<<<<<<< HEAD
                                     REGISTER_FUNCTION("complete_technology", [&](entity civ, entity tech) {
                                         systems::science::ResearchTech(universe, civ, tech);
                                     });
+                                    == == == = REGISTER_FUNCTION("complete_technology",
+                                                                 [&](entt::entity entity, entt::entity tech) {
+                                                                     Node civilization(universe, entity);
+                                                                     Node tech_node(universe, tech);
+                                                                     actions::ResearchTech(civilization, tech_node);
+                                                                 });
+>>>>>>> pr-303
 
                                     REGISTER_FUNCTION("research_technology", [&](entity researcher, entity tech) {
                                         auto& res = universe.get<components::science::ScientificResearch>(researcher);

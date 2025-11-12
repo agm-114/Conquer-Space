@@ -148,6 +148,7 @@ void LoadSatellites(Universe& universe, std::string& string) {
         earth.get<bodies::OrbitalSystem>().push_back(satellite);
         satellite.emplace<Orbit>(orbit);
         satellite.emplace<components::ships::Ship>();
+<<<<<<< HEAD
         == == == = orbit.inclination += universe.get<bodies::Body>(earth).axial * cos(orbit.inclination);
         // orbit.M0 += universe.get<components::bodies::Body>(earth).axial;
         orbit.reference_body = earth;
@@ -156,6 +157,8 @@ void LoadSatellites(Universe& universe, std::string& string) {
         universe.emplace<Orbit>(satellite, orbit);
         universe.emplace<components::ships::Ship>(satellite);
 >>>>>>> pr_254:src/common/systems/loading/loadsatellites.cpp
+        == == == =
+>>>>>>> pr-303
     }
 }
 

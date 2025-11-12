@@ -29,6 +29,7 @@ void InfrastructureSim::DoSystem() {
     ZoneScoped;
     // Get all cities with industry and infrastruture
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (Node zone_node : GetUniverse().nodes<components::IndustrialZone>()) {
         auto& industry = zone_node.get<components::IndustrialZone>();
         == == == = auto view = universe.view<cqspc::IndustrialZone>();
@@ -106,5 +107,34 @@ void InfrastructureSim::DoSystem() {
 >>>>>>> pr_254
                     }
                 }
-            }
-        }  // namespace cqsp::common::systems
+                == == == = for (Node zone_node : GetUniverse().nodes<components::IndustrialZone>()) {
+                    auto& industry = zone_node.get<components::IndustrialZone>();
+                    double power_production = 0;
+                    double power_consumption = 0;
+                    for (Node industrial_node : zone_node.Convert(industry.industries)) {
+                        if (industrial_node.any_of<infrastructure::PowerPlant>()) {
+                            power_production += industrial_node.get<infrastructure::PowerPlant>().production;
+                        }
+                        if (industrial_node.any_of<infrastructure::PowerConsumption>()) {
+                            power_consumption += industrial_node.get<infrastructure::PowerConsumption>().max;
+                        }
+                    }
+                    // Now assign infrastrutural information
+                    zone_node.emplace_or_replace<infrastructure::CityPower>(power_production, power_consumption);
+
+                    if (power_production < power_consumption) {
+                        // Then city has no power. Next time, we'd allow transmitting power, or allowing emergency use power
+                        // but for now, the city will go under brownout.
+                        zone_node.get_or_emplace<infrastructure::BrownOut>();
+                    } else {
+                        zone_node.remove<infrastructure::BrownOut>();
+                    }
+                    if (zone_node.any_of<infrastructure::CityInfrastructure>()) {
+                        auto& infra = zone_node.get<infrastructure::CityInfrastructure>();
+                        infra.improvement = 0;
+                        // Add highway things I guess
+                        if (zone_node.any_of<infrastructure::Highway>()) {
+                            infra.improvement += zone_node.get<infrastructure::Highway>().extent;
+>>>>>>> pr-303
+                        }
+                    }  // namespace cqsp::common::systems

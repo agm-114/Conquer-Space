@@ -37,6 +37,7 @@ void SysMarketHistory::DoSystem() {
     for (Node market_node : view) {
         auto& history = market_node.get<MarketHistory>();
         Market& market_data = market_node.get<Market>();
+<<<<<<< HEAD
 =======
 void cqsp::common::systems::history::SysMarketHistory::DoSystem() {
     for (entt::entity marketentity : GetUniverse().view<components::Market>()) {
@@ -50,6 +51,8 @@ void cqsp::common::systems::history::SysMarketHistory::DoSystem() {
         components::Market& market_data =
             GetUniverse().get<components::Market>(entity);
 >>>>>>> pr_191
+=======
+>>>>>>> pr-303
         // Loop through the prices
         for (auto resource : market_data.market_information) {
             history.price_history[resource.first].push_back(resource.second.price);

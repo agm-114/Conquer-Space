@@ -19,9 +19,16 @@
 #include "common/actions/economy/markethelpers.h"
 #include "common/components/market.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::common::systems {
-    void SysAgent::DoSystem() {
-        /*
+    void
+    SysAgent::DoSystem() {
+    /*
+=======
+namespace cqsp::common::systems {
+void SysAgent::DoSystem() {
+    /*
+>>>>>>> pr-303
     for (Node agent_node : GetUniverse().nodes<components::MarketAgent>()) {
         // Sell resources that agents produced
         double production_multiplier = 1;

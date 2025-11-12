@@ -19,20 +19,34 @@
 #include "common/components/name.h"
 #include "common/components/surface.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD:src/common/loading/timezoneloader.cpp namespace cqsp::common::loading {
-    bool TimezoneLoader::LoadValue(const Hjson::Value& values, Node& node) {
-        == == == = using cqsp::common::systems::loading::TimezoneLoader;
-        bool TimezoneLoader::LoadValue(const Hjson::Value& values, entt::entity entity) {
+    bool
+    TimezoneLoader::LoadValue(const Hjson::Value& values, Node& node) {
+    == == == = using cqsp::common::systems::loading::TimezoneLoader;
+    bool TimezoneLoader::LoadValue(const Hjson::Value& values, entt::entity entity) {
 >>>>>>> pr_254:src/common/systems/loading/timezoneloader.cpp
-            // Read timezones
-            double offset = values["offset"].to_double();
-            node.emplace<components::TimeZone>(offset);
-            universe.time_zones[node.get<components::Identifier>().identifier] = node;
-            return true;
-        }
+        // Read timezones
+        double offset = values["offset"].to_double();
+        node.emplace<components::TimeZone>(offset);
+        universe.time_zones[node.get<components::Identifier>().identifier] = node;
+        return true;
+    }
 
 <<<<<<< HEAD:src/common/loading/timezoneloader.cpp
-        void TimezoneLoader::PostLoad(const Node& node) {}
-    }  // namespace cqsp::common::loading
-    == == == = void TimezoneLoader::PostLoad(const entt::entity& entity) {}
+    void TimezoneLoader::PostLoad(const Node& node) {}
+}  // namespace cqsp::common::loading
+== == == = void TimezoneLoader::PostLoad(const entt::entity& entity) {}
 >>>>>>> pr_254:src/common/systems/loading/timezoneloader.cpp
+== == == = namespace cqsp::common::loading {
+    bool TimezoneLoader::LoadValue(const Hjson::Value& values, Node& node) {
+        // Read timezones
+        double offset = values["offset"].to_double();
+        node.emplace<components::TimeZone>(offset);
+        universe.time_zones[node.get<components::Identifier>().identifier] = node;
+        return true;
+    }
+
+    void TimezoneLoader::PostLoad(const Node& node) {}
+}  // namespace cqsp::common::loading
+>>>>>>> pr-303

@@ -27,51 +27,97 @@
     /**
  * Loads the hjson struct for an entire asset.
  */
-    int HjsonLoader::LoadHjson(const Hjson::Value& values) {
-        int assets = 0;
-        std::vector<Node> node_list;
-        for (int i = 0; i < values.size(); i++) {
-            Hjson::Value value = values[i];
+<<<<<<< HEAD
+    int
+    HjsonLoader::LoadHjson(const Hjson::Value& values) {
+    int assets = 0;
+    std::vector<Node> node_list;
+    for (int i = 0; i < values.size(); i++) {
+        Hjson::Value value = values[i];
 
-            Node node(universe);
-            if (NeedIdentifier()) {
-                if (!LoadInitialValues(node, value)) {
-                    SPDLOG_WARN("No identifier");
-                    universe.destroy(node);
-                    continue;
-                }
-            } else {
-                LoadInitialValues(node, value);
-                == == == = using cqsp::common::systems::loading::HjsonLoader;
-                using entt::entity;
+        Node node(universe);
+        if (NeedIdentifier()) {
+            if (!LoadInitialValues(node, value)) {
+                SPDLOG_WARN("No identifier");
+                universe.destroy(node);
+                continue;
+            }
+        } else {
+            LoadInitialValues(node, value);
+            == == == = using cqsp::common::systems::loading::HjsonLoader;
+            using entt::entity;
+            == == == = int HjsonLoader::LoadHjson(const Hjson::Value& values) {
+                int assets = 0;
+                std::vector<Node> node_list;
+                for (int i = 0; i < values.size(); i++) {
+                    Hjson::Value value = values[i];
 
-                int HjsonLoader::LoadHjson(const Hjson::Value& values) {
-                    int assets = 0;
-                    std::vector<entity> entity_list;
-                    for (int i = 0; i < values.size(); i++) {
-                        Hjson::Value value = values[i];
-
-                        entity entity = universe.create();
-                        if (!LoadInitialValues(universe, entity, value)) {
+                    Node node(universe);
+                    if (NeedIdentifier()) {
+                        if (!LoadInitialValues(node, value)) {
                             SPDLOG_WARN("No identifier");
-                            universe.destroy(entity);
+                            universe.destroy(node);
                             continue;
+                        }
+                    } else {
+                        LoadInitialValues(node, value);
+                    }
+>>>>>>> pr-303
+
+                    int HjsonLoader::LoadHjson(const Hjson::Value& values) {
+                        int assets = 0;
+                        std::vector<entity> entity_list;
+                        for (int i = 0; i < values.size(); i++) {
+                            Hjson::Value value = values[i];
+
+<<<<<<< HEAD
+                            entity entity = universe.create();
+                            if (!LoadInitialValues(universe, entity, value)) {
+                                SPDLOG_WARN("No identifier");
+                                universe.destroy(entity);
+                                continue;
 >>>>>>> pr_254:src/common/systems/loading/hjsonloader.cpp
+                            }
+
+                            value = Hjson::Merge(GetDefaultValues(), value);
+
+                            // Catch errors
+                            bool success = false;
+                            try {
+                                success = LoadValue(value, node);
+                            } catch (Hjson::index_out_of_bounds& ioob) {
+                                auto& id = node.get<components::Identifier>().identifier;
+                                SPDLOG_WARN("Index out of bounds for {}: {}", id, ioob.what());
+                            } catch (Hjson::type_mismatch& tm) {
+                                auto& id = node.get<components::Identifier>().identifier;
+                                SPDLOG_WARN("Type mismatch for {}: {}", id, tm.what());
+                            }
+                            == == == =
+                                         // Catch errors
+                                bool success = false;
+                            try {
+                                success = LoadValue(value, node);
+                            } catch (Hjson::index_out_of_bounds& ioob) {
+                                auto& id = node.get<components::Identifier>().identifier;
+                                SPDLOG_WARN("Index out of bounds for {}: {}", id, ioob.what());
+                            } catch (Hjson::type_mismatch& tm) {
+                                auto& id = node.get<components::Identifier>().identifier;
+                                SPDLOG_WARN("Type mismatch for {}: {}", id, tm.what());
+                            }
+
+                            if (!success) {
+                                universe.destroy(node);
+                                continue;
+                            }
+                            node_list.push_back(node);
+                            assets++;
                         }
 
-                        value = Hjson::Merge(GetDefaultValues(), value);
-
-                        // Catch errors
-                        bool success = false;
-                        try {
-                            success = LoadValue(value, node);
-                        } catch (Hjson::index_out_of_bounds& ioob) {
-                            auto& id = node.get<components::Identifier>().identifier;
-                            SPDLOG_WARN("Index out of bounds for {}: {}", id, ioob.what());
-                        } catch (Hjson::type_mismatch& tm) {
-                            auto& id = node.get<components::Identifier>().identifier;
-                            SPDLOG_WARN("Type mismatch for {}: {}", id, tm.what());
+                        // Load all the assets again to parse?
+                        for (Node node : node_list) {
+                            PostLoad(node);
                         }
+>>>>>>> pr-303
 
                         if (!success) {
                             universe.destroy(node);

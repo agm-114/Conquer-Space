@@ -24,10 +24,14 @@ using cqsp::common::systems::SysWalletReset;
 
 void SysWalletReset::DoSystem() {
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (Node wallet_node : GetUniverse().nodes<components::Wallet>()) {
         wallet_node.get<components::Wallet>().Reset();
         == == == = for (entt::entity entity : GetUniverse().view<Wallet>()) {
             GetUniverse().get<Wallet>(entity).Reset();
 >>>>>>> pr_254
         }
-    }
+        == == == = for (Node wallet_node : GetUniverse().nodes<components::Wallet>()) {
+            wallet_node.get<components::Wallet>().Reset();
+>>>>>>> pr-303
+        }

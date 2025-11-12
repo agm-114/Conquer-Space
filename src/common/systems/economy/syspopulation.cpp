@@ -27,86 +27,139 @@
 #include "common/components/resource.h"
 #include "common/components/surface.h"
 
-<<<<<<< HEAD namespace cqsp::common::systems {
-    == == == = namespace components = cqsp::common::components;
-    namespace infrastructure = components::infrastructure;
+<<<<<<< HEAD namespace cqsp::common::systems { == == == = namespace components = cqsp::common::components;
+namespace infrastructure = components::infrastructure;
 
-    using components::ConsumerGood;
-    using components::FailedResourceTransfer;
-    using components::Habitation;
-    using components::Hunger;
-    using components::LaborInformation;
-    using components::Market;
-    using components::PopulationSegment;
-    using components::ResourceConsumption;
-    using components::Settlement;
-    using components::Wallet;
-    using cqsp::common::systems::SysPopulationConsumption;
-    using cqsp::common::systems::SysPopulationGrowth;
-    using entt::entity;
+using components::ConsumerGood;
+using components::FailedResourceTransfer;
+using components::Habitation;
+using components::Hunger;
+using components::LaborInformation;
+using components::Market;
+using components::PopulationSegment;
+using components::ResourceConsumption;
+using components::Settlement;
+using components::Wallet;
+using cqsp::common::systems::SysPopulationConsumption;
+using cqsp::common::systems::SysPopulationGrowth;
+using entt::entity;
 
 >>>>>>> pr_254
-    // Must be run after SysPopulationConsumption
-    // This is because population growth is dependent on if consumption was
-    // satisfied.
-
-    using components::ResourceConsumption;
-
-    void SysPopulationGrowth::DoSystem() {
-        ZoneScoped;
+// Must be run after SysPopulationConsumption
+// This is because population growth is dependent on if consumption was
+// satisfied.
 
 <<<<<<< HEAD
-        for (Node pop_node : GetUniverse().nodes<components::PopulationSegment>()) {
-            auto& segment = pop_node.get<components::PopulationSegment>();
-            // If it's hungry, decay population
-            if (pop_node.all_of<components::Hunger>()) {
-                == == == = Universe& universe = GetUniverse();
-                for (entity entity : universe.view<PopulationSegment>()) {
-                    auto& segment = universe.get<PopulationSegment>(entity);
-                    // If it's hungry, decay population
-                    if (universe.all_of<Hunger>(entity)) {
+using components::ResourceConsumption;
+
+void SysPopulationGrowth::DoSystem() {
+    ZoneScoped;
+
+<<<<<<< HEAD
+    for (Node pop_node : GetUniverse().nodes<components::PopulationSegment>()) {
+        auto& segment = pop_node.get<components::PopulationSegment>();
+        // If it's hungry, decay population
+        if (pop_node.all_of<components::Hunger>()) {
+            == == == = Universe& universe = GetUniverse();
+            for (entity entity : universe.view<PopulationSegment>()) {
+                auto& segment = universe.get<PopulationSegment>(entity);
+                // If it's hungry, decay population
+                if (universe.all_of<Hunger>(entity)) {
 >>>>>>> pr_254
-                        // Population decrease will be about 1 percent each year.
-                        float increase = 1.f - static_cast<float>(Interval()) * 0.00000114077116f;
+                    // Population decrease will be about 1 percent each year.
+                    float increase = 1.f - static_cast<float>(Interval()) * 0.00000114077116f;
+                    segment.population *= increase;
+                }
+
+<<<<<<< HEAD
+                if (pop_node.all_of<components::FailedResourceTransfer>()) {
+                    // Then alert hunger.
+                    pop_node.get_or_emplace<components::Hunger>();
+                } else {
+                    pop_node.remove<components::Hunger>();
+                }
+                // If not hungry, grow population
+                if (!pop_node.all_of<components::Hunger>()) {
+                    == == == = if (universe.all_of<FailedResourceTransfer>(entity)) {
+                        // Then alert hunger.
+                        universe.get_or_emplace<Hunger>(entity);
+                    }
+                    else {
+                        universe.remove<Hunger>(entity);
+                    }
+                    // If not hungry, grow population
+                    if (!universe.all_of<Hunger>(entity)) {
+>>>>>>> pr_254
+                        // Population growth will be about 1 percent each year.
+                        float increase = static_cast<float>(Interval()) * 0.00000114077116f + 1;
                         segment.population *= increase;
                     }
 
+                    // Resolve jobs
+                    // TODO(EhWhoAmI)
+                    // For now, we would have 100% of the population working, because we
+                    // haven't got to social simulation yet. But in the future, this will
+                    // probably have to change.
 <<<<<<< HEAD
-                    if (pop_node.all_of<components::FailedResourceTransfer>()) {
-                        // Then alert hunger.
-                        pop_node.get_or_emplace<components::Hunger>();
-                    } else {
-                        pop_node.remove<components::Hunger>();
-                    }
-                    // If not hungry, grow population
-                    if (!pop_node.all_of<components::Hunger>()) {
-                        == == == = if (universe.all_of<FailedResourceTransfer>(entity)) {
-                            // Then alert hunger.
-                            universe.get_or_emplace<Hunger>(entity);
-                        }
-                        else {
-                            universe.remove<Hunger>(entity);
-                        }
-                        // If not hungry, grow population
-                        if (!universe.all_of<Hunger>(entity)) {
+                    auto& employee = pop_node.get_or_emplace<components::LaborInformation>();
+                    == == == = auto& employee = universe.get_or_emplace<LaborInformation>(entity);
 >>>>>>> pr_254
-                            // Population growth will be about 1 percent each year.
-                            float increase = static_cast<float>(Interval()) * 0.00000114077116f + 1;
-                            segment.population *= increase;
-                        }
-
-                        // Resolve jobs
-                        // TODO(EhWhoAmI)
-                        // For now, we would have 100% of the population working, because we
-                        // haven't got to social simulation yet. But in the future, this will
-                        // probably have to change.
-<<<<<<< HEAD
-                        auto& employee = pop_node.get_or_emplace<components::LaborInformation>();
-                        == == == = auto& employee = universe.get_or_emplace<LaborInformation>(entity);
->>>>>>> pr_254
-                        employee.working_population = segment.population;
-                    }
+                    employee.working_population = segment.population;
                 }
+            }
+            == == == = for (Node pop_node : GetUniverse().nodes<components::PopulationSegment>()) {
+                auto& segment = pop_node.get<components::PopulationSegment>();
+                // If it's hungry, decay population
+                if (pop_node.all_of<components::Hunger>()) {
+                    // Population decrease will be about 1 percent each year.
+                    float increase = 1.f - static_cast<float>(Interval()) * 0.00000114077116f;
+                    segment.population *= increase;
+                }
+
+                if (pop_node.all_of<components::FailedResourceTransfer>()) {
+                    // Then alert hunger.
+                    pop_node.get_or_emplace<components::Hunger>();
+                } else {
+                    pop_node.remove<components::Hunger>();
+                }
+                // If not hungry, grow population
+                if (!pop_node.all_of<components::Hunger>()) {
+                    // Population growth will be about 1 percent each year.
+                    float increase = static_cast<float>(Interval()) * 0.00000114077116f + 1;
+                    segment.population *= increase;
+                }
+
+                // Resolve jobs
+                // TODO(EhWhoAmI)
+                // For now, we would have 100% of the population working, because we
+                // haven't got to social simulation yet. But in the future, this will
+                // probably have to change.
+                auto& employee = pop_node.get_or_emplace<components::LaborInformation>();
+                employee.working_population = segment.population;
+            }
+        }
+
+        void SysPopulationConsumption::ProcessSettlement(
+            Node & settlement, const ResourceConsumption& marginal_propensity_base,
+            const ResourceConsumption& autonomous_consumption_base, const float savings) {
+            // Get the transport cost
+            if (!settlement.any_of<components::infrastructure::CityInfrastructure>()) {
+                return;
+            }
+            auto& infrastructure = settlement.get<components::infrastructure::CityInfrastructure>();
+            // Calculate the infrastructure cost
+            double infra_cost = infrastructure.default_purchase_cost - infrastructure.improvement;
+            auto& market = settlement.get<components::Market>();
+            // Loop through the population segments through the settlements
+            auto& settlement_comp = settlement.get<components::Settlement>();
+            for (Node node_segment : settlement.Convert(settlement_comp.population)) {
+                // Compute things
+                components::PopulationSegment& segment = node_segment.get_or_emplace<components::PopulationSegment>();
+                ResourceConsumption& consumption = node_segment.get_or_emplace<ResourceConsumption>();
+                // Reduce pop to some unreasonably low level so that the economy can
+                // handle it
+                const uint64_t population = segment.population / 10;
+>>>>>>> pr-303
 
 <<<<<<< HEAD
                 void SysPopulationConsumption::ProcessSettlement(
@@ -149,6 +202,7 @@
 
                                     consumption = autonomous_consumption_base;
 
+<<<<<<< HEAD
                                     // This value only changes when pop changes and
                                     // should be calculated in SysPopulationGrowth
                                     consumption *= population;
@@ -156,148 +210,181 @@
 <<<<<<< HEAD
                                     components::Wallet& wallet = node_segment.get_or_emplace<components::Wallet>();
                                     double cost = (consumption * market.price).GetSum();
+                                    == == == = components::Wallet& wallet =
+                                                 node_segment.get_or_emplace<components::Wallet>();
+                                    double cost = (consumption * market.price).GetSum();
 
                                     if (wallet > 0) {  // If the pop has cash left over spend it
                                         // Add to the cost of price of transport
                                         const ResourceConsumption& extraconsumption = marginal_propensity_base;
+>>>>>>> pr-303
 
-                                        double extra_cost = (extraconsumption * market.price)
-                                                                .GetSum();  // Distribute wallet amongst goods
-
-                                        extra_cost *= segment.standard_of_living;
-
-                                        // Now we should change the value that we do
-                                        // Also see if we have extra money and then we can adjust SOL or something like that
-                                        consumption +=
-                                            extraconsumption *
-                                            segment.standard_of_living;  // Remove purchased goods from the market
-
-                                        == == == = Wallet& wallet = universe.get_or_emplace<Wallet>(segmententity);
-                                        const double cost = (consumption * market.price).GetSum();
-                                        wallet -= cost;    // Spend, even if it puts the pop into debt
                                         if (wallet > 0) {  // If the pop has cash left over spend it
                                             // Add to the cost of price of transport
-                                            ResourceConsumption extraconsumption = marginal_propensity_base;
-                                            // Loop through all the things, if there isn't enough resources for a
-                                            // If the market supply has all of the goods, then they can buy the goods
-                                            // Get previous market supply
-                                            // the total consumption
-                                            // Add to the cost
-                                            // They can buy less because of things
-                                            //extraconsumption *= infra_cost;
-                                            extraconsumption *= wallet;  // Distribute wallet amongst goods
-                                            extraconsumption /=
-                                                market.price;  // Find out how much of each good you can buy
-                                            consumption += extraconsumption;  // Remove purchased goods from the market
-                                            for (auto& t : consumption) {
-                                                // Look for in the market, and then if supply is zero, then deny them buying
-                                                if (market.previous_supply[t.first] <= 0) {
-                                                    // Then they cannot buy the stuff
-                                                    // Then do the consumption
-                                                    // Add to latent demand
-                                                    market.latent_demand[t.first] += t.second;
-                                                    t.second = 0;
+                                            const ResourceConsumption& extraconsumption = marginal_propensity_base;
+
+                                            double extra_cost = (extraconsumption * market.price)
+                                                                    .GetSum();  // Distribute wallet amongst goods
+
+                                            extra_cost *= segment.standard_of_living;
+
+                                            // Now we should change the value that we do
+                                            // Also see if we have extra money and then we can adjust SOL or something like that
+                                            consumption +=
+                                                extraconsumption *
+                                                segment.standard_of_living;  // Remove purchased goods from the market
+
+                                            == == == = Wallet& wallet = universe.get_or_emplace<Wallet>(segmententity);
+                                            const double cost = (consumption * market.price).GetSum();
+                                            wallet -= cost;    // Spend, even if it puts the pop into debt
+                                            if (wallet > 0) {  // If the pop has cash left over spend it
+                                                // Add to the cost of price of transport
+                                                ResourceConsumption extraconsumption = marginal_propensity_base;
+                                                // Loop through all the things, if there isn't enough resources for a
+                                                // If the market supply has all of the goods, then they can buy the goods
+                                                // Get previous market supply
+                                                // the total consumption
+                                                // Add to the cost
+                                                // They can buy less because of things
+                                                //extraconsumption *= infra_cost;
+                                                extraconsumption *= wallet;  // Distribute wallet amongst goods
+                                                extraconsumption /=
+                                                    market.price;  // Find out how much of each good you can buy
+                                                consumption +=
+                                                    extraconsumption;  // Remove purchased goods from the market
+                                                for (auto& t : consumption) {
+                                                    // Look for in the market, and then if supply is zero, then deny them buying
+                                                    if (market.previous_supply[t.first] <= 0) {
+                                                        // Then they cannot buy the stuff
+                                                        // Then do the consumption
+                                                        // Add to latent demand
+                                                        market.latent_demand[t.first] += t.second;
+                                                        t.second = 0;
+                                                    }
                                                 }
+>>>>>>> pr_254
+                                                // Consumption
+                                                // Check if there's enough on the market
+                                                // Add the transport costs, and because they're importing it, we only account this
+                                                cost += extra_cost;
                                             }
->>>>>>> pr_254
-                                            // Consumption
-                                            // Check if there's enough on the market
-                                            // Add the transport costs, and because they're importing it, we only account this
-                                            cost += extra_cost;
-                                        }
 
-                                        double spending_ratio = (segment.income - segment.spending) / segment.income;
-                                        if (spending_ratio > 0.1) {
-                                            // Then we can increase SOL by 0.1
-                                            segment.standard_of_living += 0.1 + segment.standard_of_living * 0.25;
-                                        } else if (spending_ratio < 0.1) {
-                                            segment.standard_of_living -= 0.1 + segment.standard_of_living * 0.25;
-                                            segment.standard_of_living = std::max(segment.standard_of_living, 1.);
-                                        }
+                                            double spending_ratio =
+                                                (segment.income - segment.spending) / segment.income;
+                                            if (spending_ratio > 0.1) {
+                                                // Then we can increase SOL by 0.1
+                                                segment.standard_of_living += 0.1 + segment.standard_of_living * 0.25;
+                                            } else if (spending_ratio < 0.1) {
+                                                segment.standard_of_living -= 0.1 + segment.standard_of_living * 0.25;
+                                                segment.standard_of_living = std::max(segment.standard_of_living, 1.);
+                                            }
 
-                                        segment.spending = cost;
-                                        segment.income = 0;
-                                        segment.employed_amount = 0;
-                                        wallet -= cost;  // Spend, even if it puts the pop into debt
+                                            segment.spending = cost;
+                                            segment.income = 0;
+                                            segment.employed_amount = 0;
+                                            wallet -= cost;  // Spend, even if it puts the pop into debt
 
-                                        // TODO(EhWhoAmI): Don't inject cash, take the money from the government
-                                        wallet += segment.population * 1;  // Inject cash
-
-                                        market.consumption += consumption;
-                                    }
-                                }
 <<<<<<< HEAD
-                                == == == =
-                            }  // namespace cqsp::common::systems
->>>>>>> pr_254
-
-                            // In economics, the consumption function describes a relationship between
-                            // consumption and disposable income.
-                            // Its simplest form is the linear consumption function used frequently in
-                            // simple Keynesian models For each consumer good consumption is modeled as
-                            // follows C = a + b * Y C represents consumption of the consumer good a
-                            // represents autonomous consumption that is independent of disposable income or
-                            // when income levels are zero
-                            //  if income levels cannot pay for this level of maintenance they are drawn from
-                            //  the population's savings or debt
-                            // b represents the marginal propensity (demand) to consume or how
-                            //  much of their surplus income they will spend on that consumer good
-                            //  Based on how many consumer goods they consume from this segment, we can find
-                            //  their economic strata.
-                            // Y represents their disposable income (funds left over from last tick)
-                            //  Population savings can be ensured by keeping the sum of all b values below 1
-                            // Consumer Goods Include
-                            //  - Housing
-                            //  - Transport
-                            //  - Healthcare
-                            //  - Insurance
-                            //  - Entertainment
-                            //  - Education
-                            //  - Utilities
-                            // Cash from money printing is directly injected into the population
-                            // This represents basic subsdies and providing an injection point for new cash.
-                            // Eventually this should be moved to two seperate and unique systems
-                            void SysPopulationConsumption::DoSystem() {
-                                ZoneScoped;
-                                Universe& universe = GetUniverse();
-
-                                ResourceConsumption marginal_propensity_base;
-                                ResourceConsumption autonomous_consumption_base;
-                                float savings = 1;  // We calculate how much is saved since it is simpler
-                                                    // than calculating spending
-                                for (entt::entity cgentity : universe.consumergoods) {
-<<<<<<< HEAD
-                                    const components::ConsumerGood& good =
-                                        universe.get<components::ConsumerGood>(cgentity);
-                                    marginal_propensity_base[cgentity] = good.marginal_propensity * Interval();
-                                    autonomous_consumption_base[cgentity] = good.autonomous_consumption * Interval();
-                                    savings -= good.marginal_propensity;
-                                }  // These tables technically never need to be recalculated
-
-                                for (Node settlement : universe.nodes<components::Settlement>()) {
-                                    ProcessSettlement(settlement, marginal_propensity_base, autonomous_consumption_base,
-                                                      savings);
-                                    == == == = const ConsumerGood& good = universe.get<ConsumerGood>(cgentity);
-                                    marginal_propensity_base[cgentity] = good.marginal_propensity;
-                                    autonomous_consumption_base[cgentity] = good.autonomous_consumption;
-                                    savings -= good.marginal_propensity;
-                                }  // These tables technically never need to be recalculated
-                                //auto settlement
-                                //  = universe.view<Settlement>();
-
-                                // Loop through the settlements on a planet, then process the market?
-                                int settlement_count = 0;
-                                for (entt::entity entity : universe.view<Habitation>()) {
-                                    // Get the children, because reasons
-                                    // All planets with a habitation WILL have a market
-                                    auto& market = universe.get_or_emplace<Market>(entity);
-                                    // Read the segment information
-                                    auto& habit = universe.get<Habitation>(entity);
-                                    for (entt::entity settlement : habit.settlements) {
-                                        ProcessSettlement(universe, settlement, market, marginal_propensity_base,
-                                                          autonomous_consumption_base, savings);
-                                        settlement_count++;
+                                            // TODO(EhWhoAmI): Don't inject cash, take the money from the government
+                                            wallet += segment.population * 1;  // Inject cash
+                                            == == == = market.consumption += consumption;
+                                        }
                                     }
->>>>>>> pr_254
+>>>>>>> pr-303
+
+                                    market.consumption += consumption;
                                 }
                             }
+<<<<<<< HEAD
+                            == == == =
+                        }  // namespace cqsp::common::systems
+>>>>>>> pr_254
+
+<<<<<<< HEAD
+                        // In economics, the consumption function describes a relationship between
+                        // consumption and disposable income.
+                        // Its simplest form is the linear consumption function used frequently in
+                        // simple Keynesian models For each consumer good consumption is modeled as
+                        // follows C = a + b * Y C represents consumption of the consumer good a
+                        // represents autonomous consumption that is independent of disposable income or
+                        // when income levels are zero
+                        //  if income levels cannot pay for this level of maintenance they are drawn from
+                        //  the population's savings or debt
+                        // b represents the marginal propensity (demand) to consume or how
+                        //  much of their surplus income they will spend on that consumer good
+                        //  Based on how many consumer goods they consume from this segment, we can find
+                        //  their economic strata.
+                        // Y represents their disposable income (funds left over from last tick)
+                        //  Population savings can be ensured by keeping the sum of all b values below 1
+                        // Consumer Goods Include
+                        //  - Housing
+                        //  - Transport
+                        //  - Healthcare
+                        //  - Insurance
+                        //  - Entertainment
+                        //  - Education
+                        //  - Utilities
+                        // Cash from money printing is directly injected into the population
+                        // This represents basic subsdies and providing an injection point for new cash.
+                        // Eventually this should be moved to two seperate and unique systems
+                        void SysPopulationConsumption::DoSystem() {
+                            ZoneScoped;
+                            Universe& universe = GetUniverse();
+
+                            ResourceConsumption marginal_propensity_base;
+                            ResourceConsumption autonomous_consumption_base;
+                            float savings = 1;  // We calculate how much is saved since it is simpler
+                                                // than calculating spending
+                            for (entt::entity cgentity : universe.consumergoods) {
+<<<<<<< HEAD
+                                const components::ConsumerGood& good = universe.get<components::ConsumerGood>(cgentity);
+                                marginal_propensity_base[cgentity] = good.marginal_propensity * Interval();
+                                autonomous_consumption_base[cgentity] = good.autonomous_consumption * Interval();
+                                savings -= good.marginal_propensity;
+                            }  // These tables technically never need to be recalculated
+
+                            for (Node settlement : universe.nodes<components::Settlement>()) {
+                                ProcessSettlement(settlement, marginal_propensity_base, autonomous_consumption_base,
+                                                  savings);
+                                == == == = const ConsumerGood& good = universe.get<ConsumerGood>(cgentity);
+                                marginal_propensity_base[cgentity] = good.marginal_propensity;
+                                autonomous_consumption_base[cgentity] = good.autonomous_consumption;
+                                savings -= good.marginal_propensity;
+                            }  // These tables technically never need to be recalculated
+                            //auto settlement
+                            //  = universe.view<Settlement>();
+
+                            // Loop through the settlements on a planet, then process the market?
+                            int settlement_count = 0;
+                            for (entt::entity entity : universe.view<Habitation>()) {
+                                // Get the children, because reasons
+                                // All planets with a habitation WILL have a market
+                                auto& market = universe.get_or_emplace<Market>(entity);
+                                // Read the segment information
+                                auto& habit = universe.get<Habitation>(entity);
+                                for (entt::entity settlement : habit.settlements) {
+                                    ProcessSettlement(universe, settlement, market, marginal_propensity_base,
+                                                      autonomous_consumption_base, savings);
+                                    settlement_count++;
+                                }
+>>>>>>> pr_254
+                            }
+                        }
+                        == == == = ResourceConsumption marginal_propensity_base;
+                        ResourceConsumption autonomous_consumption_base;
+                        float savings = 1;  // We calculate how much is saved since it is simpler
+                                            // than calculating spending
+                        for (entt::entity cgentity : universe.consumergoods) {
+                            const components::ConsumerGood& good = universe.get<components::ConsumerGood>(cgentity);
+                            marginal_propensity_base[cgentity] = good.marginal_propensity * Interval();
+                            autonomous_consumption_base[cgentity] = good.autonomous_consumption * Interval();
+                            savings -= good.marginal_propensity;
+                        }  // These tables technically never need to be recalculated
+
+                        for (Node settlement : universe.nodes<components::Settlement>()) {
+                            ProcessSettlement(settlement, marginal_propensity_base, autonomous_consumption_base,
+                                              savings);
+                        }
+                    }
+                }  // namespace cqsp::common::systems
+>>>>>>> pr-303
