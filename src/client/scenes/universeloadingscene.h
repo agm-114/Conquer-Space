@@ -24,6 +24,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::scene {
     class UniverseLoadingScene : public ClientScene {
     == == == = namespace cqsp::scene {
@@ -79,4 +80,35 @@
             = Rml::ElementDocument * document;
     };
 }  // namespace cqsp::scene
+    == == ==
+    =
+<<<<<<< HEAD namespace cqsp::client::scene {
+        class UniverseLoadingScene : public ClientScene {
+    == == == = namespace cqsp::scene {
+        class UniverseLoadingScene : public cqsp::client::Scene {
+>>>>>>> pr-283
+         public:
+            explicit UniverseLoadingScene(engine::Application& app);
+            ~UniverseLoadingScene();
+
+            void Init();
+            void Update(float deltaTime);
+            void Ui(float deltaTime);
+            void Render(float deltaTime);
+
+         private:
+            std::atomic<bool> m_done_loading;
+            std::unique_ptr<std::thread> thread;
+
+            void LoadCurrentUniverse();
+
+            bool m_completed_loading;
+
+            Rml::ElementDocument* document;
+        };
+<<<<<<< HEAD
+    }  // namespace cqsp::client::scene
+    == == == =
+}  // namespace cqsp::scene
+>>>>>>> pr-286
 >>>>>>> pr-283

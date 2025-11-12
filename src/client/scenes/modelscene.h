@@ -24,6 +24,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::scene {
     class ModelScene : public ClientScene {
     == == == = namespace cqsp::scene {
@@ -77,5 +78,28 @@
         asset::ShaderProgram_t shader;
         engine::Mesh_t mesh;
     };
+    == == == =
+<<<<<<< HEAD namespace cqsp::client::scene {
+                 == == == = namespace cqsp::scene {
+>>>>>>> pr-283
+        class ModelScene : public ClientScene {
+         public:
+            explicit ModelScene(engine::Application& app) : ClientScene(app) {}
+            ~ModelScene() = default;
+
+            void Init();
+            void Update(float deltaTime);
+            void Ui(float deltaTime);
+            void Render(float deltaTime);
+
+         private:
+            asset::Model* model;
+            asset::ShaderProgram_t shader;
+            engine::Mesh_t mesh;
+        };
+<<<<<<< HEAD
+    }  // namespace cqsp::client::scene
+    == == == =
+>>>>>>> pr-286
 }  // namespace cqsp::scene
 >>>>>>> pr-283

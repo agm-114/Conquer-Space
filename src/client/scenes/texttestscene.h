@@ -24,6 +24,7 @@
 #include "engine/renderer/framebuffer.h"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::scene {
     == == ==
     = namespace cqsp::scene {
@@ -111,5 +112,38 @@
         std::vector<const char*> names;
         float delta_t = 0;
     };
+    == == == =
+<<<<<<< HEAD namespace cqsp::client::scene {
+                 == == == = namespace cqsp::scene {
+>>>>>>> pr-283
+        /// <summary>
+        /// Just a playground for various graphics stuff
+        /// </summary>
+        /// <param name="app"></param>
+        class TextTestScene : public ClientScene {
+         public:
+            explicit TextTestScene(engine::Application& app) : client::ClientScene(app) {}
+            ~TextTestScene();
+
+            void Init();
+            void Update(float deltaTime);
+            void Ui(float deltaTime);
+            void Render(float deltaTime);
+
+         private:
+            engine::LayerRenderer renderer;
+            float font_size = 40.f;
+            std::string text = "The quick brown fox jumps over the lazy dog";
+            int layer;
+            int src = 0;
+            int post = 0;
+            std::map<std::string, int> indices;
+            std::vector<const char*> names;
+            float delta_t = 0;
+        };
+<<<<<<< HEAD
+    }  // namespace cqsp::client::scene
+    == == == =
+>>>>>>> pr-286
 }  // namespace cqsp::scene
 >>>>>>> pr-283

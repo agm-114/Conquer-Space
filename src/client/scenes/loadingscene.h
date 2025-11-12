@@ -27,6 +27,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::scene {
     // First loading scene when the game starts
     class LoadingScene : public ClientScene {
@@ -103,5 +104,52 @@
             == == ==
             = Rml::DataModelHandle model_handle;
     };
+    == == == =
+<<<<<<< HEAD namespace cqsp::client::scene {
+                 == == == = namespace cqsp::scene {
+>>>>>>> pr-283
+        // First loading scene when the game starts
+        class LoadingScene : public ClientScene {
+         public:
+            explicit LoadingScene(engine::Application& app);
+            ~LoadingScene();
+
+            void Init();
+            void Update(float deltaTime);
+            void Ui(float deltaTime);
+            void Render(float deltaTime);
+
+            /*
+    * Function to load in a thread.
+    */
+            void LoadResources();
+
+         private:
+            float windowWidth, windowHeight;
+
+            std::atomic<bool> m_done_loading;
+
+            std::unique_ptr<std::thread> thread;
+
+            std::atomic<float> percentage;
+
+            asset::AssetLoader assetLoader;
+
+            Rml::ElementDocument* document;
+
+            void LoadFont();
+            bool need_halt = false;
+
+            struct LoadingDataModel {
+                int current = 0;
+                int max = 0;
+            } loading_data;
+
+            Rml::DataModelHandle model_handle;
+        };
+<<<<<<< HEAD
+    }  // namespace cqsp::client::scene
+    == == == =
+>>>>>>> pr-286
 }  // namespace cqsp::scene
 >>>>>>> pr-283
