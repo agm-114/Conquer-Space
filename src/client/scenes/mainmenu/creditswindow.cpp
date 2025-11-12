@@ -23,6 +23,7 @@
 #include "common/util/paths.h"
 #include "common/util/string.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client { CreditsWindow::CreditsWindow(engine::Application& app)
     : m_app(app) {}
 
@@ -48,56 +49,46 @@ std::string strip(const std::string& inpt) {
 CreditsWindow::CreditsWindow(engine::Application& app) : m_app(app) {}
 
 >>>>>>> pr_254
-CreditsWindow::~CreditsWindow() {
-    document->RemoveEventListener(Rml::EventId::Click, this);
-    document->RemoveEventListener(Rml::EventId::Keydown, this);
-    document->RemoveEventListener(Rml::EventId::Keyup, this);
-}
+== == == = namespace cqsp::client {
+    CreditsWindow::CreditsWindow(engine::Application & app) : m_app(app) {}
 
-void CreditsWindow::OpenDocument() {
-    document = m_app.LoadDocument(GetDocumentName());
-    // Read credits text file and then parse
-    credits_text_element = document->GetElementById("credits_text");
-    document->AddEventListener(Rml::EventId::Click, this);
-    document->AddEventListener(Rml::EventId::Keydown, this);
-    document->AddEventListener(Rml::EventId::Keyup, this);
+>>>>>>> pr-286
+    CreditsWindow::~CreditsWindow() {
+        document->RemoveEventListener(Rml::EventId::Click, this);
+        document->RemoveEventListener(Rml::EventId::Keydown, this);
+        document->RemoveEventListener(Rml::EventId::Keyup, this);
+    }
 
-    LoadCreditsText();
-}
+    void CreditsWindow::OpenDocument() {
+        document = m_app.LoadDocument(GetDocumentName());
+        // Read credits text file and then parse
+        credits_text_element = document->GetElementById("credits_text");
+        document->AddEventListener(Rml::EventId::Click, this);
+        document->AddEventListener(Rml::EventId::Keydown, this);
+        document->AddEventListener(Rml::EventId::Keyup, this);
 
-void CreditsWindow::Show() {
-    scroll_percentage = m_app.GetWindowHeight();
-    SetCreditsScroll();
-    document->Show();
-    document->SetClass("visible", true);
-}
+        LoadCreditsText();
+    }
+
+    void CreditsWindow::Show() {
+        scroll_percentage = m_app.GetWindowHeight();
+        SetCreditsScroll();
+        document->Show();
+        document->SetClass("visible", true);
+    }
 
 <<<<<<< HEAD
-void CreditsWindow::Update(double delta_time) {
-    if (!document->IsVisible()) {
-        == == == = void CreditsWindow::Hide() { document->SetClass("visible", false); }
+<<<<<<< HEAD
+    == == == =
+>>>>>>> pr-286
+                 void CreditsWindow::Update(double delta_time) {
+        if (!document->IsVisible()) {
+            == == == = void CreditsWindow::Hide() { document->SetClass("visible", false); }
 
-        std::string CreditsWindow::GetDocumentName() {
-            return common::util::GetCqspDataPath() + "/core/gui/credits.rml";
-        }
-
-        void CreditsWindow::ProcessEvent(Rml::Event & event) {
-            if (event.GetId() == Rml::EventId::Keydown) {
-                Rml::Input::KeyIdentifier key_identifier =
-                    (Rml::Input::KeyIdentifier)event.GetParameter<int>("key_identifier", 0);
-                if (key_identifier == Rml::Input::KI_DOWN) {
-                    fast_scroll = true;
->>>>>>> pr-288
-                    return;
-                }
-                scroll_percentage -= (scroll_speed * delta_time);
-                if (fast_scroll) {
-                    scroll_percentage -= (scroll_speed * delta_time * 5);
-                }
-                // Transform looks better for animations compared to using top.
-                SetCreditsScroll();
-
-                if (credits_text_element->GetBox().GetSize().y < (-scroll_percentage - scroll_speed * 2)) {
+<<<<<<< HEAD
+            std::string CreditsWindow::GetDocumentName() {
+                return common::util::GetCqspDataPath() + "/core/gui/credits.rml";
+                == == == = if (credits_text_element->GetBox().GetSize().y < (-scroll_percentage - scroll_speed * 2)) {
                     Hide();
                 }
                 if (document->GetProperty("opacity")->Get<float>() <= 0 && !document->IsClassSet("visible")) {
@@ -107,14 +98,9 @@ void CreditsWindow::Update(double delta_time) {
 
             void CreditsWindow::Hide() { document->SetClass("visible", false); }
 
-<<<<<<< HEAD
             std::string CreditsWindow::GetDocumentName() {
                 return common::util::GetCqspDataPath() + "/core/gui/credits.rml";
             }
-            == == == = std::string CreditsWindow::GetDocumentName() {
-                return common::util::GetCqspDataPath() + "/core/gui/credits.rml";
-            }
->>>>>>> pr_254
 
             void CreditsWindow::ProcessEvent(Rml::Event & event) {
                 if (event.GetId() == Rml::EventId::Keydown) {
@@ -123,70 +109,149 @@ void CreditsWindow::Update(double delta_time) {
                     if (key_identifier == Rml::Input::KI_DOWN) {
                         fast_scroll = true;
                         return;
+>>>>>>> pr-286
                     }
-                }
-                if (event.GetId() == Rml::EventId::Keyup) {
-                    Rml::Input::KeyIdentifier key_identifier =
-                        (Rml::Input::KeyIdentifier)event.GetParameter<int>("key_identifier", 0);
-                    if (key_identifier == Rml::Input::KI_DOWN) {
-                        fast_scroll = false;
-                        return;
-                    }
-                }
-                document->Hide();
-                document->SetClass("visible", false);
-            }
 
-            void CreditsWindow::LoadCreditsText() {
-                std::string credits_file = common::util::GetCqspDataPath() + "/core/credits.md";
+<<<<<<< HEAD
+                    void CreditsWindow::ProcessEvent(Rml::Event & event) {
+                        if (event.GetId() == Rml::EventId::Keydown) {
+                            Rml::Input::KeyIdentifier key_identifier =
+                                (Rml::Input::KeyIdentifier)event.GetParameter<int>("key_identifier", 0);
+                            if (key_identifier == Rml::Input::KI_DOWN) {
+                                fast_scroll = true;
+>>>>>>> pr-288
+                                return;
+                            }
+                            scroll_percentage -= (scroll_speed * delta_time);
+                            if (fast_scroll) {
+                                scroll_percentage -= (scroll_speed * delta_time * 5);
+                            }
+                            // Transform looks better for animations compared to using top.
+                            SetCreditsScroll();
+                            == == == = void CreditsWindow::LoadCreditsText() {
+                                std::string credits_file = common::util::GetCqspDataPath() + "/core/credits.md";
+>>>>>>> pr-286
 
-                std::ifstream credits_stream(credits_file);
-                std::string line;
-                std::stringstream buffer;
-                // A really bad markdown to html/rml parser
-                bool previous_return = false;
-                while (std::getline(credits_stream, line)) {
-                    if (line.empty()) {
-                        if (previous_return) {
-                            // Then do a new line
-                            buffer << "<br />";
+                                if (credits_text_element->GetBox().GetSize().y <
+                                    (-scroll_percentage - scroll_speed * 2)) {
+                                    Hide();
+                                }
+                                if (document->GetProperty("opacity")->Get<float>() <= 0 &&
+                                    !document->IsClassSet("visible")) {
+                                    document->Hide();
+                                }
+                            }
+<<<<<<< HEAD
+                            == == == = previous_return = true;
+                            continue;
                         }
-                        previous_return = true;
-                        continue;
-                    }
-                    previous_return = false;
-                    std::string tag = "p";
-                    if (line.starts_with("###")) {
-                        tag = "h3";
-                        // remove prefix
-                        line = line.substr(3);
-                    } else if (line.starts_with("##")) {
-                        tag = "h2";
-                        line = line.substr(2);
-                    } else if (line.starts_with('#')) {
-                        tag = "h1";
-                        line = line.substr(1);
-                    }
-<<<<<<< HEAD
-                    line = util::strip(line);
-                    == == == = line = client::util::strip(line);
->>>>>>> pr_254
+                        previous_return = false;
+                        std::string tag = "p";
+                        if (line.starts_with("###")) {
+                            tag = "h3";
+                            // remove prefix
+                            line = line.substr(3);
+                        } else if (line.starts_with("##")) {
+                            tag = "h2";
+                            line = line.substr(2);
+                        } else if (line.starts_with('#')) {
+                            tag = "h1";
+                            line = line.substr(1);
+                        }
+                        line = util::strip(line);
+>>>>>>> pr-286
 
-                    buffer << fmt::format("<{0}>{1}</{0}>", tag, line);
-                    buffer << "<br />";
-                }
-                credits_text = buffer.str();
-                // Parse the text, and then set the things
-                // Go through line by line
-                // Set document text
-                document->GetElementById("credits_text")->SetInnerRML(credits_text);
-            }
-
-            void CreditsWindow::SetCreditsScroll() {
-                credits_text_element->SetProperty("transform", fmt::format("translateY({}px)", scroll_percentage));
-            }
+                        void CreditsWindow::Hide() { document->SetClass("visible", false); }
 
 <<<<<<< HEAD
-        }  // namespace cqsp::client
-    == == == =
+<<<<<<< HEAD
+                        std::string CreditsWindow::GetDocumentName() {
+                            return common::util::GetCqspDataPath() + "/core/gui/credits.rml";
+                        }
+                        == == == = std::string CreditsWindow::GetDocumentName() {
+                            return common::util::GetCqspDataPath() + "/core/gui/credits.rml";
+                        }
 >>>>>>> pr_254
+
+                        void CreditsWindow::ProcessEvent(Rml::Event & event) {
+                            if (event.GetId() == Rml::EventId::Keydown) {
+                                Rml::Input::KeyIdentifier key_identifier =
+                                    (Rml::Input::KeyIdentifier)event.GetParameter<int>("key_identifier", 0);
+                                if (key_identifier == Rml::Input::KI_DOWN) {
+                                    fast_scroll = true;
+                                    return;
+                                }
+                            }
+                            if (event.GetId() == Rml::EventId::Keyup) {
+                                Rml::Input::KeyIdentifier key_identifier =
+                                    (Rml::Input::KeyIdentifier)event.GetParameter<int>("key_identifier", 0);
+                                if (key_identifier == Rml::Input::KI_DOWN) {
+                                    fast_scroll = false;
+                                    return;
+                                }
+                            }
+                            document->Hide();
+                            document->SetClass("visible", false);
+                        }
+
+                        void CreditsWindow::LoadCreditsText() {
+                            std::string credits_file = common::util::GetCqspDataPath() + "/core/credits.md";
+
+                            std::ifstream credits_stream(credits_file);
+                            std::string line;
+                            std::stringstream buffer;
+                            // A really bad markdown to html/rml parser
+                            bool previous_return = false;
+                            while (std::getline(credits_stream, line)) {
+                                if (line.empty()) {
+                                    if (previous_return) {
+                                        // Then do a new line
+                                        buffer << "<br />";
+                                    }
+                                    previous_return = true;
+                                    continue;
+                                }
+                                previous_return = false;
+                                std::string tag = "p";
+                                if (line.starts_with("###")) {
+                                    tag = "h3";
+                                    // remove prefix
+                                    line = line.substr(3);
+                                } else if (line.starts_with("##")) {
+                                    tag = "h2";
+                                    line = line.substr(2);
+                                } else if (line.starts_with('#')) {
+                                    tag = "h1";
+                                    line = line.substr(1);
+                                }
+<<<<<<< HEAD
+                                line = util::strip(line);
+                                == == == = line = client::util::strip(line);
+>>>>>>> pr_254
+
+                                buffer << fmt::format("<{0}>{1}</{0}>", tag, line);
+                                buffer << "<br />";
+                            }
+                            credits_text = buffer.str();
+                            // Parse the text, and then set the things
+                            // Go through line by line
+                            // Set document text
+                            document->GetElementById("credits_text")->SetInnerRML(credits_text);
+                        }
+
+                        void CreditsWindow::SetCreditsScroll() {
+                            credits_text_element->SetProperty("transform",
+                                                              fmt::format("translateY({}px)", scroll_percentage));
+                        }
+
+<<<<<<< HEAD
+                    }  // namespace cqsp::client
+                    == == == =
+>>>>>>> pr_254
+                                 == == == = void CreditsWindow::SetCreditsScroll() {
+                        credits_text_element->SetProperty("transform",
+                                                          fmt::format("translateY({}px)", scroll_percentage));
+                    }
+
+                }  // namespace cqsp::client
+>>>>>>> pr-286

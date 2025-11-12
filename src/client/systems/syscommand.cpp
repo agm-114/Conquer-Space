@@ -15,6 +15,7 @@
 #include "common/components/name.h"
 #include "common/components/ships.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD void conquerspace::client::systems::SysCommand::Init() {}
 
     void
@@ -86,51 +87,112 @@
                 }
                 gui::EntityTooltip(entity, GetApp().GetUniverse());
                 index++;
-            }
-            ImGui::End();
-        }
+                == == == = namespace cqsp::client::systems {
+                    namespace components = cqsp::common::components;
+                    namespace bodies = components::bodies;
+                    namespace types = components::types;
+                    using components::Name;
+
+                    void SysCommand::Init() {}
+
+                    void SysCommand::DoUI(int delta_time) {
+                        ShipList();
+                        if (!to_see) {
+                            return;
+                        }
+
+                        ImGui::SetNextWindowPos(
+                            ImVec2(ImGui::GetIO().DisplaySize.x * 0.79f, ImGui::GetIO().DisplaySize.y * 0.55f),
+                            ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+                        ImGui::SetNextWindowSize(ImVec2(200, 400), ImGuiCond_Always);
+                        ImGui::Begin("Order Target", &to_see, ImGuiWindowFlags_NoResize | window_flags);
+                        int index = 0;
+                        // Get selected planet
+                        auto system = GetUniverse().view<types::Orbit>();
+                        entt::entity current_planet = scene::GetCurrentViewingPlanet(GetUniverse());
+                        for (auto entity : system) {
+                            bool is_selected = (entity == current_planet);
+                            std::string planet_name = fmt::format("{}", entity);
+                            if (GetUniverse().all_of<Name>(entity)) {
+                                planet_name = fmt::format("{}", GetUniverse().get<Name>(entity).name);
+                            }
+
+                            if (CQSPGui::DefaultSelectable(planet_name.c_str(), is_selected,
+                                                           ImGuiSelectableFlags_AllowDoubleClick)) {
+                                // Selected object
+                                selected_index = index;
+                                if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && selected_ship != entt::null) {
+                                    // Go to the planet
+                                    GetUniverse().emplace_or_replace<types::MoveTarget>(selected_ship, entity);
+                                    SPDLOG_INFO("Move Ordered");
+>>>>>>> pr-286
+                                }
+                                ImGui::End();
+                            }
 
 <<<<<<< HEAD
-        void conquerspace::client::systems::SysCommand::DoUpdate(int delta_time) {
-            namespace cqspb = conquerspace::common::components::bodies;
-            namespace cqspt = conquerspace::common::components::types;
-            selected_planet = conquerspace::scene::GetCurrentViewingPlanet(GetApp());
-            entt::entity mouse_over = GetApp()
-                                          .GetUniverse()
-                                          .view<conquerspace::client::systems::MouseOverEntity, cqspt::Kinematics>()
-                                          .front();
-            if (!ImGui::GetIO().WantCaptureMouse && GetApp().MouseButtonIsReleased(GLFW_MOUSE_BUTTON_LEFT) &&
-                mouse_over == selected_planet && !conquerspace::scene::IsGameHalted() && !GetApp().MouseDragged()) {
-                to_see = true;
-            }
-            if (GetApp().GetUniverse().all_of<cqspt::Orbit>(selected_planet)) {
-                to_see = false;
-            }
-            == == == = void SysCommand::DoUpdate(int delta_time) {
-                selected_planet = cqsp::scene::GetCurrentViewingPlanet(GetUniverse());
-                /*entt::entity mouse_over = GetUniverse()
+<<<<<<< HEAD
+                            void conquerspace::client::systems::SysCommand::DoUpdate(int delta_time) {
+                                namespace cqspb = conquerspace::common::components::bodies;
+                                namespace cqspt = conquerspace::common::components::types;
+                                selected_planet = conquerspace::scene::GetCurrentViewingPlanet(GetApp());
+                                entt::entity mouse_over =
+                                    GetApp()
+                                        .GetUniverse()
+                                        .view<conquerspace::client::systems::MouseOverEntity, cqspt::Kinematics>()
+                                        .front();
+                                if (!ImGui::GetIO().WantCaptureMouse &&
+                                    GetApp().MouseButtonIsReleased(GLFW_MOUSE_BUTTON_LEFT) &&
+                                    mouse_over == selected_planet && !conquerspace::scene::IsGameHalted() &&
+                                    !GetApp().MouseDragged()) {
+                                    to_see = true;
+                                }
+                                if (GetApp().GetUniverse().all_of<cqspt::Orbit>(selected_planet)) {
+                                    to_see = false;
+                                }
+                                == == == = void SysCommand::DoUpdate(int delta_time) {
+                                    selected_planet = cqsp::scene::GetCurrentViewingPlanet(GetUniverse());
+                                    /*entt::entity mouse_over = GetUniverse()
             .view<cqsp::client::systems::MouseOverEntity, cqspt::Kinematics>().front();
+=======
+void SysCommand::DoUpdate(int delta_time) {
+    selected_planet = scene::GetCurrentViewingPlanet(GetUniverse());
+    /*
+    entt::entity mouse_over = GetUniverse()
+            .view<cqsp::client::systems::MouseOverEntity, types::Kinematics>().front();
+>>>>>>> pr-286
     if (!ImGui::GetIO().WantCaptureMouse &&
         GetApp().MouseButtonIsReleased(GLFW_MOUSE_BUTTON_LEFT) &&
         mouse_over == selected_planet && !GetApp().MouseDragged()) {
         to_see = true;
+<<<<<<< HEAD
     }*/
-            }
+                                }
+                                == == == =
+                            }
+                            */
+                        }
+>>>>>>> pr-286
 
 <<<<<<< HEAD
-            void SysCommand::ShipList() {
-                /*
+                        void SysCommand::ShipList() {
+                            /*
 =======
 void cqsp::client::systems::SysCommand::ShipList() {
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> pr-286
     /*
 >>>>>>> pr-288
     static entt::entity selectedFleetEnt = GetUniverse()
-                           .get<cqspc::Civilization>(GetUniverse()
-                           .view<cqspc::Player>()
+                           .get<components::Civilization>(GetUniverse()
+                           .view<components::Player>()
                            .front()).top_level_fleet;
 
-    auto& selectedFleet = GetUniverse().get<cqsps::Fleet>(selectedFleetEnt);
-    auto& selectedFleetName = GetUniverse().get<cqspc::Name>(selectedFleetEnt);
+    auto& selectedFleet = GetUniverse().get<components::ships::Fleet>(selectedFleetEnt);
+    auto& selectedFleetName = GetUniverse().get<components::Name>(selectedFleetEnt);
 
     std::stringstream finalSelectedFleetName;
     for (size_t i = 0; i < selectedFleet.echelon; i++) {
@@ -184,7 +246,13 @@ void cqsp::client::systems::SysCommand::ShipList() {
         }
     }
 
+<<<<<<< HEAD
     ImGui::End();*/
 >>>>>>> pr_254
-            }
-        }  // namespace cqsp::client::systems
+                        }
+                    }  // namespace cqsp::client::systems
+                    == == == = ImGui::End();
+                    */
+                }
+            }  // namespace cqsp::client::systems
+>>>>>>> pr-286

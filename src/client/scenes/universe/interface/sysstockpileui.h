@@ -25,4 +25,8 @@
 namespace cqsp::client::systems {
 bool DrawLedgerTable(const std::string& name, const common::Universe&,
                      const common::components::ResourceLedger& ledger);
+<<<<<<< HEAD
 }  // namespace cqsp::client::systems
+== == == =
+}  // namespace cqsp::client::systems
+>>>>>>> pr-286

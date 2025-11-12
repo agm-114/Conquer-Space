@@ -17,7 +17,19 @@
 #include "client/scenes/objecteditor/imguidebugger.h"
 
 namespace cqsp::client::systems {
+<<<<<<< HEAD:src/client/scenes/objecteditor/imguidebugger.cpp
 void ImGuiDebugger::Init() {}
 void ImGuiDebugger::DoUI(int delta_time) { ImGui::ShowMetricsWindow(); }
-void ImGuiDebugger::DoUpdate(int delta_time) {}
+void ImGuiDebugger::DoUpdate(int delta_time) {} == == == = class SysPlanetMarketInformation : public SysUserInterface {
+ public:
+    explicit SysPlanetMarketInformation(engine::Application& app) : SysUserInterface(app) {}
+    void Init();
+    void DoUI(int delta_time);
+    void DoUpdate(int delta_time);
+
+ private:
+    bool to_see = true;
+    entt::entity selected_planet;
+};
+>>>>>>> pr-286:src/client/scenes/universe/interface/marketwindow.h
 }  // namespace cqsp::client::systems

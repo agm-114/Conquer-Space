@@ -24,97 +24,128 @@
 #include "client/scenes/universe/universescene.h"
 <<<<<<< HEAD == == == =
 #include "common/util/save/savegame.h"
-               >>>>>>> pr-294
+    >>>>>>> pr - 294
 #include "common/util/paths.h"
 #include "common/util/save/savegame.h"
 #include "common/version.h"
 #include "engine/cqspgui.h"
 
-               <<<<<<< HEAD namespace cqsp::client::systems { == ==
-               ==
-    = namespace systems = cqsp::client::systems;
-using systems::SysPauseMenu;
+                <<<<<<< HEAD < < < < < < <
+    HEAD namespace cqsp::client::systems {
+    == == == = namespace systems = cqsp::client::systems;
+    using systems::SysPauseMenu;
 >>>>>>> pr_254
 
-void SysPauseMenu::Init() {}
+    void SysPauseMenu::Init() {}
 
 <<<<<<< HEAD
-void SysPauseMenu::DoUI(int delta_time) {
-    if (!to_show) {
-        return;
-        == == == = void SysPauseMenu::DoUI(int delta_time) {
+    == == == = namespace cqsp::client::systems {
+        void SysPauseMenu::Init() {}
+
+>>>>>>> pr-286
+        void SysPauseMenu::DoUI(int delta_time) {
             if (!to_show) {
                 return;
-            }
+                == == == = void SysPauseMenu::DoUI(int delta_time) {
+                    if (!to_show) {
+                        return;
+                    }
 
-            if (!to_show_options_window) {
-                ImGui::SetNextWindowSize(ImVec2(200, -FLT_MIN), ImGuiCond_Always);
-                ImGui::SetNextWindowPos(
-                    ImVec2(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f), ImGuiCond_Always,
-                    ImVec2(0.5f, 0.5f));
+                    if (!to_show_options_window) {
+                        ImGui::SetNextWindowSize(ImVec2(200, -FLT_MIN), ImGuiCond_Always);
+                        ImGui::SetNextWindowPos(
+                            ImVec2(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f),
+                            ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 
-                ImGui::Begin("Pause menu", &to_show, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration);
+                        ImGui::Begin("Pause menu", &to_show,
+                                     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration);
 
-                ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5f, 0.5f));
+                        ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5f, 0.5f));
 
-                const float button_height = 0;
-                if (CQSPGui::DefaultButton("Resume", ImVec2(-FLT_MIN, button_height))) {
-                    to_show = false;
-                    scene::SetGameHalted(false);
-                }
-                if (CQSPGui::DefaultButton("Save Game", ImVec2(-FLT_MIN, button_height))) {
-                    common::save::save_game(GetUniverse());
-                }
-                CQSPGui::DefaultButton("Load Game", ImVec2(-FLT_MIN, button_height));
-                ImGui::Separator();
+<<<<<<< HEAD
+                        const float button_height = 0;
+                        if (CQSPGui::DefaultButton("Resume", ImVec2(-FLT_MIN, button_height))) {
+                            to_show = false;
+                            scene::SetGameHalted(false);
+                        }
+                        if (CQSPGui::DefaultButton("Save Game", ImVec2(-FLT_MIN, button_height))) {
+                            common::save::save_game(GetUniverse());
+                        }
+                        CQSPGui::DefaultButton("Load Game", ImVec2(-FLT_MIN, button_height));
+                        ImGui::Separator();
+                        == == == = const float button_height = 0;
+                        if (CQSPGui::DefaultButton("Resume", ImVec2(-FLT_MIN, button_height))) {
+                            to_show = false;
+                            scene::SetGameHalted(false);
+                        }
+                        if (CQSPGui::DefaultButton("Save Game", ImVec2(-FLT_MIN, button_height))) {
+                            client::save::save_game(GetUniverse());
+                        }
+                        CQSPGui::DefaultButton("Load Game", ImVec2(-FLT_MIN, button_height));
+                        ImGui::Separator();
+>>>>>>> pr-286
 
-                if (CQSPGui::DefaultButton("Options", ImVec2(-FLT_MIN, button_height))) {
-                    to_show_options_window = true;
+                        if (CQSPGui::DefaultButton("Options", ImVec2(-FLT_MIN, button_height))) {
+                            to_show_options_window = true;
 >>>>>>> pr-294
-                }
+                        }
 
-                if (!to_show_options_window) {
-                    ImGui::SetNextWindowSize(ImVec2(200, -FLT_MIN), ImGuiCond_Always);
-                    ImGui::SetNextWindowPos(
-                        ImVec2(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f),
-                        ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+                        if (!to_show_options_window) {
+                            ImGui::SetNextWindowSize(ImVec2(200, -FLT_MIN), ImGuiCond_Always);
+                            ImGui::SetNextWindowPos(
+                                ImVec2(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f),
+                                ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 
-                    ImGui::Begin("Pause menu", &to_show, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration);
+                            ImGui::Begin("Pause menu", &to_show,
+                                         ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration);
 
-                    ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5f, 0.5f));
+                            ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5f, 0.5f));
 
-                    const float button_height = 0;
-                    if (CQSPGui::DefaultButton("Resume", ImVec2(-FLT_MIN, button_height))) {
-                        to_show = false;
-                        scene::SetGameHalted(false);
+<<<<<<< HEAD
+                            const float button_height = 0;
+                            if (CQSPGui::DefaultButton("Resume", ImVec2(-FLT_MIN, button_height))) {
+                                to_show = false;
+                                scene::SetGameHalted(false);
+                            }
+                            if (CQSPGui::DefaultButton("Save Game", ImVec2(-FLT_MIN, button_height))) {
+                                common::save::save_game(GetUniverse());
+                            }
+                            CQSPGui::DefaultButton("Load Game", ImVec2(-FLT_MIN, button_height));
+                            ImGui::Separator();
+
+                            if (CQSPGui::DefaultButton("Options", ImVec2(-FLT_MIN, button_height))) {
+                                to_show_options_window = true;
+                            }
+
+                            ImGui::Separator();
+                            CQSPGui::DefaultButton("Exit To Menu", ImVec2(-FLT_MIN, button_height));
+                            if (CQSPGui::DefaultButton("Exit Game", ImVec2(-FLT_MIN, button_height))) {
+                                // Kill game
+                                GetApp().ExitApplication();
+                            }
+                            ImGui::PopStyleVar();
+
+                            ImGui::Separator();
+                            ImGui::Text("Version: " CQSP_VERSION_STRING);
+
+                            ImGui::End();
+                        }
+
+                        if (to_show_options_window) {
+                            ShowOptionsWindow(&to_show_options_window, GetApp());
+                        }
                     }
-                    if (CQSPGui::DefaultButton("Save Game", ImVec2(-FLT_MIN, button_height))) {
-                        common::save::save_game(GetUniverse());
+
+                    void SysPauseMenu::DoUpdate(int delta_time) {
+                        if (GetApp().ButtonIsReleased(engine::KEY_ESCAPE)) {
+                            // Then pause
+                            to_show = !to_show;
+                            to_show_options_window = false;
+                            scene::SetGameHalted(to_show);
+                        }
                     }
-                    CQSPGui::DefaultButton("Load Game", ImVec2(-FLT_MIN, button_height));
-                    ImGui::Separator();
-
-                    if (CQSPGui::DefaultButton("Options", ImVec2(-FLT_MIN, button_height))) {
-                        to_show_options_window = true;
-                    }
-
-                    ImGui::Separator();
-                    CQSPGui::DefaultButton("Exit To Menu", ImVec2(-FLT_MIN, button_height));
-                    if (CQSPGui::DefaultButton("Exit Game", ImVec2(-FLT_MIN, button_height))) {
-                        // Kill game
-                        GetApp().ExitApplication();
-                    }
-                    ImGui::PopStyleVar();
-
-                    ImGui::Separator();
-                    ImGui::Text("Version: " CQSP_VERSION_STRING);
-
-                    ImGui::End();
-                }
-
-                if (to_show_options_window) {
-                    ShowOptionsWindow(&to_show_options_window, GetApp());
-                }
+                }  // namespace cqsp::client::systems
+                == == == = if (to_show_options_window) { ShowOptionsWindow(&to_show_options_window, GetApp()); }
             }
 
             void SysPauseMenu::DoUpdate(int delta_time) {
@@ -126,3 +157,4 @@ void SysPauseMenu::DoUI(int delta_time) {
                 }
             }
         }  // namespace cqsp::client::systems
+>>>>>>> pr-286

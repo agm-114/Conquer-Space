@@ -22,28 +22,48 @@
 #include "engine/graphics/shader.h"
 #include "engine/renderer/framebuffer.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::scene {
     class ModelScene : public ClientScene {
-     public:
-        explicit ModelScene(engine::Application& app) : ClientScene(app) {} == == == = namespace cqsp::scene {
-            class ModelScene : public client::Scene {
-             public:
-                explicit ModelScene(engine::Application& app) : client::Scene(app) {}
+ public:
+    explicit ModelScene(engine::Application& app) : ClientScene(app) {} == == == = namespace cqsp::scene {
+        class ModelScene : public client::Scene {
+         public:
+            explicit ModelScene(engine::Application& app) : client::Scene(app) {}
 >>>>>>> pr_254
-                ~ModelScene() = default;
+            ~ModelScene() = default;
 
-                void Init();
-                void Update(float deltaTime);
-                void Ui(float deltaTime);
-                void Render(float deltaTime);
+            void Init();
+            void Update(float deltaTime);
+            void Ui(float deltaTime);
+            void Render(float deltaTime);
 
-             private:
-                asset::Model* model;
-                asset::ShaderProgram_t shader;
-                engine::Mesh_t mesh;
-            };
+         private:
+            asset::Model* model;
+            asset::ShaderProgram_t shader;
+            engine::Mesh_t mesh;
+        };
 <<<<<<< HEAD
-        }  // namespace cqsp::client::scene
-        == == == =
-    }  // namespace cqsp::scene
+    }  // namespace cqsp::client::scene
+    == == == =
+}  // namespace cqsp::scene
 >>>>>>> pr_254
+    == == ==
+    = namespace cqsp::client::scene {
+    class ModelScene : public ClientScene {
+     public:
+        explicit ModelScene(engine::Application& app) : ClientScene(app) {}
+        ~ModelScene() = default;
+
+        void Init();
+        void Update(float deltaTime);
+        void Ui(float deltaTime);
+        void Render(float deltaTime);
+
+     private:
+        asset::Model* model;
+        asset::ShaderProgram_t shader;
+        engine::Mesh_t mesh;
+    };
+}  // namespace cqsp::client::scene
+>>>>>>> pr-286

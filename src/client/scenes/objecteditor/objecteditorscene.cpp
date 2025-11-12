@@ -24,6 +24,7 @@
 #include "client/util/assetwindow.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::scene {
     ObjectEditorScene::ObjectEditorScene(engine::Application& app)
     : ClientScene(app) {
@@ -114,3 +115,45 @@
                 }  // namespace cqsp::client::scene
                 == == == =
 >>>>>>> pr_254
+                             == == == =
+
+                                          namespace cqsp::client::scene {
+                    ObjectEditorScene::ObjectEditorScene(engine::Application & app) : ClientScene(app) {
+                        AddUISystem<systems::SysFieldNodeViewer>("Node Viewer");
+                        AddUISystem<systems::SysGoodViewer>("Good Viewer");
+                        AddUISystem<systems::SysRecipeViewer>("Recipe Viewer");
+                    }
+
+                    ObjectEditorScene::~ObjectEditorScene() = default;
+
+                    void ObjectEditorScene::Init() {
+                        // Sorta need to initialize everything
+                        systems::LoadAllResources(GetApp().GetAssetManager(),
+                                                  *dynamic_cast<client::ConquerSpace*>(GetApp().GetGame()));
+                    }
+
+                    void ObjectEditorScene::Update(float deltaTime) {}
+
+                    void ObjectEditorScene::Ui(float deltaTime) {
+                        // Do information UI
+                        ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+                        ImGui::Begin("UI to Show");
+                        if (ImGui::Button("Exit")) {
+                            // Exit app
+                            GetApp().ExitApplication();
+                        }
+                        for (auto& ui : user_interfaces) {
+                            ImGui::Checkbox(fmt::format("{}", ui.first).c_str(), &ui.second.first);
+                        }
+                        ImGui::End();
+                        for (auto& ui : user_interfaces) {
+                            if (ui.second.first) {
+                                ui.second.second->DoUI(deltaTime);
+                            }
+                        }
+                    }
+
+                    void ObjectEditorScene::Render(float deltaTime) {}
+
+                }  // namespace cqsp::client::scene
+>>>>>>> pr-286

@@ -29,53 +29,81 @@
 #include "loadgamewindow.h"
 #include "settingswindow.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::scene {
     class MainMenuScene : public ClientScene {
-        == == == = namespace cqsp::scene {
-            class MainMenuScene : public cqsp::client::Scene {
+    == == == = namespace cqsp::scene {
+        class MainMenuScene : public cqsp::client::Scene {
 >>>>>>> pr_254
-             public:
-                explicit MainMenuScene(engine::Application& app);
-                ~MainMenuScene();
-
-                void Init();
-                void Update(float deltaTime);
-                void Ui(float deltaTime);
-                void Render(float deltaTime);
-
-             private:
-                void ModWindow();
-
-                Rml::ElementDocument* main_menu;
-
-                SettingsWindow settings_window;
-                CreditsWindow credits_window;
-                LoadGameWindow load_game_window;
-
-                class EventListener : public Rml::EventListener {
+         public:
+            explicit MainMenuScene(engine::Application& app);
+            ~MainMenuScene();
+            == == == = namespace cqsp::client::scene {
+                class MainMenuScene : public ClientScene {
                  public:
-                    EventListener() = default;
-                    void ProcessEvent(Rml::Event& event);
-                    engine::Application* app;
-                    MainMenuScene* m_scene;
-                } listener;
+                    explicit MainMenuScene(engine::Application& app);
+                    ~MainMenuScene();
+>>>>>>> pr-286
 
-                bool is_options_visible = false;
-                bool last_options_visible = false;
+                    void Init();
+                    void Update(float deltaTime);
+                    void Ui(float deltaTime);
+                    void Render(float deltaTime);
 
-                std::vector<std::string> file_list;
-                int index;
+                 private:
+                    void ModWindow();
 
-                void ShuffleFileList();
-                void SetMainMenuImage(const std::string& file);
-                void NextImage();
+                    Rml::ElementDocument* main_menu;
 
-                double last_switch = 0;
-                // Change every minute (time is in seconds)
-                const float switch_time = 60;
-            };
 <<<<<<< HEAD
-        }  // namespace cqsp::client::scene
-        == == == =
-    }  // namespace cqsp::scene
+                    SettingsWindow settings_window;
+                    CreditsWindow credits_window;
+                    LoadGameWindow load_game_window;
+
+                    class EventListener : public Rml::EventListener {
+                     public:
+                        EventListener() = default;
+                        void ProcessEvent(Rml::Event& event);
+                        engine::Application* app;
+                        MainMenuScene* m_scene;
+                    } listener;
+                    == == == = SettingsWindow settings_window;
+                    CreditsWindow credits_window;
+                    LoadGameWindow load_game_window;
+
+                    class EventListener : public Rml::EventListener {
+                     public:
+                        EventListener() = default;
+                        void ProcessEvent(Rml::Event& event);
+                        engine::Application* app;
+                        MainMenuScene* m_scene;
+                    } listener;
+>>>>>>> pr-286
+
+                    bool is_options_visible = false;
+                    bool last_options_visible = false;
+
+                    std::vector<std::string> file_list;
+                    int index;
+
+                    void ShuffleFileList();
+                    void SetMainMenuImage(const std::string& file);
+                    void NextImage();
+
+<<<<<<< HEAD
+                    double last_switch = 0;
+                    // Change every minute (time is in seconds)
+                    const float switch_time = 60;
+                };
+<<<<<<< HEAD
+            }  // namespace cqsp::client::scene
+            == == == =
+        }  // namespace cqsp::scene
 >>>>>>> pr_254
+            == == ==
+            = double last_switch = 0;
+        // Change every minute
+        const float switch_time = 60;
+    };
+}  // namespace cqsp::client::scene
+>>>>>>> pr-286

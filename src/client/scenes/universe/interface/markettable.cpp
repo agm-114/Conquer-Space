@@ -35,6 +35,7 @@ using cqsp::common::util::GetName;
 
 void MarketInformationTable(common::Universe& universe, const entt::entity& market_entity) {
     if (!universe.any_of<components::Market>(market_entity)) {
+<<<<<<< HEAD
         == == == = using cqsp::common::util::LongToHumanString;
         using components::Market;
         using entt::entity;
@@ -117,45 +118,76 @@ void MarketInformationTable(common::Universe& universe, const entt::entity& mark
                 ImGui::TextFmt("{}", (market.resource_fulfilled[good_entity]));
             }
             ImGui::EndTable();
+            == == == = ImGui::TextFmt("Market is not a market");
+            return;
         }
+        // auto& center = GetUniverse().get<cqspc::MarketCenter>(marketentity);
+        components::Market& market = universe.get<components::Market>(market_entity);
+        ImGui::TextFmt("Has {} entities attached to it", market.participants.size());
+
+        // Get resource stockpile
+        if (!ImGui::BeginTable("marketinfotable", 9, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
+            return;
+        }
+        ImGui::TableSetupColumn("Good");
+        ImGui::TableSetupColumn("Price");
+        ImGui::TableSetupColumn("Supply");
+        ImGui::TableSetupColumn("Demand");
+        ImGui::TableSetupColumn("S/D ratio");
+        ImGui::TableSetupColumn("D/S ratio");
+        ImGui::TableSetupColumn("Latent Demand");
+        ImGui::TableSetupColumn("Input Ratio");
+        ImGui::TableSetupColumn("Chronic Shortages");
+        ImGui::TableHeadersRow();
+        auto goodsview = universe.view<components::Price>();
+
+        for (entt::entity good_entity : goodsview) {
+            ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0);
+            if (universe.any_of<components::CapitalGood>(good_entity)) {
+                ImGui::TextFmtColored(ImColor(1.f, 1.f, 0.f), "{}", GetName(universe, good_entity));
+            } else {
+                ImGui::TextFmt("{}", GetName(universe, good_entity));
+>>>>>>> pr-286
+            }
 <<<<<<< HEAD:src/client/scenes/universe/interface/markettable.cpp
-        == == == =
+            == == == =
 
-                     void SysPlanetMarketInformation::Init() {}
+                         void SysPlanetMarketInformation::Init() {}
 
-        void SysPlanetMarketInformation::DoUI(int delta_time) {
-            // Get selected planet and display the market if it exists.
-            if (!to_see) {
-                return;
+            void SysPlanetMarketInformation::DoUI(int delta_time) {
+                // Get selected planet and display the market if it exists.
+                if (!to_see) {
+                    return;
+                }
+                if (!GetUniverse().valid(selected_planet)) {
+                    return;
+                }
+                ImGui::Begin("Market");
+                MarketInformationTable(GetUniverse(), selected_planet);
+                ImGui::End();
             }
-            if (!GetUniverse().valid(selected_planet)) {
-                return;
-            }
-            ImGui::Begin("Market");
-            MarketInformationTable(GetUniverse(), selected_planet);
-            ImGui::End();
-        }
 
-        void SysPlanetMarketInformation::DoUpdate(int delta_time) {
-            to_see = true;
-
-            selected_planet = scene::GetCurrentViewingPlanet(GetUniverse());
-            entity mouse_over = GetUniverse().view<MouseOverEntity>().front();
-            if (!ImGui::GetIO().WantCaptureMouse && GetApp().MouseButtonIsReleased(GLFW_MOUSE_BUTTON_LEFT) &&
-                mouse_over == selected_planet && !scene::IsGameHalted() && !GetApp().MouseDragged()) {
+            void SysPlanetMarketInformation::DoUpdate(int delta_time) {
                 to_see = true;
 
-                if (GetUniverse().valid(selected_planet)) {
-                    SPDLOG_INFO("Switched entity: {}",
-                                GetUniverse().get<components::Identifier>(selected_planet).identifier);
-                } else {
-                    SPDLOG_INFO("Switched entity is not valid");
+                selected_planet = scene::GetCurrentViewingPlanet(GetUniverse());
+                entity mouse_over = GetUniverse().view<MouseOverEntity>().front();
+                if (!ImGui::GetIO().WantCaptureMouse && GetApp().MouseButtonIsReleased(GLFW_MOUSE_BUTTON_LEFT) &&
+                    mouse_over == selected_planet && !scene::IsGameHalted() && !GetApp().MouseDragged()) {
+                    to_see = true;
+
+                    if (GetUniverse().valid(selected_planet)) {
+                        SPDLOG_INFO("Switched entity: {}",
+                                    GetUniverse().get<components::Identifier>(selected_planet).identifier);
+                    } else {
+                        SPDLOG_INFO("Switched entity is not valid");
+                    }
+                }
+                if (!GetUniverse().valid(selected_planet) ||
+                    !GetUniverse().all_of<components::bodies::Body>(selected_planet)) {
+                    to_see = false;
                 }
             }
-            if (!GetUniverse().valid(selected_planet) ||
-                !GetUniverse().all_of<components::bodies::Body>(selected_planet)) {
-                to_see = false;
-            }
-        }
 >>>>>>> pr_254:src/client/scenes/universe/interface/marketwindow.cpp
-    }  // namespace cqsp::client::systems
+        }  // namespace cqsp::client::systems

@@ -30,29 +30,32 @@ class SysUserInterface {
 
     engine::Application &GetApp() { return m_app; }
     common::Universe &GetUniverse() { return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->m_universe; }
+<<<<<<< HEAD
     common::scripting::ScriptInterface &GetScriptInterface() {
-        return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->script_interface;
-    }
-    asset::AssetManager &GetAssetManager() { return GetApp().GetAssetManager(); }
-    ImGuiWindowFlags window_flags = 0;
+        == == == = scripting::ScriptInterface & GetScriptInterface() {
+>>>>>>> pr-286
+            return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->script_interface;
+        }
+        asset::AssetManager &GetAssetManager() { return GetApp().GetAssetManager(); }
+        ImGuiWindowFlags window_flags = 0;
 
- private:
-    engine::Application &m_app;
-};
+     private:
+        engine::Application &m_app;
+    };
 
-class SysRmlUiInterface {
- public:
-    explicit SysRmlUiInterface(engine::Application &app) : m_app(app) {}
-    virtual ~SysRmlUiInterface() {}
-    virtual void Update(double delta_time) = 0;
-    virtual void OpenDocument() = 0;
+    class SysRmlUiInterface {
+     public:
+        explicit SysRmlUiInterface(engine::Application &app) : m_app(app) {}
+        virtual ~SysRmlUiInterface() {}
+        virtual void Update(double delta_time) = 0;
+        virtual void OpenDocument() = 0;
 
- protected:
-    engine::Application &GetApp() { return m_app; }
-    common::Universe &GetUniverse() { return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->m_universe; }
-    asset::AssetManager &GetAssetManager() { return GetApp().GetAssetManager(); }
+     protected:
+        engine::Application &GetApp() { return m_app; }
+        common::Universe &GetUniverse() { return dynamic_cast<ConquerSpace *>(GetApp().GetGame())->m_universe; }
+        asset::AssetManager &GetAssetManager() { return GetApp().GetAssetManager(); }
 
- private:
-    engine::Application &m_app;
-};
+     private:
+        engine::Application &m_app;
+    };
 }  // namespace cqsp::client::systems

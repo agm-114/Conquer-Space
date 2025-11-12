@@ -24,6 +24,7 @@
 #include "systooltips.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::systems {
     using common::Universe;
 using common::components::Identifier;
@@ -90,3 +91,34 @@ bool DrawLedgerTable(const std::string &name, const Universe &universe, const Re
         }  // namespace cqsp::client::systems
 
 >>>>>>> pr_254
+        == == == =
+
+                     namespace cqsp::client::systems {
+            using common::Universe;
+            using common::components::Identifier;
+            using common::components::ResourceLedger;
+            using util::LongToHumanString;
+
+            bool DrawLedgerTable(const std::string &name, const Universe &universe, const ResourceLedger &ledger) {
+                if (ledger.empty()) {
+                    ImGui::Text("Empty ledger");
+                    return false;
+                }
+                if (ImGui::BeginTable(name.c_str(), 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
+                    ImGui::TableSetupColumn("Good");
+                    ImGui::TableSetupColumn("Amount");
+                    ImGui::TableHeadersRow();
+                    for (auto iterator = ledger.begin(); iterator != ledger.end(); iterator++) {
+                        ImGui::TableNextRow();
+                        ImGui::TableSetColumnIndex(0);
+                        ImGui::TextFmt("{}", common::util::GetName(universe, iterator->first));
+                        ImGui::TableSetColumnIndex(1);
+                        ImGui::TextFmt("{}", LongToHumanString(static_cast<int64_t>(iterator->second)));
+                    }
+                    ImGui::EndTable();
+                }
+                return true;
+            }
+
+        }  // namespace cqsp::client::systems
+>>>>>>> pr-286

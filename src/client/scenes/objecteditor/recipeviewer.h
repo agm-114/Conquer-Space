@@ -25,9 +25,12 @@ namespace cqsp::client::systems {
 class SysRecipeViewer : public SysUserInterface {
  public:
 <<<<<<< HEAD
+<<<<<<< HEAD
     explicit SysRecipeViewer(engine::Application& app) : SysUserInterface(app) { search_text.fill(0); }
     == == == = explicit SysRecipeViewer(engine::Application & app) : SysUserInterface(app) {}
 >>>>>>> pr_254
+    == == == = explicit SysRecipeViewer(engine::Application & app) : SysUserInterface(app) {}
+>>>>>>> pr-286
 
     void Init();
     void DoUI(int delta_time);

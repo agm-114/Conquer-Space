@@ -22,7 +22,10 @@
 namespace cqsp::client::systems {
 // Loads all the goods and the like into the game.
 <<<<<<< HEAD
+<<<<<<< HEAD
 void LoadAllResources(asset::AssetManager& asset_manager, ConquerSpace& conquer_space);
 == == == = void LoadAllResources(engine::Application & app, ConquerSpace& conquer_space);
 >>>>>>> pr_254
+== == == = void LoadAllResources(asset::AssetManager & asset_manager, ConquerSpace& conquer_space);
+>>>>>>> pr-286
 }  // namespace cqsp::client::systems

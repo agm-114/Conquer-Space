@@ -23,9 +23,11 @@
 #include "common/util/nameutil.h"
 #include "common/util/utilnumberdisplay.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::client::systems { namespace components = common::components;
 
-void SysRecipeViewer::Init() {}
+    void
+    SysRecipeViewer::Init() {}
 
 void SysRecipeViewer::DoUI(int delta_time) {
     ImGui::SetNextWindowSize(ImVec2(800, 700), ImGuiCond_FirstUseEver);
@@ -66,26 +68,43 @@ void SysRecipeViewer::DoUI(int delta_time) {
                 selected_recipe = recipe;
                 ResetSelection();
             }
-        }
-        ImGui::EndChild();
-        ImGui::EndChild();
-        ImGui::SameLine();
-        ImGui::BeginChild("recipe_viewer_right", ImVec2(400, 700));
-        RecipeViewerRight();
-        ImGui::EndChild();
-        ImGui::End();
-    }
+            == == == = namespace cqsp::client::systems {
+                namespace components = common::components;
 
-    void SysRecipeViewer::DoUpdate(int delta_time) {}
+                void SysRecipeViewer::Init() {}
+
+                void SysRecipeViewer::DoUI(int delta_time) {
+                    ImGui::Begin("Recipe Viewer");
+                    // List out all the stuff
+                    auto recipes = GetUniverse().view<components::Recipe>();
+                    ImGui::TextFmt("Recipes: {}", recipes.size());
+                    ImGui::BeginChild("recipe_viewer_left", ImVec2(300, -1));
+                    for (entt::entity recipe : recipes) {
+                        bool is_selected = recipe == selected_recipe;
+                        if (ImGui::SelectableFmt("{}", &is_selected, common::util::GetName(GetUniverse(), recipe))) {
+                            selected_recipe = recipe;
+>>>>>>> pr-286
+                        }
+                        ImGui::EndChild();
+                        ImGui::EndChild();
+                        ImGui::SameLine();
+                        ImGui::BeginChild("recipe_viewer_right", ImVec2(400, 700));
+                        RecipeViewerRight();
+                        ImGui::EndChild();
+                        ImGui::End();
+                    }
+
+<<<<<<< HEAD
+                    void SysRecipeViewer::DoUpdate(int delta_time) {}
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    void SysRecipeViewer::ResourceMapTable(components::ResourceLedger & ledger, const char* name) {
-        == == == = namespace cqsp::client::systems {
-            void ResourceMapTable(common::Universe & universe, components::ResourceLedger & ledger, const char* name) {
+                    void SysRecipeViewer::ResourceMapTable(components::ResourceLedger & ledger, const char* name) {
+                        == == ==
+                        = namespace cqsp::client::systems {void ResourceMapTable(
+                            common::Universe & universe, components::ResourceLedger & ledger, const char* name) {
 >>>>>>> pr_254
-                if (!ImGui::BeginTable(name, 2)) {
-                    return;
+                            if (!ImGui::BeginTable(name, 2)) {return;
                 }
                 ImGui::TableSetupColumn("Good");
                 ImGui::TableSetupColumn("Amount");
@@ -215,3 +234,44 @@ void SysRecipeViewer::DoUI(int delta_time) {
 
         void SysRecipeViewer::ResetSelection() { expected_production = 1; }
     }  // namespace cqsp::client::systems
+    == == == = void SysRecipeViewer::DoUpdate(int delta_time) {}
+
+    namespace {
+    void ResourceMapTable(common::Universe& universe, components::ResourceLedger& ledger, const char* name) {
+        if (!ImGui::BeginTable(name, 2)) {
+            return;
+        }
+        ImGui::TableSetupColumn("Good");
+        ImGui::TableSetupColumn("Amount");
+        ImGui::TableHeadersRow();
+        for (auto& in : ledger) {
+            ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0);
+            ImGui::TextFmt("{}", cqsp::common::util::GetName(universe, in.first));
+            ImGui::TableSetColumnIndex(1);
+            ImGui::TextFmt("{}", in.second);
+        }
+        ImGui::EndTable();
+    }
+    }  // namespace
+
+    void SysRecipeViewer::RecipeViewerRight() {
+        if (selected_recipe == entt::null) {
+            ImGui::Text("Good is invalid!");
+            return;
+        }
+        ImGui::TextFmt("Name: {}", common::util::GetName(GetUniverse(), selected_recipe));
+        ImGui::TextFmt("Identifier: {}", GetUniverse().get<components::Identifier>(selected_recipe).identifier);
+        // Get inputs and outputs
+        auto& recipe_comp = GetUniverse().get<components::Recipe>(selected_recipe);
+        ImGui::TextFmt("Workers per unit of recipe: {}", recipe_comp.workers);
+        ImGui::Text("Input");
+        ResourceMapTable(GetUniverse(), recipe_comp.input, "input_table");
+        ImGui::Text("Capital Cost");
+        ResourceMapTable(GetUniverse(), recipe_comp.capitalcost, "capital_table");
+        ImGui::Text("Output");
+        ImGui::TextFmt("{}, {}", common::util::GetName(GetUniverse(), recipe_comp.output.entity),
+                       recipe_comp.output.amount);
+    }
+}  // namespace cqsp::client::systems
+>>>>>>> pr-286
