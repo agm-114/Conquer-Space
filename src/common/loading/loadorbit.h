@@ -20,8 +20,18 @@
 
 #include <optional>
 
+<<<<<<< HEAD:src/common/loading/loadorbit.h
 #include "common/components/orbit.h"
 
-namespace cqsp::common::loading {
-std::optional<components::types::Orbit> LoadOrbit(const Hjson::Value& values);
+    namespace cqsp::common::loading {
+    std::optional<components::types::Orbit> LoadOrbit(const Hjson::Value& values);
 }  // namespace cqsp::common::loading
+== == == =
+#include "common/components/coordinates.h"
+#include "common/components/ships.h"
+#include "common/components/units.h"
+#include "common/systems/movement/sysmovement.h"
+             namespace cqsp::common::systems {
+    void SysNavyControl::DoSystem() { Universe& universe = GetUniverse(); }
+}  // namespace cqsp::common::systems
+>>>>>>> pr-290:src/common/systems/navy/sysnavy.cpp

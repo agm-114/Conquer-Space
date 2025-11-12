@@ -23,12 +23,13 @@
     =
 #include "common/actions/economy/markethelpers.h"
 #include "common/components/economy.h"
-        >>>>>>> pr-292
+        >>>>>>> pr - 292
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::common::systems {
-    void
-    SysAgent::DoSystem() {
+                    void
+                    SysAgent::DoSystem() {
     /*
 =======
 namespace cqsp::common::systems {
@@ -36,6 +37,13 @@ void SysAgent::DoSystem() {
     /*
 >>>>>>> pr-303
     for (Node agent_node : GetUniverse().nodes<components::MarketAgent>()) {
+=======
+namespace cqsp::common::systems {
+void SysAgent::DoSystem() {
+    /*
+    auto view = GetUniverse().view<components::MarketAgent>();
+    for (entt::entity entity : view) {
+>>>>>>> pr-290
         // Sell resources that agents produced
         double production_multiplier = 1;
         if (agent_node.any_of<components::FactoryProductivity>()) {
@@ -105,8 +113,12 @@ void SysAgent::DoSystem() {
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 }  // namespace cqsp::common::systems
 =======
 */
 
 >>>>>>> pr_254
+    == == == =
+}  // namespace cqsp::common::systems
+>>>>>>> pr-290

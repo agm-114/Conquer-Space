@@ -23,10 +23,14 @@
 namespace cqsp::common::systems {
 
 <<<<<<< HEAD
-namespace infrastructure = components::infrastructure;
+<<<<<<< HEAD
+== == == =
+>>>>>>> pr-290
+             namespace infrastructure = components::infrastructure;
 
 void InfrastructureSim::DoSystem() {
     ZoneScoped;
+<<<<<<< HEAD
     // Get all cities with industry and infrastruture
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -138,3 +142,43 @@ void InfrastructureSim::DoSystem() {
 >>>>>>> pr-303
                         }
                     }  // namespace cqsp::common::systems
+                    == == == = Universe& universe = GetUniverse();
+                    // Get all cities with industry and infrastruture
+                    auto view = universe.view<components::IndustrialZone>();
+                    for (entt::entity entity : view) {
+                        auto& industry = universe.get<components::IndustrialZone>(entity);
+                        double power_production = 0;
+                        double power_consumption = 0;
+                        for (entt::entity industrial_site : industry.industries) {
+                            if (universe.any_of<infrastructure::PowerPlant>(industrial_site)) {
+                                power_production +=
+                                    universe.get<infrastructure::PowerPlant>(industrial_site).production;
+                            }
+                            if (universe.any_of<infrastructure::PowerConsumption>(industrial_site)) {
+                                power_consumption +=
+                                    universe.get<infrastructure::PowerConsumption>(industrial_site).max;
+                            }
+                        }
+                        // Now assign infrastrutural information
+                        universe.emplace_or_replace<infrastructure::CityPower>(entity, power_production,
+                                                                               power_consumption);
+
+                        if (power_production < power_consumption) {
+                            // Then city has no power. Next time, we'd allow transmitting power, or allowing emergency use power
+                            // but for now, the city will go under brownout.
+                            universe.get_or_emplace<infrastructure::BrownOut>(entity);
+                        } else {
+                            universe.remove<infrastructure::BrownOut>(entity);
+                        }
+                        if (GetUniverse().any_of<infrastructure::CityInfrastructure>(entity)) {
+                            auto& infra = GetUniverse().get<infrastructure::CityInfrastructure>(entity);
+                            infra.improvement = 0;
+                            // Add highway things I guess
+                            if (GetUniverse().any_of<infrastructure::Highway>(entity)) {
+                                infra.improvement += GetUniverse().get<infrastructure::Highway>(entity).extent;
+                            }
+                        }
+                    }
+                }
+            }  // namespace cqsp::common::systems
+>>>>>>> pr-290

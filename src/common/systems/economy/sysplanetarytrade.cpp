@@ -22,77 +22,81 @@
 #include "common/components/market.h"
 #include "common/components/spaceport.h"
 #include "common/components/surface.h"
+<<<<<<< HEAD
 
-namespace cqsp::common::systems {
-void SysPlanetaryTrade::DoSystem() {
-    // Sort through all the districts, and figure out their trade
-    // Get all the markets
-    // Then cross reference to see if they can buy or sell
-    // Then list all the markets
-    // Get the market of the planet, and add latent supply and demand, and then compute the market
-    auto planetary_markets =
-        GetUniverse().nodes<components::Market, components::PlanetaryMarket, components::Habitation>();
+    == == ==
+    =
+>>>>>>> pr-290
+        namespace cqsp::common::systems {void SysPlanetaryTrade::DoSystem() {
+            // Sort through all the districts, and figure out their trade
+            // Get all the markets
+            // Then cross reference to see if they can buy or sell
+            // Then list all the markets
+            // Get the market of the planet, and add latent supply and demand, and then compute the market
+            auto planetary_markets =
+                GetUniverse().nodes<components::Market, components::PlanetaryMarket, components::Habitation>();
 
-    auto goodsview = GetUniverse().nodes<components::Price>();
+auto goodsview = GetUniverse().nodes<components::Price>();
 
-    for (Node market_node : planetary_markets) {
-        auto& p_market = market_node.get<components::Market>();
-        auto& habitation = market_node.get<components::Habitation>();
-        auto& wallet = market_node.get_or_emplace<components::Wallet>();
+for (Node market_node : planetary_markets) {
+    auto& p_market = market_node.get<components::Market>();
+    auto& habitation = market_node.get<components::Habitation>();
+    auto& wallet = market_node.get_or_emplace<components::Wallet>();
 
-        p_market.trade.clear();
+    p_market.trade.clear();
 
-        for (Node settlement_node : market_node.Convert(habitation.settlements)) {
-            auto& market = settlement_node.get<components::Market>();
+    for (Node settlement_node : market_node.Convert(habitation.settlements)) {
+        auto& market = settlement_node.get<components::Market>();
 
-            p_market.supply() += market.production;
-            p_market.demand() += market.consumption;
+        p_market.supply() += market.production;
+        p_market.demand() += market.consumption;
 
-            if (settlement_node.any_of<components::infrastructure::SpacePort>()) {
-                auto& space_port = settlement_node.get<components::infrastructure::SpacePort>();
-                p_market.supply() += space_port.output_resources_rate;
-                p_market.demand() += space_port.demanded_resources_rate;
-            }
+        if (settlement_node.any_of<components::infrastructure::SpacePort>()) {
+            auto& space_port = settlement_node.get<components::infrastructure::SpacePort>();
+            p_market.supply() += space_port.output_resources_rate;
+            p_market.demand() += space_port.demanded_resources_rate;
         }
-
-        for (Node good_node : goodsview) {
-            DeterminePrice(p_market, good_node);
-        }
-        // Now we can compute the prices for the individual markets
-        for (Node settlement_node : market_node.Convert(habitation.settlements)) {
-            auto& market = settlement_node.get<components::Market>();
-            auto& market_wallet = settlement_node.get_or_emplace<components::Wallet>();
-            for (Node good_node : goodsview) {
-                double access = market.market_access[good_node];
-                market.price[good_node] = p_market.price[good_node] * access + (1 - access) * market.price[good_node];
-            }
-
-            // Determine supply and demand for the market
-            market.trade.clear();
-            for (auto& [good, supply] : market.supply()) {
-                if (p_market.supply()[good] == 0) {
-                    continue;
-                }
-                // Remove local production so that we don't confound this with our local production
-                market.trade[good] -= std::max(
-                    (supply / p_market.supply()[good] * p_market.demand()[good]) - market.consumption[good], 0.);
-            }
-
-            for (auto& [good, value] : market.demand()) {
-                if (p_market.demand()[good] == 0) {
-                    continue;
-                }
-                // Remove local consumption so that we don't confound this with local production
-                market.trade[good] +=
-                    std::max((value / p_market.demand()[good] * p_market.supply()[good]) - market.production[good], 0.);
-            }
-        }
-
-        auto& planetary_market = market_node.get<components::PlanetaryMarket>();
-        planetary_market.supplied_resources.clear();
     }
-    initial_tick = false;
+
+    for (Node good_node : goodsview) {
+        DeterminePrice(p_market, good_node);
+    }
+    // Now we can compute the prices for the individual markets
+    for (Node settlement_node : market_node.Convert(habitation.settlements)) {
+        auto& market = settlement_node.get<components::Market>();
+        auto& market_wallet = settlement_node.get_or_emplace<components::Wallet>();
+        for (Node good_node : goodsview) {
+            double access = market.market_access[good_node];
+            market.price[good_node] = p_market.price[good_node] * access + (1 - access) * market.price[good_node];
+        }
+
+        // Determine supply and demand for the market
+        market.trade.clear();
+        for (auto& [good, supply] : market.supply()) {
+            if (p_market.supply()[good] == 0) {
+                continue;
+            }
+            // Remove local production so that we don't confound this with our local production
+            market.trade[good] -=
+                std::max((supply / p_market.supply()[good] * p_market.demand()[good]) - market.consumption[good], 0.);
+        }
+
+        for (auto& [good, value] : market.demand()) {
+            if (p_market.demand()[good] == 0) {
+                continue;
+            }
+            // Remove local consumption so that we don't confound this with local production
+            market.trade[good] +=
+                std::max((value / p_market.demand()[good] * p_market.supply()[good]) - market.production[good], 0.);
+        }
+    }
+
+    auto& planetary_market = market_node.get<components::PlanetaryMarket>();
+    planetary_market.supplied_resources.clear();
 }
+initial_tick = false;
+}
+<<<<<<< HEAD
 
 void SysPlanetaryTrade::Init() {
     auto goodsview = GetUniverse().view<components::Price>();
@@ -113,3 +117,6 @@ void SysPlanetaryTrade::DeterminePrice(components::Market& market, Node& good_en
             (1 + 0.75 * std::clamp((demand - supply) / (std::max(0.001, std::min(demand, supply))), -1., 1.));
 }
 }  // namespace cqsp::common::systems
+== == == =
+}  // namespace cqsp::common::systems
+>>>>>>> pr-290

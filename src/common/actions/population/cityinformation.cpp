@@ -19,20 +19,34 @@
 #include "common/components/population.h"
 #include "common/components/surface.h"
 
-namespace cqsp::common::actions {
+<<<<<<< HEAD:src/common/actions/population/cityinformation.cpp namespace cqsp::common::actions {
 <<<<<<< HEAD
-uint64_t GetCityPopulation(Node& city) {
-    if (!city.any_of<components::Settlement>()) {
-        == == == = uint64_t GetCityPopulation(const Universe& universe, entt::entity city) {
-            if (!universe.any_of<components::Settlement>(city)) {
+    uint64_t GetCityPopulation(Node & city) {
+        if (!city.any_of<components::Settlement>()) {
+            == == == = uint64_t GetCityPopulation(const Universe& universe, entt::entity city) {
+                if (!universe.any_of<components::Settlement>(city)) {
 >>>>>>> pr-292
-                return 0;
+                    return 0;
+                }
+                uint64_t pop_count = 0;
+                auto& settlement = city.get<components::Settlement>();
+                for (Node pop : city.Convert(settlement.population)) {
+                    pop_count += pop.get<components::PopulationSegment>().population;
+                }
+                return pop_count;
             }
-            uint64_t pop_count = 0;
-            auto& settlement = city.get<components::Settlement>();
-            for (Node pop : city.Convert(settlement.population)) {
-                pop_count += pop.get<components::PopulationSegment>().population;
+        }  // namespace cqsp::common::actions
+        == == == = namespace cqsp::common::systems {
+            uint64_t GetCityPopulation(const Universe& universe, entt::entity city) {
+                if (!universe.any_of<components::Settlement>(city)) {
+                    return 0;
+                }
+                uint64_t pop_count = 0;
+                auto& settlement = universe.get<components::Settlement>(city);
+                for (entt::entity pop : settlement.population) {
+                    pop_count += universe.get<components::PopulationSegment>(pop).population;
+                }
+                return pop_count;
             }
-            return pop_count;
-        }
-    }  // namespace cqsp::common::actions
+        }  // namespace cqsp::common::systems
+>>>>>>> pr-290:src/common/systems/population/cityinformation.cpp

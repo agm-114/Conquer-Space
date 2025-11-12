@@ -44,7 +44,7 @@
 #include "common/components/units.h"
 <<<<<<< HEAD == == == =
 #include "common/actions/cityactions.h"
-               >>>>>>> pr-292
+    >>>>>>> pr - 292
 #include "common/util/nameutil.h"
 #include "common/util/profiler.h"
 #include "engine/graphics/primitives/cube.h"
@@ -61,7 +61,7 @@
 #include "stb_image.h"  // NOLINT: STB is rather annoying
 #include "tracy/Tracy.hpp"
 
-    namespace cqsp::client::systems {
+                namespace cqsp::client::systems {
 
 <<<<<<< HEAD
     namespace components = common::components;
@@ -1272,6 +1272,7 @@
                                                     =
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                                                         entt::entity settlement = common::systems::actions::CreateCity(
                                                             m_universe, on_planet, s.latitude(), s.longitude());
 >>>>>>> pr_254
@@ -1294,6 +1295,14 @@
                                                     Name& name = m_universe.emplace<Name>(settlement);
                                                     name.name = m_universe.name_generators["Town Names"].Generate("1");
 >>>>>>> pr-292
+                                                    == == ==
+                                                        = entt::entity settlement =
+                                                            common::systems::actions::CreateCity(
+                                                                m_universe, on_planet, s.latitude(), s.longitude());
+                                                    // Set the name of the city
+                                                    Name& name = m_universe.emplace<Name>(settlement);
+                                                    name.name = m_universe.name_generators["Town Names"].Generate("1");
+>>>>>>> pr-290
 
                                                     // Set country
                                                     // Add population and economy

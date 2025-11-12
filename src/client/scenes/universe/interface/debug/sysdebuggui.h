@@ -27,17 +27,19 @@
 #include "client/util/assetwindow.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+#define sysdebuggui_parameters == == == =
+#define sysdebuggui_parameters                                                                                \
+>>>>>>> pr-290
+    cqsp::engine::Application &app,
+    common::Universe &universe, common::scripting::ScriptInterface &script_interface, const std::string_view &args,
+    CommandOutput &input == == == =
 #define sysdebuggui_parameters                                                                                        \
     cqsp::engine::Application &app, common::Universe &universe, common::scripting::ScriptInterface &script_interface, \
         const std::string_view &args, CommandOutput &input
-    == == ==
-    =
-#define sysdebuggui_parameters                                                                                        \
-    cqsp::engine::Application &app, common::Universe &universe, common::scripting::ScriptInterface &script_interface, \
-        const std::string_view &args, CommandOutput &input
-        >>>>>>> pr_254
+                                      >>>>>>> pr_254
 
-    namespace cqsp::client::systems {
+                                      namespace cqsp::client::systems {
     class SysDebugMenu : public SysUserInterface {
      public:
         explicit SysDebugMenu(engine::Application &app);

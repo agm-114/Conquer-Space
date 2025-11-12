@@ -25,6 +25,7 @@ using cqsp::common::systems::SysWalletReset;
 void SysWalletReset::DoSystem() {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (Node wallet_node : GetUniverse().nodes<components::Wallet>()) {
         wallet_node.get<components::Wallet>().Reset();
         == == == = for (entt::entity entity : GetUniverse().view<Wallet>()) {
@@ -35,3 +36,10 @@ void SysWalletReset::DoSystem() {
             wallet_node.get<components::Wallet>().Reset();
 >>>>>>> pr-303
         }
+        == == == = auto view = GetUniverse().view<components::Wallet>();
+        for (entt::entity entity : view) {
+            GetUniverse().get<components::Wallet>(entity).Reset();
+        }
+    }
+}  // namespace cqsp::common::systems
+>>>>>>> pr-290

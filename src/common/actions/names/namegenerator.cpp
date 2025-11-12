@@ -19,32 +19,33 @@
 #include <fmt/args.h>
 #include <fmt/format.h>
 
-namespace cqsp::common::actions {
-std::string NameGenerator::Generate(const std::string& rule_name) {
-    if (rule_list.find(rule_name) == rule_list.end()) {
-        return "";
-    }
-    if (random == nullptr) {
-        return "";
-    }
+<<<<<<< HEAD:src/common/actions/names/namegenerator.cpp namespace cqsp::common::actions {
+    == == == = namespace cqsp::common::systems::names {
+>>>>>>> pr-290:src/common/systems/names/namegenerator.cpp
+                 std::string NameGenerator::Generate(const std::string& rule_name) {
+                     if (rule_list.find(rule_name) == rule_list.end()) {return "";
+}
+if (random == nullptr) {
+    return "";
+}
 
-    std::string rule = rule_list[rule_name];
-    // Format rule, I guess
-    fmt::dynamic_format_arg_store<fmt::format_context> args;
-    for (const auto& syllable : syllables_list) {
-        if (syllable.second.empty()) {
-            args.push_back(fmt::arg(syllable.first.c_str(), std::string()));
-            continue;
-        }
-        int index = random->GetRandomInt(0, syllable.second.size() - 1);
-        const std::string& sy = syllable.second[index];
-        args.push_back(fmt::arg(syllable.first.c_str(), sy));
+std::string rule = rule_list[rule_name];
+// Format rule, I guess
+fmt::dynamic_format_arg_store<fmt::format_context> args;
+for (const auto& syllable : syllables_list) {
+    if (syllable.second.empty()) {
+        args.push_back(fmt::arg(syllable.first.c_str(), std::string()));
+        continue;
     }
-    try {
-        return fmt::vformat(rule, args);
-    } catch (const fmt::format_error& error) {
-        return "";
-    }
+    int index = random->GetRandomInt(0, syllable.second.size() - 1);
+    const std::string& sy = syllable.second[index];
+    args.push_back(fmt::arg(syllable.first.c_str(), sy));
+}
+try {
+    return fmt::vformat(rule, args);
+} catch (const fmt::format_error& error) {
+    return "";
+}
 }
 
 void NameGenerator::LoadNameGenerator(const Hjson::Value& value) {
@@ -66,4 +67,8 @@ void NameGenerator::LoadNameGenerator(const Hjson::Value& value) {
         }
     }
 }
+<<<<<<< HEAD:src/common/actions/names/namegenerator.cpp
 }  // namespace cqsp::common::actions
+== == == =
+}  // namespace cqsp::common::systems::names
+>>>>>>> pr-290:src/common/systems/names/namegenerator.cpp

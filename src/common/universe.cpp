@@ -28,6 +28,7 @@ Universe::Universe() : Universe(util::random_id()) {}
 
 Universe::Universe(std::string uuid) : uuid(std::move(uuid)) {
     random = std::make_unique<util::StdRandom>(42);
+<<<<<<< HEAD
     nodeFactory = [this](entt::entity entity) { return Node(*this, entity); };
 }
 <<<<<<< HEAD
@@ -75,3 +76,7 @@ std::set<Node> Universe::Convert(const std::set<entt::entity>& entities) const {
 >>>>>>> pr-291
 
     }  // namespace cqsp::common
+    == == == =
+}
+}  // namespace cqsp::common
+>>>>>>> pr-290

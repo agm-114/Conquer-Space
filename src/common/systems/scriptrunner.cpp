@@ -22,34 +22,60 @@
 #include <vector>
 
 #include "common/util/profiler.h"
+<<<<<<< HEAD
 <<<<<<< HEAD namespace cqsp::common::systems {
-    == == == =
+    == == ==
+    =
 
-                 using cqsp::common::systems::SysScript;
+        using cqsp::common::systems::SysScript;
 
 >>>>>>> pr_254
-    SysScript::SysScript(Game & game) : ISimulationSystem(game) {
-        sol::optional<std::vector<sol::table>> optional = game.GetScriptInterface()["events"]["data"];
-        if (optional.has_value()) {
-            events = *optional;
-        }
+SysScript::SysScript(Game &game) : ISimulationSystem(game) {
+    sol::optional<std::vector<sol::table>> optional = game.GetScriptInterface()["events"]["data"];
+    if (optional.has_value()) {
+        events = *optional;
     }
+    == == == = namespace cqsp::common::systems {
+        SysScript::SysScript(Game & game) : ISimulationSystem(game) {
+            sol::optional<std::vector<sol::table>> optional = game.GetScriptInterface()["events"]["data"];
+            if (optional.has_value()) {
+                events = *optional;
+            }
+        }
 
-    SysScript::~SysScript() {
-        // So it doesn't crash when we delete this
-        for (auto &evet : events) {
-            evet.abandon();
-        }
-        events.clear();
-    }
+        SysScript::~SysScript() {
+            // So it doesn't crash when we delete this
+            for (auto &evet : events) {
+                evet.abandon();
+>>>>>>> pr-290
+            }
 
-    void SysScript::DoSystem() {
-        BEGIN_TIMED_BLOCK(ScriptEngine);
-        GetGame().GetScriptInterface()["date"] = GetUniverse().date.GetDate();
-        for (auto &evt : events) {
-            sol::protected_function_result result = evt["on_tick"](evt);
-            GetGame().GetScriptInterface().ParseResult(result);
-        }
-        END_TIMED_BLOCK(ScriptEngine);
-    }
-}  // namespace cqsp::common::systems
+<<<<<<< HEAD
+            SysScript::~SysScript() {
+                // So it doesn't crash when we delete this
+                for (auto &evet : events) {
+                    evet.abandon();
+                }
+                events.clear();
+            }
+
+            void SysScript::DoSystem() {
+                BEGIN_TIMED_BLOCK(ScriptEngine);
+                GetGame().GetScriptInterface()["date"] = GetUniverse().date.GetDate();
+                for (auto &evt : events) {
+                    sol::protected_function_result result = evt["on_tick"](evt);
+                    GetGame().GetScriptInterface().ParseResult(result);
+                }
+                END_TIMED_BLOCK(ScriptEngine);
+            }
+            == == == = void SysScript::DoSystem() {
+                BEGIN_TIMED_BLOCK(ScriptEngine);
+                GetGame().GetScriptInterface()["date"] = GetUniverse().date.GetDate();
+                for (auto &evt : events) {
+                    sol::protected_function_result result = evt["on_tick"](evt);
+                    GetGame().GetScriptInterface().ParseResult(result);
+                }
+                END_TIMED_BLOCK(ScriptEngine);
+            }
+>>>>>>> pr-290
+        }  // namespace cqsp::common::systems

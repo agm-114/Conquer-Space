@@ -14,15 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
+#include "common/node.h"
 
-#include "common/scripting/scripting.h"
-#include "common/universe.h"
+#include <memory>
+#include <utility>
 
-namespace cqsp::common::scripting {
-void LoadFunctions(Universe& universe, ScriptInterface& script_engine);
-<<<<<<< HEAD
-}  // namespace cqsp::common::scripting
-== == == =
-}  // namespace cqsp::scripting
->>>>>>> pr-290
+namespace cqsp::common {}  // namespace cqsp::common

@@ -61,9 +61,12 @@ sol::object JsonToLuaObject(const Hjson::Value& j, const sol::this_state& s) {
 
 <<<<<<< HEAD:src/client/scripting/clientscripting.cpp
 void AssetManagerInterfaces(asset::AssetManager& asset_manager, common::Universe& universe,
+<<<<<<< HEAD
 =======
 void AssetManagerInterfaces(engine::Application& app, common::Universe& universe,
 >>>>>>> pr_254:src/client/systems/clientscripting.cpp
+=======
+>>>>>>> pr-290
                             common::scripting::ScriptInterface& script_engine) {
     CREATE_NAMESPACE(client);
 
