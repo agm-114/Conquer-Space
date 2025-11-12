@@ -32,11 +32,17 @@
 
 namespace cqsp::client::systems {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 == == == =
 >>>>>>> pr_254
              // TODO(EhWhoAmI): Would be helpful to move the following structs to a header file.
     struct MouseOverEntity {};
+== == == =
+
+             // TODO(EhWhoAmI): Would be helpful to move the following structs to a header file.
+    struct MouseOverEntity {};
+>>>>>>> pr-287
 
 // Planet that the camera center is at
 struct FocusedPlanet {};
@@ -105,24 +111,33 @@ class SysStarSystemRenderer {
     engine::Renderable city;
     engine::Renderable sun;
 <<<<<<< HEAD
+<<<<<<< HEAD
     == == == = asset::Model * iss_model;
 >>>>>>> pr_254
+    == == == =
+>>>>>>> pr-287
 
-    asset::ShaderProgram_t model_shader;
+                 asset::ShaderProgram_t model_shader;
     asset::ShaderProgram_t orbit_shader;
     asset::ShaderProgram_t near_shader;
     asset::ShaderProgram_t vis_shader;
 <<<<<<< HEAD
-    asset::ShaderProgram_t circle_shader;
+<<<<<<< HEAD
+    == == == =
+>>>>>>> pr-287
+                 asset::ShaderProgram_t circle_shader;
     asset::ShaderProgram_t planet_shader;
     asset::ShaderProgram_t textured_planet_shader;
     asset::ShaderProgram_t sun_shader;
     asset::ShaderProgram_t skybox_shader;
     asset::ShaderProgram_t buffer_shader;
+<<<<<<< HEAD
     == == == =
 >>>>>>> pr_254
+                 == == == =
+>>>>>>> pr-287
 #if FALSE
-                 // Disabled for now
+                              // Disabled for now
         asset::ShaderProgram_t no_light_shader;
 #endif
 
@@ -271,8 +286,12 @@ class SysStarSystemRenderer {
     bool have_province = false;
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 }  // namespace cqsp::client::systems
 == == == =
 }  // namespace cqsp::client::systems
 
 >>>>>>> pr_254
+== == == =
+}  // namespace cqsp::client::systems
+>>>>>>> pr-287
